@@ -1,16 +1,18 @@
 <template>
-  <div>
-      discover
-      <router-view />
+  <div class="discover">
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-    name: 'Discover'
-}
+  name: "Discover",
+};
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.discover {
+  display: flex;
+  justify-content: center;
+}
 </style>
