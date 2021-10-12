@@ -1,46 +1,52 @@
 <template>
   <div class="banner">
-    <div class="banner-display">
+    <div class="display">
       <div>
-        <div class="banner-images">
+        <div class="images">
           <img
             :src="value.imageUrl"
             v-for="(value, index) in banners"
             :key="index"
+            id="banner-display-image"
             :class="elementIsActive(currentBannerIndex, index)"
           />
         </div>
         <div class="download">
-          <img src="../../assets/recommend/download.png" />
+          <img
+            id="banner-download-image"
+            src="../../assets/recommend/download.png"
+          />
         </div>
       </div>
     </div>
 
-    <div class="banner-background">
+    <div class="background">
       <img
         :src="value.imageUrl"
         v-for="(value, index) in banners"
         :key="index"
+        id="banner-background-image"
         :class="elementIsActive(currentBannerIndex, index)"
       />
     </div>
 
-    <div class="banner-index-point">
+    <div class="index-point">
       <span
         v-for="(value, index) in banners"
         :key="index"
         :class="elementIsActive(currentBannerIndex, index)"
+        id="banner-index-point-span"
         @click="pointChange(index)"
       >
       </span>
     </div>
 
-    <div class="banner-arrow">
-      <div class="banner-arrow-left" @click="changeImageIndex(-1)">
-        <img src="../../assets/recommend/left.png" />
+    <div class="arrow">
+      <div class="left" @click="changeImageIndex(-1)">
+        <img src="../../assets/recommend/left.png" class="image" />
       </div>
-      <div class="banner-arrow-right" @click="changeImageIndex(1)">
-        <img src="../../assets/recommend/right.png" />
+      <div class="right" @click="changeImageIndex(1)">
+        <img src="../../assets/recommend/right.png" class="image" />
       </div>
     </div>
   </div>
@@ -111,13 +117,13 @@ export default {
   overflow: hidden;
 }
 
-.banner-display {
+.display {
   $banner-image-width: 730px;
   display: flex;
   justify-content: center;
 
-  .banner-images {
-    img {
+  .images {
+    #banner-display-image {
       height: 283px;
       width: $banner-image-width;
       transition: 0.3s;
@@ -131,7 +137,7 @@ export default {
   }
 
   .download {
-    img {
+    #banner-download-image {
       height: 283px;
       width: 250px;
       opacity: 1;
@@ -145,8 +151,8 @@ export default {
   }
 }
 
-.banner-background {
-  img {
+.background {
+  #banner-background-image {
     position: absolute;
     filter: blur(100px);
     height: 283px;
@@ -160,7 +166,7 @@ export default {
   }
 }
 
-.banner-index-point {
+.index-point {
   height: 20px;
   width: 220px;
   position: absolute;
@@ -170,7 +176,7 @@ export default {
   display: flex;
   justify-content: center;
 
-  span {
+  #banner-index-point-span {
     height: 6px;
     width: 6px;
     background-color: #fff;
@@ -190,7 +196,7 @@ export default {
   }
 }
 
-.banner-arrow {
+.arrow {
   @mixin arrow($left) {
     height: 63px;
     width: 37px;
@@ -214,20 +220,20 @@ export default {
   align-self: center;
   z-index: 99;
 
-  .banner-arrow-left {
+  .left {
     @include arrow(-530px);
   }
 
-  .banner-arrow-right {
+  .right {
     @include arrow(530px);
   }
-  .banner-arrow-left,
-  .banner-arrow-right {
+  .left,
+  .right {
     &:hover {
       @include arrow-hover();
     }
 
-    img {
+    .image {
       @include arrow-image();
     }
   }

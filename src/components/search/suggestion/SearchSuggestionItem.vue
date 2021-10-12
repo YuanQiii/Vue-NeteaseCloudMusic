@@ -1,17 +1,23 @@
 <template>
   <div class="result" v-if="isShow()">
     <div class="title">
-      <img class="title-image" src="@/assets/navigation/resalb.png" />
+      <img class="image" src="@/assets/navigation/resalb.png" />
       <span>{{ getTitleName() }}</span>
     </div>
     <div class="detail">
       <div
-        class="detail-name"
+        class="name"
         v-for="(value, index) in searchResult[resultType]"
         :key="index"
         @click="toSearchDetail('digitalsingle', value.id)"
       >
-        {{ value.name }}-{{ value.artists[0].name }}
+        <span v-if="resultType == 'songs'"
+          >{{ value.name }}-{{ value.artists[0].name }}</span
+        >
+        <span v-if="resultType == 'artists'">{{ value.name }}</span>
+        <span v-if="resultType == 'albums'"
+          >{{ value.name }}-{{ value.artist.name }}</span
+        >
       </div>
     </div>
   </div>
@@ -105,13 +111,14 @@ export default {
 }
 
 .title {
+  margin-top: 5px;
   border-right: solid 1px #e2e2e2;
   padding-right: 10px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
 
-  .title-image {
+  .image {
     height: 15px;
     width: 15px;
     margin-right: 5px;
@@ -123,8 +130,9 @@ export default {
 .detail {
   font-size: 12px;
   border-bottom: solid 1px #e2e2e2;
+  padding: 5px 0px;
 
-  .detail-name {
+  .name {
     padding-left: 10px;
     width: 160px;
     height: auto;

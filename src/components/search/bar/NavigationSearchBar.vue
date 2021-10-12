@@ -83,7 +83,7 @@ export default {
 .search-bar {
   position: relative;
   background-color: #fff;
-  height: 24px;
+  height: 22px;
   border-radius: 16px;
   z-index: 99;
   margin-top: 20px;
@@ -105,7 +105,7 @@ export default {
     border: 0px;
     margin-top: 0px;
     width: 120px;
-    height: 23px;
+    height: 22px;
     position: absolute;
 
     &:focus::-webkit-input-placeholder {
@@ -113,5 +113,4 @@ export default {
     }
   }
 }
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="top-bar-item">
     <slot />
   </div>
 </template>
@@ -10,8 +10,8 @@ export default {
 };
 </script>
 
-<style scoped>
-div {
+<style lang='scss' scoped>
+.top-bar-item {
   height: 70px;
   padding: 0 15px;
   display: flex;
@@ -21,8 +21,9 @@ div {
   transition: 0.1s;
   position: relative;
   color: #ccc;
-}
-div:hover {
-  background-color: #000;
+
+  &:hover {
+    background-color: #000;
+  }
 }
 </style>

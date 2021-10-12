@@ -1,6 +1,6 @@
 <template>
   <div class="search-suggestion">
-    <div v-show="searchKeyWords">
+    <div v-show="searchKeyWords && SearchSuggestionShow">
       <div
         @click="
           toSearchResultDetail('/searchpage/users', '1002', searchKeyWords)
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       searchTypes: ["songs", "artists", "albums", "playlists"],
+      SearchSuggestionShow: true,
     };
   },
   methods: {
@@ -102,10 +103,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search-suggestion {
+  position: relative;
   height: auto;
   width: 235px;
   margin-left: 39%;
-  margin-top: 5px;
+  margin-top: 8px;
   background-color: #fff;
   z-index: 99;
   border-radius: 3px;

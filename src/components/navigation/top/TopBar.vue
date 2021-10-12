@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top-bar">
-      <img class="top-bar-logo" src="@/assets/navigation/logo.png" />
+      <img class="logo" src="@/assets/navigation/logo.png" />
       <top-bar-item
         v-for="(value, index) in topBarNames"
         :key="index"
@@ -9,11 +9,11 @@
         :class="isActive(index)"
       >
         {{ value }}
-        <span :class="isActive(index)"></span>
+        <span id="top-bar-item-span" :class="isActive(index)"></span>
       </top-bar-item>
       <search />
       <div class="center">创作者中心</div>
-      <a @click="toggleShow">登录</a>
+      <a class="login" @click="toggleShow">登录</a>
     </div>
     <!-- <user-login v-if="isShow" /> -->
   </div>
@@ -72,13 +72,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.top-bar-logo {
-  margin-top: 20px;
-  padding-right: 20px;
-  height: 30px;
-  object-fit: cover;
-}
-
 .top-bar {
   display: flex;
   justify-content: center;
@@ -86,6 +79,13 @@ export default {
   background-color: #242424;
   color: #fff;
   height: 70px;
+
+  .logo {
+    margin-top: 20px;
+    padding-right: 20px;
+    height: 30px;
+    object-fit: cover;
+  }
 
   .active {
     background-color: #000;
@@ -109,7 +109,7 @@ export default {
   }
 }
 
-span {
+#top-bar-item-span {
   box-sizing: border-box;
   width: 16px;
   height: 16px;
@@ -124,7 +124,7 @@ span {
   }
 }
 
-a {
+.login {
   color: #787878;
   font-size: 12px;
   margin-top: 28px;
