@@ -1,5 +1,5 @@
 <template>
-  <div class="audiomain">
+  <div class="music-player">
     <audio ref="audio"></audio>
 
     <play-status-control />
@@ -13,6 +13,9 @@ import PlayProgressBar from "./PlayProgressBar.vue";
 import PlaySetting from "./PlaySetting.vue";
 import PlaySongControl from "./PlaySongControl.vue";
 import PlayStatusControl from "./PlayStatusControl.vue";
+
+import { songDetailApi } from "@/api/song.js";
+
 export default {
   components: {
     PlayProgressBar,
@@ -20,7 +23,10 @@ export default {
     PlaySongControl,
     PlaySetting,
   },
-  name: "MusicAudio",
+  name: "MusicPlayer",
+  created() {
+    this.getSongs();
+  },
   data() {
     return {
       playTypeCurrentIndex: 0,
@@ -39,6 +45,8 @@ export default {
       toggleVolume: false,
       screenY: 0,
       dragVolumeFlag: false,
+
+      songsDetail: {},
     };
   },
   computed: {
@@ -288,113 +296,24 @@ export default {
         value: !this.windowShow,
       });
     },
+
+    getSongs() {
+      let params = {
+        ids: "346089,346576",
+      };
+      songDetailApi(params).then((response) => {
+        this.$store.commit("updatePlayListSongs", response.data.songs);
+        console.log(
+          "🚀 ~ file: MusicPlayer.vue ~ line 311 ~ songDetailApi ~ this.$store.state.player.playListSongs",
+          this.$store.state.player.playListSongs
+        );
+      });
+    },
   },
 };
 </script>
 <style scoped>
-.rate {
-  background-color: #191919;
-  width: 4px;
-  height: 100%;
-}
-.rut {
-  width: 4px;
-  height: 80px;
-  text-align: right;
-  background-color: #c70c0c;
-  margin-left: 14px;
-  margin-top: 10px;
-  position: relative;
-}
-.vol {
-  width: 32px;
-  height: 103px;
-  background-color: #040506;
-  position: absolute;
-  top: -103px;
-  left: 1365px;
-  z-index: 9;
-}
-.rut > img {
-  opacity: 1;
-  width: 14px;
-  position: absolute;
-  left: -5px;
-  top: 70px;
-  transform: rotateZ(-90deg);
-}
-.tip {
-  width: 81px;
-  height: 34px;
-  background-color: #191919;
-  position: absolute;
-  text-align: center;
-  color: #fff;
-  font-size: 12px;
-  line-height: 34px;
-  border-radius: 5px;
-  top: -35px;
-  left: 1370px;
-  box-shadow: 0px -1px 16px -5px #281406;
-  z-index: 99;
-}
-img:hover {
-  opacity: 1;
-}
-img {
-  opacity: 0.7;
-  cursor: pointer;
-}
-
-.pb {
-  overflow: hidden;
-}
-
-.count {
-  overflow: hidden;
-}
-.count > div > span {
-  margin-left: 5px;
-}
-.count > div {
-  background-color: #1e1e1e;
-  height: 18px;
-  width: 40px;
-  margin-top: 14px;
-  box-sizing: border-box;
-  border-radius: 25px;
-  color: #666;
-  text-align: center;
-  font-size: 12px;
-  margin-left: -10px;
-}
-.playlist > img {
-  width: 25px;
-  height: 25px;
-  margin-left: 33px;
-  margin-top: 12px;
-}
-
-.playtype {
-  position: relative;
-  margin-left: 10px;
-  margin-top: 14px;
-}
-
-.playtype > img {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 0;
-}
-.volume > img {
-  width: 20px;
-  height: 20px;
-  margin-top: 14px;
-  margin-left: 30px;
-}
-
-.audiomain {
+.music-player {
   position: fixed;
   z-index: 99;
   height: 53px;
@@ -405,5 +324,13 @@ img {
   display: flex;
   padding-left: 25%;
   box-shadow: 0px -4px 5px 0px rgba(20, 4, 1, 0.3);
+}
+
+img:hover {
+  opacity: 1;
+}
+img {
+  opacity: 0.7;
+  cursor: pointer;
 }
 </style>

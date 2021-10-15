@@ -1,40 +1,71 @@
 <template>
   <div class="play-control">
-    <div class="play-control-previous" @click="togglePlayMusic(-1)">
+    <div class="play-control-previous" @click="playPreviousSong">
       <img src="../../assets/player/next.png" alt />
     </div>
-    <div class="play-control-pause">
-      <img
-        src="../../assets/player/musicpause.png"
-        v-show="playStatus == 'pause'"
-        @click="switchPlayStatus()"
-      />
-      <img
-        src="../../assets/player/musicplay.png"
-        v-show="playStatus == 'play'"
-        @click="switchPlayStatus()"
-      />
+
+    <div class="play-control-pause" @click="switchPlayStatus">
+      <img src="../../assets/player/musicplay.png" v-if="playStatus" />
+      <img src="../../assets/player/musicpause.png" v-else />
     </div>
-    <div class="play-control-next" @click="togglePlayMusic(1)">
+    <div class="play-control-next" @click="playNextSong">
       <img src="../../assets/player/next.png" alt />
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "PlayStatusControl",
   data() {
-    return {
-      playStatus: "pause",
-    };
+    return {};
+  },
+  computed: {
+    ...mapState({
+      playStatus: (state) => state.player.playStatus,
+      playMode: (state) => state.player.playMode,
+      playListSongsId: (state) => state.player.playListSongsId,
+      currentPLayIndex: (state) => state.player.currentPLayIndex,
+      playModeHistory: (state) => state.player.playModeHistory,
+    }),
   },
   methods: {
-    switchPlayMusic(value) {
-      console.log(value);
+    playPreviousSong() {
+      this.$store.commit("updatePlayModeHistory", -1);
+      this.$store.commit(
+        "updateCurrentPLayIndex",
+        this.playModeHistory[this.playModeHistory.length]
+      );
+    },
+    playNextSong() {
+      let songCount = this.playListSongsId.length;
+      let nextPlayIndex = 0;
+
+      if (this.playMode == "循环" || this.playMode == "单曲循环") {
+        let temp = this.currentPLayIndex;
+
+        nextPlayIndex = ++temp;
+
+        if (nextPlayIndex > songCount) {
+          this.nextPlayIndex = 0;
+        }
+
+        this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
+      } else {
+        nextPlayIndex = Math.floor(Math.random() * songCount);
+
+        while (nextPlayIndex == this.currentPLayIndex) {
+          nextPlayIndex = Math.floor(Math.random() * songCount);
+        }
+        this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
+      }
+
+      this.$store.commit("updatePlayModeHistory", nextPlayIndex);
     },
     switchPlayStatus() {
-      this.playStatus = this.playStatus == "pause" ? "play" : "pause";
+      this.$store.commit("switchPlayStatus");
+      console.log(this.playStatus);
     },
   },
 };

@@ -1,12 +1,17 @@
 <template>
   <div class="sub-bar-item">
-    <div :class="isActive()" @click="toDiscoverItemPage(subBarItemName)">
+    <div
+      id="sub-bar-item-name"
+      :class="elementIsActive(currentSubBarItem, subBarItemName)"
+      @click="toDiscoverItemPage(subBarItemName)"
+    >
       {{ subBarItemName }}
     </div>
   </div>
 </template>
 
 <script>
+import { elementIsActive } from "@/utils/elementIsActive.js";
 export default {
   name: "SubBarItem",
   props: {
@@ -26,14 +31,10 @@ export default {
     };
   },
   methods: {
-    isActive() {
-      return this.currentSubBarItem == this.subBarItemName
-        ? "sub-bar-item-name active"
-        : "sub-bar-item-name deactive";
+    elementIsActive(current, self) {
+      return elementIsActive(current, self);
     },
     toDiscoverItemPage(name) {
-      this.$emit("update:currentSubBarItem", name);
-
       let pageName = this.pageNames[name];
       if (pageName != this.$route.name) {
         this.$router.push({ name: pageName });
@@ -56,7 +57,7 @@ export default {
   color: #fff;
   font-size: 12px;
 
-  .sub-bar-item-name {
+  #sub-bar-item-name {
     padding: 3px 10px;
     border-radius: 10px;
 

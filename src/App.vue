@@ -1,7 +1,11 @@
 <template>
   <div>
     <navigation-bar />
-    <div><router-view /></div>
+    <div>
+      <keep-alive>
+        <router-view />
+      </keep-alive>
+    </div>
     <music-player />
   </div>
 </template>

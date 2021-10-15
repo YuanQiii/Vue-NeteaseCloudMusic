@@ -29,6 +29,9 @@ export default {
     TopBarItem,
     Search,
   },
+  created() {
+    this.getCurrentPageName();
+  },
   data() {
     return {
       topBarNames: [
@@ -47,7 +50,7 @@ export default {
         "Musician",
         "Download",
       ],
-      currentIndex: 0,
+      currentIndex: "Recommend",
       isShow: false,
       count: 0,
     };
@@ -66,6 +69,11 @@ export default {
     },
     isActive(index) {
       return index == this.currentIndex ? "active" : "";
+    },
+    getCurrentPageName() {
+      this.currentIndex = this.topBarPathNames.indexOf(
+        this.$store.state.navigation.currentPageName
+      );
     },
   },
 };

@@ -23,7 +23,7 @@
 
 <script>
 import SearchSuggestion from "../suggestion/SearchSuggestion.vue";
-import { searchSuggest } from "@/api/search.js";
+import { searchSuggestApi } from "@/api/search.js";
 export default {
   name: "NavigationSearchBar",
   components: {
@@ -52,7 +52,7 @@ export default {
         keywords: newValue,
       };
 
-      searchSuggest(params).then((response) => {
+      searchSuggestApi(params).then((response) => {
         console.log(response.data.result);
         this.searchResult = response.data.result;
       });

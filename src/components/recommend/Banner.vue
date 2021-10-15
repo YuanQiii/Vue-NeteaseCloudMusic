@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { banner } from "@/api/recommend.js";
+import { bannerApi } from "@/api/recommend.js";
 import { elementIsActive } from "@/utils/elementIsActive.js";
 export default {
   name: "Banner",
@@ -70,9 +70,12 @@ export default {
   },
   methods: {
     getBanners() {
-      banner().then((response) => {
-        console.log(response.data);
+      bannerApi().then((response) => {
         this.banners = response.data.banners;
+        console.log(
+          "🚀 ~ file: Banner.vue ~ line 75 ~ bannerApi ~ response.data.banners",
+          response.data.banners
+        );
         this.bannerImageChange();
       });
     },

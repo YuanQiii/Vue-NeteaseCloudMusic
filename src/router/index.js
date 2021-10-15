@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store/index.js";
 
 const Discover = () => import("../views/discover/Discover.vue");
 const Recommend = () => import("../views/discover/Recommend.vue");
@@ -72,5 +73,12 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  store.commit("changeCurrentPageName", to.name);
+  next()
+})
+
+
 
 export default router;
