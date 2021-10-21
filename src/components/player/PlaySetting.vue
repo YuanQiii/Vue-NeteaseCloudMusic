@@ -29,7 +29,7 @@
         <span>10</span>
       </div>
     </div>
-    <div v-show="toggleTip" class="tip">{{ togglePlayTip }}</div>
+    <!-- <div v-show="toggleTip" class="tip">{{ togglePlayTip }}</div> -->
     <div
       v-show="toggleVolume"
       class="volume-bar"

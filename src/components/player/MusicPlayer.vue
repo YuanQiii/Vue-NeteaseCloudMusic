@@ -27,63 +27,7 @@ export default {
   created() {
     this.getSongs();
   },
-  data() {
-    return {
-      playTypeCurrentIndex: 0,
-      pauseCurrentIndex: 0,
-      proBarWidth: 0,
-      timer: null,
-      playtime: 0,
-      duration: "00:00",
-      elapsedTimer: null,
-      etValue: 0,
-      eTime: "00:00",
-      playFlag: false,
-      playLoopType: 1,
-      toggleTip: false,
-      togglePlayTip: "",
-      toggleVolume: false,
-      screenY: 0,
-      dragVolumeFlag: false,
 
-      songsDetail: {},
-    };
-  },
-  computed: {
-    musicAudioId() {
-      return this.$store.state.musicAudioId;
-    },
-    musicAudioIdList() {
-      return this.$store.state.musicAudioIdList;
-    },
-    musicAudioUrl() {
-      return this.$store.state.musicAudioUrl;
-    },
-    musicAudioUrlList() {
-      return this.$store.state.musicAudioUrlList;
-    },
-    musicAudioDetail() {
-      return this.$store.state.musicAudioDetail;
-    },
-    musicAudioDetailList() {
-      return this.$store.state.musicAudioDetailList;
-    },
-    musicAudioLyric() {
-      return this.$store.state.musicAudioLyric;
-    },
-    musicAudioLyricList() {
-      return this.$store.state.musicAudioLyricList;
-    },
-    musicAudioIndex() {
-      return this.$store.state.musicAudioIndex;
-    },
-    musicAudioPlayStatus() {
-      return this.$store.state.musicAudioPlayStatus;
-    },
-    windowShow() {
-      return this.$store.state.windowShow;
-    },
-  },
   watch: {
     musicAudioId() {
       // this.$refs.audio.src = this.musicAudioUrl;
@@ -296,13 +240,12 @@ export default {
         value: !this.windowShow,
       });
     },
-
     getSongs() {
       let params = {
         ids: "346089,346576",
       };
       songDetailApi(params).then((response) => {
-        this.$store.commit("updatePlayListSongs", response.data.songs);
+        this.$store.commit("updatePlayListSongsAndId", response.data.songs);
         console.log(
           "🚀 ~ file: MusicPlayer.vue ~ line 311 ~ songDetailApi ~ this.$store.state.player.playListSongs",
           this.$store.state.player.playListSongs

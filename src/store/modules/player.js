@@ -1,57 +1,62 @@
+import Vue from 'vue';
+
 const state = {
-    playListSongs: {},
 
-    playListSongsId: [1, 2, 3, 4, 5],
-    currentPLayIndex: 0,
+  // 歌曲列表
+  playListSongs: {},
+  playListSongsId: [346089, 346576],
 
-    currentPlayLink: {},
-    playStatus: 0,
-    playMode: '随机',
-    playModeHistory: [],
+  // 当前播放歌曲id
+  currentPLayIndex: 346089,
 
-    pipStatus: 0,
-    volume: 0,
+  // 当前播放歌曲时间
+  currentPlayTime: 0,
 
-}
+  // 播放歌曲索引历史
+  playIndexHistory: [],
+
+
+  currentPlayLink: {},
+  playStatus: 0,
+  playMode: "随机",
+
+  pipStatus: 0,
+  volume: 0,
+};
 
 const mutations = {
-    updatePlayListSongs(state, payload) {
-        payload.forEach(element => {
-            state.playListSongs[element.id] = element
-            state.playListSongsId.push(element.id)
-        })
-    },
-    switchPlayStatus(state) {
-        state.playStatus = state.playStatus ? 0 : 1
-    },
-    updateCurrentPLayIndex(state, payload) {
-        state.currentPLayIndex = payload
-    },
-    updatePlayModeHistory(state, payload) {
-        if (payload == -1) {
-            state.playModeHistory.pop()
-        } else {
-            state.playModeHistory.push(payload)
-        }
+  updatePlayListSongsAndId(state, payload) {
+    payload.forEach((element) => {
+      Vue.set(state.playListSongs, element.id, element)
+      state.playListSongsId.push(element.id);
+    });
+  },
+  switchPlayStatus(state) {
+    state.playStatus = state.playStatus ? 0 : 1;
+  },
+  updateCurrentPLayIndex(state, payload) {
+    state.currentPLayIndex = payload;
+  },
+  updateCurrentPlayTime(state, payload) {
+    state.currentPlayTime = payload
+  },
+  updateplayIndexHistory(state, payload) {
+    if (payload == -1) {
+      state.playIndexHistory.pop();
+    } else {
+      state.playIndexHistory.push(payload);
     }
+  },
+};
 
+const getters = {};
 
-
-}
-
-const getters = {
-
-}
-
-const actions = {
-
-}
-
+const actions = {};
 
 // 最后统一导出
 export default {
-    state,
-    getters,
-    actions,
-    mutations
-}
+  state,
+  getters,
+  actions,
+  mutations,
+};

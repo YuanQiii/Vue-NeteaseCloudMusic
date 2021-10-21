@@ -27,24 +27,41 @@ export default {
       playMode: (state) => state.player.playMode,
       playListSongsId: (state) => state.player.playListSongsId,
       currentPLayIndex: (state) => state.player.currentPLayIndex,
-      playModeHistory: (state) => state.player.playModeHistory,
+      playIndexHistory: (state) => state.player.playIndexHistory,
     }),
   },
   methods: {
     playPreviousSong() {
-      this.$store.commit("updatePlayModeHistory", -1);
-      this.$store.commit(
-        "updateCurrentPLayIndex",
-        this.playModeHistory[this.playModeHistory.length]
-      );
+      let historyLength = this.playIndexHistory.length;
+
+      if (historyLength > 1) {
+        this.$store.commit("updateplayIndexHistory", -1);
+        historyLength = this.playIndexHistory.length;
+        this.$store.commit(
+          "updateCurrentPLayIndex",
+          this.playIndexHistory[historyLength - 1]
+        );
+      } else {
+        let temp = this.currentPLayIndex;
+        let previousPlayIndex = 0;
+        let songCount = this.playListSongsId.length;
+
+        previousPlayIndex = ++temp;
+
+        if (previousPlayIndex > songCount) {
+          this.previousPlayIndex = 0;
+        }
+
+        this.$store.commit("updateCurrentPLayIndex", previousPlayIndex);
+      }
     },
+
     playNextSong() {
       let songCount = this.playListSongsId.length;
       let nextPlayIndex = 0;
 
       if (this.playMode == "循环" || this.playMode == "单曲循环") {
         let temp = this.currentPLayIndex;
-
         nextPlayIndex = ++temp;
 
         if (nextPlayIndex > songCount) {
@@ -61,7 +78,7 @@ export default {
         this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
       }
 
-      this.$store.commit("updatePlayModeHistory", nextPlayIndex);
+      this.$store.commit("updateplayIndexHistory", nextPlayIndex);
     },
     switchPlayStatus() {
       this.$store.commit("switchPlayStatus");
