@@ -18,9 +18,6 @@
 import { mapState } from "vuex";
 export default {
   name: "PlayStatusControl",
-  data() {
-    return {};
-  },
   computed: {
     ...mapState({
       playStatus: (state) => state.player.playStatus,
@@ -28,6 +25,8 @@ export default {
       playListSongsId: (state) => state.player.playListSongsId,
       currentPLayIndex: (state) => state.player.currentPLayIndex,
       playIndexHistory: (state) => state.player.playIndexHistory,
+
+      audio: (state) => state.audio.audio,
     }),
   },
   methods: {
@@ -81,8 +80,12 @@ export default {
       this.$store.commit("updateplayIndexHistory", nextPlayIndex);
     },
     switchPlayStatus() {
+      if (this.playStatus) {
+        this.audio.pause();
+      } else {
+        this.audio.play();
+      }
       this.$store.commit("switchPlayStatus");
-      console.log(this.playStatus);
     },
   },
 };

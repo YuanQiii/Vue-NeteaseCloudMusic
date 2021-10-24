@@ -42,7 +42,7 @@
 
     <div class="duration-time">
       <span class="elapsed">{{ elapsedTimeStr }}</span>
-      <span class="duration">/ {{ parseDurationTime(322000) }}</span>
+      <span class="duration">/ {{ durationTimeStr }}</span>
     </div>
   </div>
 </template>
@@ -50,7 +50,7 @@
 <script>
 import { parseDurationTime } from "@/utils/parseDurationTime.js";
 
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "PlayProgressBar",
@@ -59,8 +59,8 @@ export default {
       marginLeft: 0,
       width: 0,
       pointHalfWidth: 10,
+      barWidth: 500,
       isMouseDown: false,
-      elapsedTimeStr: "00:00",
     };
   },
   computed: {
@@ -68,7 +68,13 @@ export default {
       playListSongs: (state) => state.player.playListSongs,
       currentPLayIndex: (state) => state.player.currentPLayIndex,
       currentPlayTime: (state) => state.player.currentPlayTime,
+
+      audio: (state) => state.audio.audio,
     }),
+
+    ...mapGetters(["playSongDurationTime"]),
+
+    // 歌曲信息
     playSongInfoShow() {
       return Object.keys(this.playListSongs).length;
     },
@@ -86,9 +92,11 @@ export default {
         return "";
       }
     },
+
+    // 样式
     pointStyle() {
       return {
-        marginLeft: `${this.marginLeft}px`,
+        marginLeft: `${this.marginLeft - this.pointHalfWidth}px`,
       };
     },
     elapsedBarStyle() {
@@ -96,34 +104,62 @@ export default {
         width: `${this.width}px`,
       };
     },
+
+    // 播放时间
+    durationTimeStr() {
+      return this.parseDurationTime(this.playSongDurationTime);
+    },
+    elapsedTimeStr() {
+      return this.parseDurationTime(this.currentPlayTime * 1000);
+    },
+
+    // 播放条
     progressBarInfo() {
       return this.$refs.playProgressBar.getBoundingClientRect();
     },
+    progressBarInfoX() {
+      return this.progressBarInfo["x"];
+    },
+    progressBarInfoWidth() {
+      return this.progressBarInfo["width"];
+    },
+  },
+  watch: {
+    currentPlayTime: {
+      handler(newValue, oldValue) {
+        let currentRate = (newValue * 1000) / this.playSongDurationTime;
+        this.handleCurrentTime(currentRate);
+      },
+    },
   },
   methods: {
+    // 时间样式解析
     parseDurationTime(time) {
       return parseDurationTime(time);
     },
+
+    // 调整进度宽度样式
+    handleCurrentTime(currentRate) {
+      let currentTime = Math.round(
+        (this.playSongDurationTime * currentRate) / 1000
+      );
+
+      this.marginLeft = this.width = this.barWidth * currentRate;
+    },
+
+    // 根据进度获取时间
     getPlayTime(e) {
-      let targetX = e["clientX"];
-      let diff = targetX - this.progressBarInfo["x"];
+      let currentX = e["clientX"];
+      let diff = currentX - this.progressBarInfoX;
 
       if (diff >= 0 && diff <= 500) {
-        let targetRate =
-          (targetX - this.progressBarInfo["x"]) / this.progressBarInfo["width"];
-        this.getTargetTime(targetRate);
+        let currentRate =
+          (currentX - this.progressBarInfoX) / this.progressBarInfoWidth;
 
-        diff = targetX - this.progressBarInfo["x"];
-
-        this.marginLeft = diff - this.pointHalfWidth;
-        this.width = diff;
+        this.handleCurrentTime(currentRate);
+        this.audio.currentTime =
+          Math.round(this.playSongDurationTime * currentRate) / 1000;
       }
-    },
-    getTargetTime(targetRate) {
-      let targetTime =
-        this.playListSongs[this.currentPLayIndex]["dt"] * targetRate;
-      this.$store.commit("updateCurrentPlayTime", Math.round(targetTime));
-      this.elapsedTimeStr = this.parseDurationTime(targetTime);
     },
     getStartPosition(e) {
       this.isMouseDown = true;

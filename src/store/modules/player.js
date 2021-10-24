@@ -1,20 +1,18 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 const state = {
-
   // 歌曲列表
   playListSongs: {},
-  playListSongsId: [346089, 346576],
+  playListSongsId: [33894312, 346576],
 
   // 当前播放歌曲id
-  currentPLayIndex: 346089,
+  currentPLayIndex: 33894312,
 
   // 当前播放歌曲时间
   currentPlayTime: 0,
 
   // 播放歌曲索引历史
   playIndexHistory: [],
-
 
   currentPlayLink: {},
   playStatus: 0,
@@ -27,7 +25,7 @@ const state = {
 const mutations = {
   updatePlayListSongsAndId(state, payload) {
     payload.forEach((element) => {
-      Vue.set(state.playListSongs, element.id, element)
+      Vue.set(state.playListSongs, element.id, element);
       state.playListSongsId.push(element.id);
     });
   },
@@ -38,7 +36,7 @@ const mutations = {
     state.currentPLayIndex = payload;
   },
   updateCurrentPlayTime(state, payload) {
-    state.currentPlayTime = payload
+    state.currentPlayTime = payload;
   },
   updateplayIndexHistory(state, payload) {
     if (payload == -1) {
@@ -49,7 +47,15 @@ const mutations = {
   },
 };
 
-const getters = {};
+const getters = {
+  playSongDurationTime(state) {
+    try {
+      return state.playListSongs[state.currentPLayIndex]["dt"];
+    } catch {
+      return 0;
+    }
+  },
+};
 
 const actions = {};
 
