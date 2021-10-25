@@ -1,6 +1,11 @@
 import Vue from "vue";
 
 const state = {
+
+  // audio
+  audio: null,
+  audioInterval: null,
+
   // 歌曲列表
   playListSongs: {},
   playListSongsId: [33894312, 346576],
@@ -23,6 +28,24 @@ const state = {
 };
 
 const mutations = {
+  initAudioObject(state) {
+    state.audio = new Audio();
+  },
+  updateAudioConfig(state, payload) {
+    for (const key in payload) {
+      if (Object.hasOwnProperty.call(payload, key)) {
+        state.audio[key] = payload[key];
+      }
+    }
+  },
+  updateAudioInterval(state, payload) {
+    if (payload) {
+      state.audioInterval = payload;
+    } else {
+      clearInterval(state.audioInterval);
+    }
+  },
+
   updatePlayListSongsAndId(state, payload) {
     payload.forEach((element) => {
       Vue.set(state.playListSongs, element.id, element);
@@ -45,6 +68,20 @@ const mutations = {
       state.playIndexHistory.push(payload);
     }
   },
+
+  switchPlayMode(state) {
+    switch (state.playMode) {
+      case '循环':
+        state.playMode = '随机'
+        break;
+      case '随机':
+        state.playMode = '单曲循环'
+        break;
+      case '单曲循环':
+        state.playMode = '循环'
+        break;
+    }
+  }
 };
 
 const getters = {

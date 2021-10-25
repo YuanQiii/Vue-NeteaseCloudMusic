@@ -3,17 +3,21 @@ import Vuex from "vuex";
 
 import navigation from "./modules/navigation.js";
 import player from "./modules/player.js";
-import audio from "./modules/audio.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    isMouseDown: false
+  },
+  mutations: {
+    updateIsMouseDown(state, payload) {
+      state.isMouseDown = payload
+    }
+  },
   actions: {},
   modules: {
     navigation,
     player,
-    audio,
   },
 });

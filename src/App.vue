@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @mouseup="updateIsMouseDown">
     <navigation-bar />
     <div>
       <keep-alive>
@@ -18,6 +18,12 @@ export default {
   components: {
     NavigationBar,
     MusicPlayer,
+  },
+  methods: {
+    updateIsMouseDown() {
+      this.$store.commit("updateIsMouseDown", false);
+      console.log(123);
+    },
   },
 };
 </script>

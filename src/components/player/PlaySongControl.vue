@@ -1,8 +1,5 @@
 <template>
   <div class="play-song-control">
-    <div class="picture-in-picture">
-      <img src="../../assets/player/musiccollect.png" class="image" />
-    </div>
     <div class="collect">
       <img src="../../assets/player/musiccollect.png" class="image" />
     </div>

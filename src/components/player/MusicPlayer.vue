@@ -32,8 +32,8 @@ export default {
   },
   computed: {
     ...mapState({
-      audio: (state) => state.audio.audio,
-      audioInterval: (state) => state.audio.audioInterval,
+      audio: (state) => state.player.audio,
+      audioInterval: (state) => state.player.audioInterval,
     }),
     audioCurrentTime() {
       if (this.audio) {

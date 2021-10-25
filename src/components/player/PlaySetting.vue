@@ -1,26 +1,26 @@
 <template>
   <div class="play-setting">
-    <div class="volume" @click="volumeShow">
+    <div class="volume" @click="switchVolumeShow">
       <img src="../../assets/player/volume.png" class="image" />
     </div>
-    <div class="mode" @click="togglePlayType">
+    <div class="mode" @click="switchPlayMode">
       <img
         src="../../assets/player/shuffle.png"
-        v-show="playTypeCurrentIndex === 0"
+        v-show="playMode == '随机'"
         class="image"
       />
       <img
         src="../../assets/player/singlecycle.png"
-        v-show="playTypeCurrentIndex === 1"
+        v-show="playMode == '单曲循环'"
         class="image"
       />
       <img
         src="../../assets/player/loop.png"
-        v-show="playTypeCurrentIndex === 2"
+        v-show="playMode == '循环'"
         class="image"
       />
     </div>
-    <div class="panel" @click="toggleShow">
+    <div class="panel">
       <img src="../../assets/player/playlist.png" class="image" />
     </div>
     <div class="count">
@@ -29,60 +29,104 @@
         <span>10</span>
       </div>
     </div>
-    <!-- <div v-show="toggleTip" class="tip">{{ togglePlayTip }}</div> -->
-    <div
-      v-show="toggleVolume"
-      class="volume-bar"
-      @mousemove="dragStart($event)"
-      @mouseleave="dragFlag(false)"
-    >
-      <div class="point">
-        <div class="rate" ref="rate"></div>
-        <img
-          src="../../assets/player/progress.png"
-          class="image"
-          @mousedown="dragFlag(true)"
-          @mouseup="dragFlag(false)"
+    <div v-show="modeTipShow" class="tip">{{ playMode }}</div>
+    <div v-show="volumeShow" class="volume-bar" @mousemove="getMoveDistance">
+      <div class="bar">
+        <div @mousedown="getVolume">
+          <div class="all-bar" ref="volumeBar" />
+          <div class="surplus-bar" :style="surplusBarStyle" />
+        </div>
+
+        <div
+          class="point"
           draggable="false"
-          ref="dragVolume"
-        />
+          :style="pointStyle"
+          @mousedown="getStartPosition"
+        >
+          <div class="white"></div>
+          <div class="red"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "PlaySetting",
   data() {
     return {
-      playTypeCurrentIndex: 0,
-      toggleTip: true,
-      toggleVolume: true,
-      dragVolumeFlag: false,
-      screenY: 0,
+      volumeShow: false,
+      modeTipShow: false,
+      modeTipTimeOut: null,
+      playTypeCurrentIndex: 1,
+      barHeight: 80,
+      height: 80,
+      top: 80,
     };
   },
+  computed: {
+    ...mapState({
+      audio: (state) => state.player.audio,
+      playMode: (state) => state.player.playMode,
+
+      isMouseDown: (state) => state.isMouseDown,
+    }),
+
+    surplusBarStyle() {
+      return {
+        height: `${this.height}px`,
+      };
+    },
+    pointStyle() {
+      return {
+        top: `${this.top}px`,
+      };
+    },
+    volumeBarInfo() {
+      return this.$refs.volumeBar.getBoundingClientRect();
+    },
+    volumeBarInfoY() {
+      return this.volumeBarInfo["y"];
+    },
+    volumeBarInfoHeight() {
+      return this.volumeBarInfo["height"];
+    },
+  },
   methods: {
-    volumeShow() {},
-    togglePlayType() {},
-    toggleShow() {},
-    dragFlag(flag) {
-      if (flag) {
-        this.dragVolumeFlag = flag;
-      } else {
-        this.dragVolumeFlag = flag;
+    switchVolumeShow() {
+      this.volumeShow = !this.volumeShow;
+    },
+    switchPlayMode() {
+      this.$store.commit("switchPlayMode");
+      this.modeTipShow = true;
+      if (this.modeTipTimeOut) {
+        clearTimeout(this.modeTipTimeOut);
+      }
+      this.modeTipTimeOut = setTimeout(() => {
+        this.modeTipShow = false;
+      }, 1000);
+    },
+    getVolume(e) {
+      let currentY = e["clientY"];
+
+      let diff = currentY - this.volumeBarInfoY;
+
+      if (diff >= 0 && diff <= 80) {
+        let currentRate =
+          (currentY - this.volumeBarInfoY) / this.volumeBarInfoHeight;
+
+        this.height = this.top = this.barHeight * currentRate;
+        this.audio.volume = 1 - currentRate;
       }
     },
-    dragStart(event) {
-      if (this.dragVolumeFlag) {
-        this.screenY = event.screenY;
-        let val = 70 - (977 - this.screenY);
-        if (0 <= val && val <= 70) {
-          this.$refs.dragVolume.style.top = `${val}px`;
-          this.$refs.rate.style.height = `${val}px`;
-          this.$refs.audio.volume = (977 - this.screenY) / 70;
-        }
+    getStartPosition(e) {
+      this.$store.commit("updateIsMouseDown", true);
+    },
+    getMoveDistance(e) {
+      if (this.isMouseDown) {
+        this.getVolume(e);
       }
     },
   },
@@ -140,18 +184,19 @@ export default {
       padding-left: 5px;
     }
   }
+
   .tip {
     width: 81px;
     height: 34px;
     background-color: #191919;
-    position: absolute;
+    position: relative;
     text-align: center;
     color: #fff;
     font-size: 12px;
     line-height: 34px;
     border-radius: 5px;
     top: -35px;
-    left: 1370px;
+    left: -120px;
     box-shadow: 0px -1px 16px -5px #281406;
     z-index: 99;
   }
@@ -160,17 +205,54 @@ export default {
     width: 32px;
     height: 103px;
     background-color: #040506;
-    position: absolute;
-    top: -103px;
-    left: 1365px;
     z-index: 9;
+    position: relative;
+    left: -200px;
+    top: -103px;
+    opacity: 0.8;
+
+    .all-bar {
+      width: 4px;
+      height: 80px;
+      background-color: #c70c0c;
+      position: absolute;
+      top: 5px;
+    }
+
+    .surplus-bar {
+      width: 4px;
+      background-color: #191919;
+      position: absolute;
+      top: 5px;
+    }
+
+    .point {
+      position: absolute;
+      left: -5px;
+
+      .white {
+        position: absolute;
+        top: -3px;
+        left: 1px;
+        background-color: #fff;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .red {
+        position: absolute;
+        left: 4px;
+        top: 0px;
+        width: 6px;
+        height: 6px;
+        background-color: #c70c0c;
+        border-radius: 50%;
+      }
+    }
   }
 
-  .point {
-    width: 4px;
-    height: 80px;
-    text-align: right;
-    background-color: #c70c0c;
+  .bar {
     margin-left: 14px;
     margin-top: 10px;
     position: relative;

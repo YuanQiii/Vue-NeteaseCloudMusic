@@ -26,7 +26,7 @@ export default {
       currentPLayIndex: (state) => state.player.currentPLayIndex,
       playIndexHistory: (state) => state.player.playIndexHistory,
 
-      audio: (state) => state.audio.audio,
+      audio: (state) => state.player.audio,
     }),
   },
   methods: {

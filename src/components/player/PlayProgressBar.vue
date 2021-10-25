@@ -4,11 +4,7 @@
       <img src="../../assets/player/note.png" class="image" />
     </div>
 
-    <div
-      class="play-progress"
-      @mousemove="getMoveDistance"
-      @mouseup="getEndPosition"
-    >
+    <div class="play-progress" @mousemove="getMoveDistance">
       <div class="info">
         <div class="title" v-show="playSongInfoShow">
           <span class="song-name">{{ playSongTitleName }}</span>
@@ -60,7 +56,6 @@ export default {
       width: 0,
       pointHalfWidth: 10,
       barWidth: 500,
-      isMouseDown: false,
     };
   },
   computed: {
@@ -69,7 +64,9 @@ export default {
       currentPLayIndex: (state) => state.player.currentPLayIndex,
       currentPlayTime: (state) => state.player.currentPlayTime,
 
-      audio: (state) => state.audio.audio,
+      audio: (state) => state.player.audio,
+
+      isMouseDown: (state) => state.isMouseDown,
     }),
 
     ...mapGetters(["playSongDurationTime"]),
@@ -137,16 +134,9 @@ export default {
     parseDurationTime(time) {
       return parseDurationTime(time);
     },
-
-    // 调整进度宽度样式
     handleCurrentTime(currentRate) {
-      let currentTime = Math.round(
-        (this.playSongDurationTime * currentRate) / 1000
-      );
-
       this.marginLeft = this.width = this.barWidth * currentRate;
     },
-
     // 根据进度获取时间
     getPlayTime(e) {
       let currentX = e["clientX"];
@@ -162,10 +152,7 @@ export default {
       }
     },
     getStartPosition(e) {
-      this.isMouseDown = true;
-    },
-    getEndPosition(e) {
-      this.isMouseDown = false;
+      this.$store.commit("updateIsMouseDown", true);
     },
     getMoveDistance(e) {
       if (this.isMouseDown) {
