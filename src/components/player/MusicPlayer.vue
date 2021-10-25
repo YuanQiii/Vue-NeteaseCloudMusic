@@ -48,7 +48,7 @@ export default {
   methods: {
     getSongs() {
       let params = {
-        ids: "33894312,346576",
+        ids: "1398663411,346576",
       };
       songDetailApi(params).then((response) => {
         this.$store.commit("updatePlayListSongsAndId", response.data.songs);
@@ -64,7 +64,6 @@ export default {
       this.$store.commit("updateAudioConfig", {
         preload: "auto",
         autoplay: true,
-        src: "https://music.163.com/song/media/outer/url?id=33894312.mp3",
       });
 
       let updateCurrentPlayTime = setInterval(() => {

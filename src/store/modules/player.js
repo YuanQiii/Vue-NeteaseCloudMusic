@@ -8,10 +8,10 @@ const state = {
 
   // 歌曲列表
   playListSongs: {},
-  playListSongsId: [33894312, 346576],
+  playListSongsId: [],
 
-  // 当前播放歌曲id
-  currentPLayIndex: 33894312,
+  // 当前播放歌曲列表索引
+  currentPLayIndex: 0,
 
   // 当前播放歌曲时间
   currentPlayTime: 0,
@@ -23,7 +23,6 @@ const state = {
   playStatus: 0,
   playMode: "随机",
 
-  pipStatus: 0,
   volume: 0,
 };
 
@@ -37,6 +36,10 @@ const mutations = {
         state.audio[key] = payload[key];
       }
     }
+  },
+  updateAudioSrc(state) {
+    state.audio.src = `https://music.163.com/song/media/outer/url?id=${getters.currentPlayId(state)}.mp3`
+    state.audio.play()
   },
   updateAudioInterval(state, payload) {
     if (payload) {
@@ -87,11 +90,14 @@ const mutations = {
 const getters = {
   playSongDurationTime(state) {
     try {
-      return state.playListSongs[state.currentPLayIndex]["dt"];
+      return state.playListSongs[getters.currentPlayId(state)]["dt"];
     } catch {
       return 0;
     }
   },
+  currentPlayId(state) {
+    return state.playListSongsId[state.currentPLayIndex]
+  }
 };
 
 const actions = {};

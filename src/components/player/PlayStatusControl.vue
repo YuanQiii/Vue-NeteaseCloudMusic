@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "PlayStatusControl",
   computed: {
@@ -28,6 +28,8 @@ export default {
 
       audio: (state) => state.player.audio,
     }),
+
+    ...mapGetters(["currentPlayId"]),
   },
   methods: {
     playPreviousSong() {
@@ -53,8 +55,9 @@ export default {
 
         this.$store.commit("updateCurrentPLayIndex", previousPlayIndex);
       }
-    },
 
+      this.$store.commit("updateAudioSrc");
+    },
     playNextSong() {
       let songCount = this.playListSongsId.length;
       let nextPlayIndex = 0;
@@ -78,6 +81,7 @@ export default {
       }
 
       this.$store.commit("updateplayIndexHistory", nextPlayIndex);
+      this.$store.commit("updateAudioSrc");
     },
     switchPlayStatus() {
       if (this.playStatus) {

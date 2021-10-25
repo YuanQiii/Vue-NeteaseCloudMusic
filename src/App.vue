@@ -22,7 +22,6 @@ export default {
   methods: {
     updateIsMouseDown() {
       this.$store.commit("updateIsMouseDown", false);
-      console.log(123);
     },
   },
 };

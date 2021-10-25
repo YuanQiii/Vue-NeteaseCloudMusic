@@ -66,6 +66,9 @@ export default {
       top: 80,
     };
   },
+  created() {
+    this.initVolume();
+  },
   computed: {
     ...mapState({
       audio: (state) => state.player.audio,
@@ -95,6 +98,9 @@ export default {
     },
   },
   methods: {
+    initVolume() {
+      this.handleVolume(this.audio.volume);
+    },
     switchVolumeShow() {
       this.volumeShow = !this.volumeShow;
     },
@@ -117,9 +123,12 @@ export default {
         let currentRate =
           (currentY - this.volumeBarInfoY) / this.volumeBarInfoHeight;
 
-        this.height = this.top = this.barHeight * currentRate;
-        this.audio.volume = 1 - currentRate;
+        this.handleVolume(currentRate);
       }
+    },
+    handleVolume(currentRate) {
+      this.height = this.top = this.barHeight * currentRate;
+      this.audio.volume = 1 - currentRate;
     },
     getStartPosition(e) {
       this.$store.commit("updateIsMouseDown", true);
