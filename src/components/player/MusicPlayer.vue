@@ -7,10 +7,10 @@
   </div>
 </template>
 <script>
-import PlayProgressBar from "./PlayProgressBar.vue";
-import PlaySetting from "./PlaySetting.vue";
-import PlaySongControl from "./PlaySongControl.vue";
-import PlayStatusControl from "./PlayStatusControl.vue";
+import PlayProgressBar from "./control/PlayProgressBar.vue";
+import PlaySetting from "./control/PlaySetting.vue";
+import PlaySongControl from "./control/PlaySongControl.vue";
+import PlayStatusControl from "./control/PlayStatusControl.vue";
 
 import { songDetailApi } from "@/api/song.js";
 import { mapState } from "vuex";

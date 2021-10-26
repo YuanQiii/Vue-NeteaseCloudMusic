@@ -1,32 +1,31 @@
 <template>
   <div class="play-setting">
     <div class="volume" @click="switchVolumeShow">
-      <img src="../../assets/player/volume.png" class="image" />
+      <img src="../../../assets/player/volume.png" class="image" />
     </div>
     <div class="mode" @click="switchPlayMode">
       <img
-        src="../../assets/player/shuffle.png"
+        src="../../../assets/player/shuffle.png"
         v-show="playMode == '随机'"
         class="image"
       />
       <img
-        src="../../assets/player/singlecycle.png"
+        src="../../../assets/player/singlecycle.png"
         v-show="playMode == '单曲循环'"
         class="image"
       />
       <img
-        src="../../assets/player/loop.png"
+        src="../../../assets/player/loop.png"
         v-show="playMode == '循环'"
         class="image"
       />
     </div>
-    <div class="panel">
-      <img src="../../assets/player/playlist.png" class="image" />
+    <div class="panel" @click="switchPlaylistShow">
+      <img src="../../../assets/player/playlist.png" class="image" />
     </div>
     <div class="count">
       <div class="background">
-        <!-- <span>{{ $store.state.musicAudioList.length }}</span> -->
-        <span>10</span>
+        <span class="count">{{ playSongsCount }}</span>
       </div>
     </div>
     <div v-show="modeTipShow" class="tip">{{ playMode }}</div>
@@ -48,12 +47,17 @@
         </div>
       </div>
     </div>
+    <div v-show="playlistShow" class="playlist-display">
+      <playlist-display />
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
+import PlaylistDisplay from "../playlist/PlaylistDisplay.vue";
 export default {
+  components: { PlaylistDisplay },
   name: "PlaySetting",
   data() {
     return {
@@ -73,9 +77,12 @@ export default {
     ...mapState({
       audio: (state) => state.player.audio,
       playMode: (state) => state.player.playMode,
+      playlistShow: (state) => state.player.playlistShow,
 
       isMouseDown: (state) => state.isMouseDown,
     }),
+
+    ...mapGetters(["playSongsCount"]),
 
     surplusBarStyle() {
       return {
@@ -103,6 +110,9 @@ export default {
     },
     switchVolumeShow() {
       this.volumeShow = !this.volumeShow;
+    },
+    switchPlaylistShow() {
+      this.$store.commit("updatePlaylistShow", !this.playlistShow);
     },
     switchPlayMode() {
       this.$store.commit("switchPlayMode");
@@ -192,6 +202,10 @@ export default {
       margin-left: -10px;
       padding-left: 5px;
     }
+
+    .count {
+      line-height: 18px;
+    }
   }
 
   .tip {
@@ -280,6 +294,11 @@ export default {
       top: 70px;
       transform: rotateZ(-90deg);
     }
+  }
+
+  .playlist-display {
+    position: relative;
+    left: -800px;
   }
 }
 </style>

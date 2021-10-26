@@ -24,6 +24,9 @@ const state = {
   playMode: "随机",
 
   volume: 0,
+
+  // 播放列表
+  playlistShow: false
 };
 
 const mutations = {
@@ -38,7 +41,7 @@ const mutations = {
     }
   },
   updateAudioSrc(state) {
-    state.audio.src = `https://music.163.com/song/media/outer/url?id=${getters.currentPlayId(state)}.mp3`
+    state.audio.src = `https://music.163.com/song/media/outer/url?id=${getters.currentPlaySongId(state)}.mp3`
     state.audio.play()
   },
   updateAudioInterval(state, payload) {
@@ -50,10 +53,15 @@ const mutations = {
   },
 
   updatePlayListSongsAndId(state, payload) {
-    payload.forEach((element) => {
-      Vue.set(state.playListSongs, element.id, element);
-      state.playListSongsId.push(element.id);
-    });
+    if (payload) {
+      payload.forEach((element) => {
+        Vue.set(state.playListSongs, element.id, element);
+        state.playListSongsId.push(element.id);
+      });
+    } else {
+      state.playListSongs = {}
+      state.playListSongsId = []
+    }
   },
   switchPlayStatus(state) {
     state.playStatus = state.playStatus ? 0 : 1;
@@ -84,19 +92,31 @@ const mutations = {
         state.playMode = '循环'
         break;
     }
+  },
+
+  updatePlaylistShow(state, payload) {
+    state.playlistShow = payload
   }
 };
 
 const getters = {
   playSongDurationTime(state) {
     try {
-      return state.playListSongs[getters.currentPlayId(state)]["dt"];
+      return state.playListSongs[getters.currentPlaySongId(state)]["dt"];
     } catch {
       return 0;
     }
   },
-  currentPlayId(state) {
+  // 当前歌曲id
+  currentPlaySongId(state) {
     return state.playListSongsId[state.currentPLayIndex]
+  },
+  // 当前歌名
+  currentPLaySongName(state) {
+    return state.playListSongs[getters.currentPlaySongId(state)]['name']
+  },
+  playSongsCount(state) {
+    return state.playListSongsId.length
   }
 };
 

@@ -1,7 +1,7 @@
 <template>
   <div class="play-progress-bar">
     <div class="song-image">
-      <img src="../../assets/player/note.png" class="image" />
+      <img src="../../../assets/player/note.png" class="image" />
     </div>
 
     <div class="play-progress" @mousemove="getMoveDistance">
@@ -13,7 +13,7 @@
           <span class="artist-name">{{ playSongArtistName }}</span>
         </div>
         <div class="link" v-show="playSongInfoShow">
-          <img src="../../assets/player/link.png" class="image" />
+          <img src="../../../assets/player/link.png" class="image" />
         </div>
       </div>
 

@@ -1,10 +1,10 @@
 <template>
   <div class="play-song-control">
     <div class="collect">
-      <img src="../../assets/player/musiccollect.png" class="image" />
+      <img src="../../../assets/player/musiccollect.png" class="image" />
     </div>
     <div class="share">
-      <img src="../../assets/player/musicshare.png" class="image" />
+      <img src="../../../assets/player/musicshare.png" class="image" />
     </div>
   </div>
 </template>

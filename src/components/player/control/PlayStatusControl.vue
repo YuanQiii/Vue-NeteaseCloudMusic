@@ -1,15 +1,15 @@
 <template>
   <div class="play-control">
     <div class="play-control-previous" @click="playPreviousSong">
-      <img src="../../assets/player/next.png" alt />
+      <img src="../../../assets/player/next.png" alt />
     </div>
 
     <div class="play-control-pause" @click="switchPlayStatus">
-      <img src="../../assets/player/musicplay.png" v-if="playStatus" />
-      <img src="../../assets/player/musicpause.png" v-else />
+      <img src="../../../assets/player/musicplay.png" v-if="playStatus" />
+      <img src="../../../assets/player/musicpause.png" v-else />
     </div>
     <div class="play-control-next" @click="playNextSong">
-      <img src="../../assets/player/next.png" alt />
+      <img src="../../../assets/player/next.png" alt />
     </div>
   </div>
 </template>
