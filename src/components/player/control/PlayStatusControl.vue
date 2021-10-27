@@ -29,7 +29,7 @@ export default {
       audio: (state) => state.player.audio,
     }),
 
-    ...mapGetters(["currentPlayId"]),
+    ...mapGetters(["playSongsCount"]),
   },
   methods: {
     playPreviousSong() {
@@ -45,43 +45,37 @@ export default {
       } else {
         let temp = this.currentPLayIndex;
         let previousPlayIndex = 0;
-        let songCount = this.playListSongsId.length;
 
         previousPlayIndex = ++temp;
 
-        if (previousPlayIndex > songCount) {
+        if (previousPlayIndex > this.playSongsCount) {
           this.previousPlayIndex = 0;
         }
 
         this.$store.commit("updateCurrentPLayIndex", previousPlayIndex);
       }
-
-      this.$store.commit("updateAudioSrc");
     },
     playNextSong() {
-      let songCount = this.playListSongsId.length;
       let nextPlayIndex = 0;
-
       if (this.playMode == "循环" || this.playMode == "单曲循环") {
         let temp = this.currentPLayIndex;
         nextPlayIndex = ++temp;
 
-        if (nextPlayIndex > songCount) {
-          this.nextPlayIndex = 0;
+        if (nextPlayIndex > this.playSongsCount - 1) {
+          nextPlayIndex = 0;
         }
 
         this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
       } else {
-        nextPlayIndex = Math.floor(Math.random() * songCount);
+        nextPlayIndex = Math.floor(Math.random() * this.playSongsCount);
 
         while (nextPlayIndex == this.currentPLayIndex) {
-          nextPlayIndex = Math.floor(Math.random() * songCount);
+          nextPlayIndex = Math.floor(Math.random() * this.playSongsCount);
         }
         this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
       }
 
       this.$store.commit("updateplayIndexHistory", nextPlayIndex);
-      this.$store.commit("updateAudioSrc");
     },
     switchPlayStatus() {
       if (this.playStatus) {

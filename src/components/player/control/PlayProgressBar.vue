@@ -69,22 +69,22 @@ export default {
       isMouseDown: (state) => state.isMouseDown,
     }),
 
-    ...mapGetters(["playSongDurationTime", "currentPlayId"]),
+    ...mapGetters(["playSongDurationTime", "currentPlaySongId"]),
 
     // 歌曲信息
     playSongInfoShow() {
       return Object.keys(this.playListSongs).length;
     },
     playSongTitleName() {
-      if (this.playListSongs.hasOwnProperty(this.currentPlayId)) {
-        return this.playListSongs[this.currentPlayId]["name"];
+      if (this.playListSongs.hasOwnProperty(this.currentPlaySongId)) {
+        return this.playListSongs[this.currentPlaySongId]["name"];
       } else {
         return "";
       }
     },
     playSongArtistName() {
-      if (this.playListSongs.hasOwnProperty(this.currentPlayId)) {
-        return this.playListSongs[this.currentPlayId]["ar"][0]["name"];
+      if (this.playListSongs.hasOwnProperty(this.currentPlaySongId)) {
+        return this.playListSongs[this.currentPlaySongId]["ar"][0]["name"];
       } else {
         return "";
       }

@@ -5,6 +5,7 @@ const state = {
   // audio
   audio: null,
   audioInterval: null,
+  audioStateInterval: null,
 
   // 歌曲列表
   playListSongs: {},
@@ -40,10 +41,7 @@ const mutations = {
       }
     }
   },
-  updateAudioSrc(state) {
-    state.audio.src = `https://music.163.com/song/media/outer/url?id=${getters.currentPlaySongId(state)}.mp3`
-    state.audio.play()
-  },
+
   updateAudioInterval(state, payload) {
     if (payload) {
       state.audioInterval = payload;
@@ -66,12 +64,33 @@ const mutations = {
   switchPlayStatus(state) {
     state.playStatus = state.playStatus ? 0 : 1;
   },
+
+
+  // 切换当前歌曲
   updateCurrentPLayIndex(state, payload) {
     state.currentPLayIndex = payload;
+    mutations.updateAudioSrc(state)
   },
+  updateAudioSrc(state) {
+    if (state.audioStateInterval) {
+      clearInterval(state.audioStateInterval)
+    }
+    state.audioStateInterval = setInterval(() => {
+      state.audio.src = `https://music.163.com/song/media/outer/url?id=${getters.currentPlaySongId(state)}.mp3`
+      if (state.audio.readyState == 4) {
+        state.audio.play()
+        clearInterval(state.audioStateInterval)
+      }
+    }, 100);
+  },
+
+
+
+
   updateCurrentPlayTime(state, payload) {
     state.currentPlayTime = payload;
   },
+
   updateplayIndexHistory(state, payload) {
     if (payload == -1) {
       state.playIndexHistory.pop();
@@ -109,7 +128,6 @@ const getters = {
   },
   // 当前歌曲id
   currentPlaySongId(state) {
-
     try {
       return state.playListSongsId[state.currentPLayIndex]
     } catch {
@@ -118,7 +136,6 @@ const getters = {
   },
   // 当前歌名
   currentPLaySongName(state) {
-
     if (state.playListSongs.hasOwnProperty(getters.currentPlaySongId(state))) {
       return state.playListSongs[getters.currentPlaySongId(state)]['name']
     } else {

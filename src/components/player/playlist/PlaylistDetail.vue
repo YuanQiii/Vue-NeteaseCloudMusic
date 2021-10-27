@@ -14,31 +14,32 @@
       </div>
 
       <div v-else class="list">
-        <div></div>
         <div
-          class="item"
           v-for="(value, index) in playListSongsId"
           :key="index"
+          :class="elementIsActive(currentPlaySongId, value)"
           @click="changeCurrentPLayIndex(index)"
         >
-          <img
-            class="arrow-image"
-            src="../../../assets/player/triangle.png"
-            v-show="currentPlaySongId == value"
-          />
-          <div class="song-name">
-            {{ playListSongs[value]["name"] }}
+          <div class="item">
+            <img
+              class="arrow-image"
+              src="../../../assets/player/triangle.png"
+              v-show="currentPlaySongId == value"
+            />
+            <div class="song-name">
+              {{ playListSongs[value]["name"] }}
+            </div>
+            <div class="operate">
+              <!-- <operate :sendShow="sendShow" /> -->
+            </div>
+            <div class="artist-name">
+              {{ playListSongs[value]["ar"][0]["name"] }}
+            </div>
+            <div class="duration">
+              {{ parseDurationTime(playListSongs[value]["dt"]) }}
+            </div>
+            <img class="link-image" src="../../../assets/player/link.png" />
           </div>
-          <div class="operate">
-            <!-- <operate :sendShow="sendShow" /> -->
-          </div>
-          <div class="artist-name">
-            {{ playListSongs[value]["ar"][0]["name"] }}
-          </div>
-          <div class="duration">
-            {{ parseDurationTime(playListSongs[value]["dt"]) }}
-          </div>
-          <img class="link-image" src="../../../assets/player/link.png" />
         </div>
       </div>
     </div>
@@ -101,7 +102,6 @@ export default {
   font-size: 12px;
   line-height: 50px;
   overflow: auto;
-
   &::-webkit-scrollbar {
     background-color: #101010;
     width: 7px;
@@ -112,13 +112,16 @@ export default {
     border-radius: 5px;
   }
 
-  .image {
-    opacity: 0.7;
-    cursor: pointer;
+  .active {
+    opacity: 1;
+  }
 
-    &:hover {
-      opacity: 1;
-    }
+  .deactive {
+    opacity: 0.7;
+  }
+
+  .image {
+    cursor: pointer;
   }
 
   .tip {
@@ -154,7 +157,6 @@ export default {
 
       &:hover {
         background-color: #131211;
-        opacity: 1;
       }
 
       .song-name,
