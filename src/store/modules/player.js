@@ -109,11 +109,21 @@ const getters = {
   },
   // 当前歌曲id
   currentPlaySongId(state) {
-    return state.playListSongsId[state.currentPLayIndex]
+
+    try {
+      return state.playListSongsId[state.currentPLayIndex]
+    } catch {
+      return 0
+    }
   },
   // 当前歌名
   currentPLaySongName(state) {
-    return state.playListSongs[getters.currentPlaySongId(state)]['name']
+
+    if (state.playListSongs.hasOwnProperty(getters.currentPlaySongId(state))) {
+      return state.playListSongs[getters.currentPlaySongId(state)]['name']
+    } else {
+      return ''
+    }
   },
   playSongsCount(state) {
     return state.playListSongsId.length
