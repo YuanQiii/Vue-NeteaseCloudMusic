@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-10-19 09:48:46
+ * @LastEditTime: 2021-10-28 16:33:38
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit 
+ * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\player\MusicPlayer.vue
+-->
 <template>
   <div class="music-player">
     <play-status-control />
@@ -53,8 +61,8 @@ export default {
       songDetailApi(params).then((response) => {
         this.$store.commit("updatePlayListSongsAndId", response.data.songs);
         console.log(
-          "🚀 ~ file: MusicPlayer.vue ~ line 311 ~ songDetailApi ~ this.$store.state.player.playListSongs",
-          this.$store.state.player.playListSongs
+          "🚀 ~ file: MusicPlayer.vue ~ line 63 ~ songDetailApi ~ response.data.songs",
+          response.data.songs
         );
       });
     },

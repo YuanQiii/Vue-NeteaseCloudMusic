@@ -1,9 +1,10 @@
+
 <template>
   <div class="playlistdisplay">
     <playlist-head />
     <div class="displaycontent">
       <playlist-detail />
-      <display-lyric />
+      <!-- <display-lyric /> -->
     </div>
   </div>
 </template>

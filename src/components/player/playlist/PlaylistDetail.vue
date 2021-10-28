@@ -30,7 +30,7 @@
               {{ playListSongs[value]["name"] }}
             </div>
             <div class="operate">
-              <!-- <operate :sendShow="sendShow" /> -->
+              <song-operation :songDetail="playListSongs[value]" />
             </div>
             <div class="artist-name">
               {{ playListSongs[value]["ar"][0]["name"] }}
@@ -52,7 +52,10 @@ import { mapState, mapGetters } from "vuex";
 import { parseDurationTime } from "@/utils/parseDurationTime.js";
 import { elementIsActive } from "@/utils/elementIsActive.js";
 
+import SongOperation from "../../operation/SongOperation.vue";
+
 export default {
+  components: { SongOperation },
   name: "PlaylistDetail",
   data() {
     return {
@@ -102,11 +105,11 @@ export default {
   font-size: 12px;
   line-height: 50px;
   overflow: auto;
+
   &::-webkit-scrollbar {
     background-color: #101010;
     width: 7px;
   }
-
   &::-webkit-scrollbar-thumb {
     background-color: #454546;
     border-radius: 5px;
@@ -114,6 +117,7 @@ export default {
 
   .active {
     opacity: 1;
+    background-color: #131211;
   }
 
   .deactive {
@@ -178,12 +182,9 @@ export default {
         cursor: pointer;
       }
 
-      .operate {
-        position: relative;
-        left: -385px;
-        top: -5px;
-        opacity: 0;
-      }
+      // .operate {
+      //   position: relative;
+      // }
 
       .artist-name {
         width: 70px;

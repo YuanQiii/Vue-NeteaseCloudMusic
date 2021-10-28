@@ -22,40 +22,20 @@ export default {
     ...mapState({
       playStatus: (state) => state.player.playStatus,
       playMode: (state) => state.player.playMode,
-      playListSongsId: (state) => state.player.playListSongsId,
       currentPLayIndex: (state) => state.player.currentPLayIndex,
-      playIndexHistory: (state) => state.player.playIndexHistory,
-
-      audio: (state) => state.player.audio,
     }),
 
-    ...mapGetters(["playSongsCount"]),
+    ...mapGetters(["playSongsCount", "playIndexHistoryCount"]),
   },
   methods: {
     playPreviousSong() {
-      let historyLength = this.playIndexHistory.length;
-
-      if (historyLength > 1) {
+      if (this.playIndexHistoryCount > 0) {
         this.$store.commit("updateplayIndexHistory", -1);
-        historyLength = this.playIndexHistory.length;
-        this.$store.commit(
-          "updateCurrentPLayIndex",
-          this.playIndexHistory[historyLength - 1]
-        );
       } else {
-        let temp = this.currentPLayIndex;
-        let previousPlayIndex = 0;
-
-        previousPlayIndex = ++temp;
-
-        if (previousPlayIndex > this.playSongsCount) {
-          this.previousPlayIndex = 0;
-        }
-
-        this.$store.commit("updateCurrentPLayIndex", previousPlayIndex);
+        this.playNextSong(false);
       }
     },
-    playNextSong() {
+    playNextSong(addHistory = true) {
       let nextPlayIndex = 0;
       if (this.playMode == "循环" || this.playMode == "单曲循环") {
         let temp = this.currentPLayIndex;
@@ -74,15 +54,11 @@ export default {
         }
         this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
       }
-
-      this.$store.commit("updateplayIndexHistory", nextPlayIndex);
+      if (addHistory) {
+        this.$store.commit("updateplayIndexHistory", nextPlayIndex);
+      }
     },
     switchPlayStatus() {
-      if (this.playStatus) {
-        this.audio.pause();
-      } else {
-        this.audio.play();
-      }
       this.$store.commit("switchPlayStatus");
     },
   },
