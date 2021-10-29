@@ -26,9 +26,10 @@
         <div
           class="point"
           ref="progressBarPoint"
-          draggable="false"
+          draggable="true"
           :style="pointStyle"
           @mousedown="getStartPosition"
+          @dragstart="dragstart"
         >
           <div class="white"></div>
           <div class="red"></div>
@@ -130,6 +131,10 @@ export default {
     },
   },
   methods: {
+    dragstart(e) {
+      console.log(e);
+    },
+
     // 时间样式解析
     parseDurationTime(time) {
       return parseDurationTime(time);

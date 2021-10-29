@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-10-28 17:52:03
+ * @LastEditTime: 2021-10-29 15:51:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
@@ -60,7 +60,8 @@ const mutations = {
 
 
   /**
-   * @description: 更新歌单列表
+   * @description: 更新歌单列表，
+   * payload 为对象时，增加一首歌曲
    * @param {*} state
    * @param {*} payload 类型为array
    * @return {*}
@@ -74,20 +75,34 @@ const mutations = {
       addSongs.push(payload)
     }
 
-    if (addSongs) {
-      addSongs.forEach((element) => {
-        if (!state.playListSongs.hasOwnProperty(element.id)) {
-          Vue.set(state.playListSongs, element.id, element);
-          state.playListSongsId.push(element.id);
-        } else {
-          console.log('已添加到播放列表');
-        }
-      });
+    addSongs.forEach((element) => {
+      if (!state.playListSongs.hasOwnProperty(element.id)) {
+        Vue.set(state.playListSongs, element.id, element);
+        state.playListSongsId.push(element.id);
+      } else {
+        console.log('已添加到播放列表');
+      }
+    });
+
+  },
+
+  /**
+   * @description: 删除歌单歌曲,
+   * payload为null时删除所有歌曲
+   * @param {*} state
+   * @param {*} payload 歌曲id
+   * @return {*}
+   */
+  deletePlayListSongsAndId(state, payload) {
+    if (payload) {
+      Vue.delete(state.playListSongs, payload)
+      Vue.delete(state.playListSongsId, state.playListSongsId.indexOf(payload))
     } else {
       state.playListSongs = {}
       state.playListSongsId = []
     }
   },
+
   switchPlayStatus(state) {
     if (state.playStatus) {
       state.playStatus = 0

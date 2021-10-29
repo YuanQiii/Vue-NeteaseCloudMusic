@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     clearPlaylist() {
-      this.$store.commit("updatePlayListSongsAndId", null);
+      this.$store.commit("deletePlayListSongsAndId", null);
     },
     closePlaylistShow() {
       this.$store.commit("updatePlaylistShow", false);

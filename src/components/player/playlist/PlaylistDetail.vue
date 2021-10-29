@@ -29,7 +29,7 @@
             <div class="song-name">
               {{ playListSongs[value]["name"] }}
             </div>
-            <div class="operate">
+            <div class="operation">
               <song-operation :songDetail="playListSongs[value]" />
             </div>
             <div class="artist-name">
@@ -87,8 +87,8 @@ export default {
     parseDurationTime(time) {
       return parseDurationTime(time);
     },
-    elementIsActive(current, self) {
-      return elementIsActive(current, self);
+    elementIsActive(current, self, origin) {
+      return elementIsActive(current, self, origin);
     },
   },
 };
@@ -182,9 +182,13 @@ export default {
         cursor: pointer;
       }
 
-      // .operate {
-      //   position: relative;
-      // }
+      .operation {
+        margin-top: -7px;
+        opacity: 0;
+        &:hover {
+          opacity: 1;
+        }
+      }
 
       .artist-name {
         width: 70px;
