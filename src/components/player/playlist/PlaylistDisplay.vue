@@ -1,24 +1,32 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-10-26 09:40:15
+ * @LastEditTime: 2021-11-01 10:30:39
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\player\playlist\PlaylistDisplay.vue
+-->
 
 <template>
   <div class="playlistdisplay">
     <playlist-head />
     <div class="displaycontent">
       <playlist-detail />
-      <!-- <display-lyric /> -->
+      <playlist-lyric />
     </div>
   </div>
 </template>
 <script>
 import PlaylistHead from "./PlaylistHead.vue";
 import PlaylistDetail from "./PlaylistDetail.vue";
-import DisplayLyric from "./DisplayLyric";
+import PlaylistLyric from "./PlaylistLyric.vue";
 
 export default {
   name: "PlaylistDisplay",
   components: {
     PlaylistHead,
     PlaylistDetail,
-    DisplayLyric,
+    PlaylistLyric,
   },
 };
 </script>

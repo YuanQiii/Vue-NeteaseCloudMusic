@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-10-28 16:33:38
+ * @LastEditTime: 2021-11-01 16:01:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit 
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\player\MusicPlayer.vue
@@ -20,7 +20,7 @@ import PlaySetting from "./control/PlaySetting.vue";
 import PlaySongControl from "./control/PlaySongControl.vue";
 import PlayStatusControl from "./control/PlayStatusControl.vue";
 
-import { songDetailApi } from "@/api/song.js";
+import { songDetailApi, songLyricApi } from "@/api/song.js";
 import { mapState } from "vuex";
 
 export default {
@@ -33,6 +33,7 @@ export default {
   name: "MusicPlayer",
   created() {
     this.getSongs();
+    this.getLyric();
     this.initAudio();
   },
   data() {
@@ -64,6 +65,27 @@ export default {
           "🚀 ~ file: MusicPlayer.vue ~ line 63 ~ songDetailApi ~ response.data.songs",
           response.data.songs
         );
+      });
+    },
+    getLyric() {
+      let params = {
+        id: "1398663411",
+      };
+
+      songLyricApi(params).then((response) => {
+        this.$store.commit("updatePlayListSongsLyric", {
+          [params["id"]]: response["data"]["lrc"]["lyric"],
+        });
+
+        params = {
+          id: "346576",
+        };
+
+        songLyricApi(params).then((response) => {
+          this.$store.commit("updatePlayListSongsLyric", {
+            [params["id"]]: response["data"]["lrc"]["lyric"],
+          });
+        });
       });
     },
     initAudio() {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-10-29 15:51:21
+ * @LastEditTime: 2021-11-01 17:55:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
@@ -15,8 +15,11 @@ const state = {
   audioInterval: null,
   audioStateInterval: null,
 
-  // 歌曲列表
+  // 歌曲
   playListSongs: {},
+  // 歌词
+  playListSongsLyric: {},
+  // 歌曲id
   playListSongsId: [],
 
   // 当前播放歌曲列表索引
@@ -57,7 +60,6 @@ const mutations = {
       clearInterval(state.audioInterval);
     }
   },
-
 
   /**
    * @description: 更新歌单列表，
@@ -101,6 +103,21 @@ const mutations = {
       state.playListSongs = {}
       state.playListSongsId = []
     }
+  },
+
+  /**
+   * @description: 更新歌词
+   * @param {*} state 
+   * @param {*} payload 对象，键名为id，值为歌词对象
+   * @return {*}
+   */
+  updatePlayListSongsLyric(state, payload) {
+    Object.keys(payload).forEach(index => {
+      if (!state.playListSongsLyric.hasOwnProperty(index)) {
+        Vue.set(state.playListSongsLyric, index, payload[index])
+      }
+    })
+    console.log("🚀 ~ file: player.js ~ line 118 ~ Object.keys ~ state.playListSongsLyric", state.playListSongsLyric)
   },
 
   switchPlayStatus(state) {
@@ -171,8 +188,17 @@ const mutations = {
         break;
     }
   },
+
+
+  /**
+   * @description: 更新歌曲播放时间
+   * @param {*} state
+   * @param {*} payload
+   * @return {*}
+   */
   updateCurrentPlayTime(state, payload) {
     state.currentPlayTime = payload;
+    // 1.066263
   },
   updatePlaylistShow(state, payload) {
     state.playlistShow = payload

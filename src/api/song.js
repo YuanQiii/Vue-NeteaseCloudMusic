@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-10-28 14:13:17
- * @LastEditors: your name
+ * @LastEditTime: 2021-11-01 09:31:05
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\api\song.js
  */
@@ -23,7 +23,7 @@ export function songDetailApi(params) {
 
 /**
  * @description: 歌词Api
- * @param {*} params
+ * @param {*} params id
  * @return {*}
  */
 export function songLyricApi(params) {
