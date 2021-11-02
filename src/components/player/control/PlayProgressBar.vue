@@ -112,14 +112,14 @@ export default {
     },
 
     // 播放条
-    progressBarInfo() {
+    barBoxInfo() {
       return this.$refs.playProgressBar.getBoundingClientRect();
     },
-    progressBarInfoX() {
-      return this.progressBarInfo["x"];
+    barBoxInfoX() {
+      return this.barBoxInfo["x"];
     },
-    progressBarInfoWidth() {
-      return this.progressBarInfo["width"];
+    barBoxInfoWidth() {
+      return this.barBoxInfo["width"];
     },
   },
   watch: {
@@ -145,11 +145,10 @@ export default {
     // 根据进度获取时间
     getPlayTime(e) {
       let currentX = e["clientX"];
-      let diff = currentX - this.progressBarInfoX;
+      let diff = currentX - this.barBoxInfoX;
 
       if (diff >= 0 && diff <= 500) {
-        let currentRate =
-          (currentX - this.progressBarInfoX) / this.progressBarInfoWidth;
+        let currentRate = (currentX - this.barBoxInfoX) / this.barBoxInfoWidth;
 
         this.handleCurrentTime(currentRate);
         this.audio.currentTime =

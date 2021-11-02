@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-01 17:55:52
+ * @LastEditTime: 2021-11-02 17:22:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
@@ -54,11 +54,7 @@ const mutations = {
   },
 
   updateAudioInterval(state, payload) {
-    if (payload) {
-      state.audioInterval = payload;
-    } else {
-      clearInterval(state.audioInterval);
-    }
+    state.audioInterval = payload || clearInterval(state.audioInterval)
   },
 
   /**
@@ -175,6 +171,11 @@ const mutations = {
     }
   },
 
+  /**
+   * @description: 切换播放模式
+   * @param {*} state
+   * @return {*}
+   */
   switchPlayMode(state) {
     switch (state.playMode) {
       case '循环':
@@ -189,7 +190,6 @@ const mutations = {
     }
   },
 
-
   /**
    * @description: 更新歌曲播放时间
    * @param {*} state
@@ -198,7 +198,6 @@ const mutations = {
    */
   updateCurrentPlayTime(state, payload) {
     state.currentPlayTime = payload;
-    // 1.066263
   },
   updatePlaylistShow(state, payload) {
     state.playlistShow = payload

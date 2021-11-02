@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-01 16:01:59
+ * @LastEditTime: 2021-11-02 12:00:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit 
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\player\MusicPlayer.vue
@@ -96,11 +96,11 @@ export default {
         autoplay: true,
       });
 
-      let updateCurrentPlayTime = setInterval(() => {
+      let currentPlayTimeInterval = setInterval(() => {
         this.$store.commit("updateCurrentPlayTime", this.audio.currentTime);
       }, 100);
 
-      this.$store.commit("updateAudioInterval", updateCurrentPlayTime);
+      this.$store.commit("updateAudioInterval", currentPlayTimeInterval);
     },
   },
 };
