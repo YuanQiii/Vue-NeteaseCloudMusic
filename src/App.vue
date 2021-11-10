@@ -7,7 +7,7 @@
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
 -->
 <template>
-  <div @mouseup="updateIsMouseDown">
+  <div @mouseup="updateIsMouseDown" class="app">
     <navigation-bar />
     <div>
       <login-window />
@@ -39,3 +39,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.app {
+  display: block;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+}
+</style>

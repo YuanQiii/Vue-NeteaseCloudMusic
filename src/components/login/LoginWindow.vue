@@ -7,22 +7,28 @@
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
 -->
 <template>
-  <div class="login-window" ref="loginWindow" :style="loginWindowStyle">
+  <div
+    class="login-window"
+    ref="loginWindow"
+    :style="loginWindowStyle"
+    v-show="loginWindowShow"
+  >
     <div
       class="head"
       draggable="true"
-      @dragstart="start"
-      @drag="startPosition"
-      @dragend="end"
+      @mousedown="beforeMove"
+      @mousemove="move"
+      @mouseup="afterMove"
     >
       <div class="mode">{{ loginMode }}</div>
-      <div class="close">x</div>
+      <div class="close" @click="closeWindow">x</div>
     </div>
     <q-r-code-login />
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import QRCodeLogin from "./QRCodeLogin.vue";
 export default {
   components: { QRCodeLogin },
@@ -30,14 +36,19 @@ export default {
   data() {
     return {
       loginMode: "登录",
-      left: 1000,
-      top: 0,
+      isMouseDown: false,
+      left: 800,
+      top: 200,
 
       diffX: 0,
       diffY: 0,
     };
   },
   computed: {
+    ...mapState({
+      loginWindowShow: (state) => state.login.loginWindowShow,
+    }),
+
     loginWindowStyle() {
       return {
         left: `${this.left}px`,
@@ -50,20 +61,22 @@ export default {
     },
   },
   methods: {
-    start(e) {
+    beforeMove(e) {
+      this.isMouseDown = true;
       this.diffX = e["clientX"] - this.loginBoxInfo["x"];
       this.diffY = e["clientY"] - this.loginBoxInfo["y"];
     },
-
-    startPosition(e) {
-      this.left = e["clientX"] - this.diffX;
-      this.top = e["clientY"] - this.diffY;
-      console.log(e);
+    move(e) {
+      if (this.isMouseDown) {
+        this.left = e["clientX"] - this.diffX;
+        this.top = e["clientY"] - this.diffY;
+      }
     },
-
-    end(e) {
-      // this.left = e["clientX"] - this.diffX;
-      // this.top = e["clientY"] - this.diffY;
+    afterMove(e) {
+      this.isMouseDown = false;
+    },
+    closeWindow() {
+      this.$store.commit("updateLoginWindowShow", false);
     },
   },
 };
@@ -80,6 +93,7 @@ export default {
   box-shadow: 0 5px 16px rgb(0 0 0 / 80%);
   z-index: 999;
   position: absolute;
+  user-select: none;
 
   .head {
     color: #fff;

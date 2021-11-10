@@ -111,11 +111,12 @@ export default {
   z-index: 99;
   height: 53px;
   background-image: linear-gradient(0deg, #242323, #363636);
-  width: 100%;
+  width: 100vw;
+  overflow: hidden;
   top: 90%;
   opacity: 0.98;
   display: flex;
-  padding-left: 25%;
+  justify-content: center;
   box-shadow: 0px -4px 5px 0px rgba(20, 4, 1, 0.3);
 }
 </style>

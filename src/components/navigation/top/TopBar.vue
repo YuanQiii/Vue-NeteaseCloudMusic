@@ -13,9 +13,8 @@
       </top-bar-item>
       <search />
       <div class="center">创作者中心</div>
-      <a class="login" @click="toggleShow">登录</a>
+      <a class="login" @click="toggleLoginWindowShow">登录</a>
     </div>
-    <!-- <user-login v-if="isShow" /> -->
   </div>
 </template>
 
@@ -64,8 +63,8 @@ export default {
         this.$router.push({ name: pathName });
       }
     },
-    toggleShow() {
-      this.isShow = !this.isShow;
+    toggleLoginWindowShow() {
+      this.$store.commit("updateLoginWindowShow", true);
     },
     isActive(index) {
       return index == this.currentIndex ? "active" : "";
