@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-11-10 17:58:53
+ * @LastEditTime: 2021-11-11 18:00:14
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -11,15 +11,11 @@
     class="login-window"
     ref="loginWindow"
     :style="loginWindowStyle"
-    v-show="loginWindowShow"
+    v-if="loginWindowShow"
+    @mousemove="move"
+    @mouseup="afterMove"
   >
-    <div
-      class="head"
-      draggable="true"
-      @mousedown="beforeMove"
-      @mousemove="move"
-      @mouseup="afterMove"
-    >
+    <div class="head" @mousedown="beforeMove">
       <div class="mode">{{ loginMode }}</div>
       <div class="close" @click="closeWindow">x</div>
     </div>
@@ -36,10 +32,8 @@ export default {
   data() {
     return {
       loginMode: "登录",
-      isMouseDown: false,
       left: 800,
-      top: 200,
-
+      top: 400,
       diffX: 0,
       diffY: 0,
     };
@@ -47,6 +41,7 @@ export default {
   computed: {
     ...mapState({
       loginWindowShow: (state) => state.login.loginWindowShow,
+      loginWindowMove: (state) => state.login.loginWindowMove,
     }),
 
     loginWindowStyle() {
@@ -55,28 +50,39 @@ export default {
         top: `${this.top}px`,
       };
     },
-
-    loginBoxInfo() {
-      return this.$refs.loginWindow.getBoundingClientRect();
-    },
   },
   methods: {
     beforeMove(e) {
-      this.isMouseDown = true;
-      this.diffX = e["clientX"] - this.loginBoxInfo["x"];
-      this.diffY = e["clientY"] - this.loginBoxInfo["y"];
+      this.diffX = e["offsetX"];
+      this.diffY = e["offsetY"];
+      this.$store.commit("updateLoginWindowMove", true);
     },
     move(e) {
-      if (this.isMouseDown) {
-        this.left = e["clientX"] - this.diffX;
-        this.top = e["clientY"] - this.diffY;
+      if (this.loginWindowMove) {
+        this.left = this.limitPosition(
+          e["clientX"] - this.diffX,
+          window.innerWidth - 530
+        );
+        this.top = this.limitPosition(
+          e["clientY"] - this.diffY,
+          window.innerHeight - 332
+        );
       }
     },
     afterMove(e) {
-      this.isMouseDown = false;
+      this.$store.commit("updateLoginWindowMove", false);
     },
     closeWindow() {
       this.$store.commit("updateLoginWindowShow", false);
+    },
+    limitPosition(value, max) {
+      if (value <= 0) {
+        return 0;
+      } else if (value >= max) {
+        return max;
+      } else {
+        return value;
+      }
     },
   },
 };
@@ -85,7 +91,7 @@ export default {
 <style lang="scss" scoped>
 .login-window {
   width: 530px;
-  height: 332px;
+  height: 350px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -103,6 +109,7 @@ export default {
     background: #2d2d2d;
     justify-content: space-between;
     cursor: move;
+    border-radius: 4px 4px 0 0;
   }
 
   .mode {
@@ -111,6 +118,7 @@ export default {
 
   .close {
     margin-right: 18px;
+    cursor: pointer;
   }
 }
 </style>
