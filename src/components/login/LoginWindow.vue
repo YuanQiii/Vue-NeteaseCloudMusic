@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-11-11 18:00:14
+ * @LastEditTime: 2021-11-15 10:19:48
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -16,22 +16,26 @@
     @mouseup="afterMove"
   >
     <div class="head" @mousedown="beforeMove">
-      <div class="mode">{{ loginMode }}</div>
+      <div class="mode">{{ loginTitle }}</div>
       <div class="close" @click="closeWindow">x</div>
     </div>
+    <login-menu />
     <q-r-code-login />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+
+import LoginMenu from "./LoginMenu.vue";
 import QRCodeLogin from "./QRCodeLogin.vue";
+
 export default {
-  components: { QRCodeLogin },
+  components: { QRCodeLogin, LoginMenu },
   name: "LoginWindow",
   data() {
     return {
-      loginMode: "登录",
+      loginTitle: "登录",
       left: 800,
       top: 400,
       diffX: 0,
@@ -42,6 +46,7 @@ export default {
     ...mapState({
       loginWindowShow: (state) => state.login.loginWindowShow,
       loginWindowMove: (state) => state.login.loginWindowMove,
+      loginMode: (state) => state.login.loginMode,
     }),
 
     loginWindowStyle() {
@@ -55,7 +60,10 @@ export default {
     beforeMove(e) {
       this.diffX = e["offsetX"];
       this.diffY = e["offsetY"];
-      this.$store.commit("updateLoginWindowMove", true);
+      // this.$store.commit("updateLoginWindowMove", true);
+      this.$store.commit("updateLoginState", {
+        loginWindowMove: true,
+      });
     },
     move(e) {
       if (this.loginWindowMove) {
@@ -69,11 +77,17 @@ export default {
         );
       }
     },
-    afterMove(e) {
-      this.$store.commit("updateLoginWindowMove", false);
+    afterMove() {
+      // this.$store.commit("updateLoginWindowMove", false);
+      this.$store.commit("updateLoginState", {
+        loginWindowMove: false,
+      });
     },
     closeWindow() {
-      this.$store.commit("updateLoginWindowShow", false);
+      // this.$store.commit("updateLoginWindowShow", false);
+      this.$store.commit("updateLoginState", {
+        loginWindowShow: false,
+      });
     },
     limitPosition(value, max) {
       if (value <= 0) {

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-11-12 17:55:33
+ * @LastEditTime: 2021-11-15 10:06:46
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -17,7 +17,13 @@
           <div class="qr">
             <div class="text">扫码登录</div>
             <img class="image" src="" alt="" ref="QRImage" />
-            <div class="link-text">使用 网易云音乐APP 扫码登录</div>
+            <div class="link-text">
+              使用
+              <a class="link-download" target="_blank" href="/download"
+                >网易云音乐APP</a
+              >
+              扫码登录
+            </div>
           </div>
         </div>
 
@@ -151,6 +157,25 @@ export default {
             font-size: 12px;
             margin-left: -47px;
             margin-top: 10px;
+
+            .link-download {
+              $link-download-color: #0c73c2;
+              cursor: pointer;
+
+              color: $link-download-color;
+
+              &:link {
+                text-decoration: none;
+                color: $link-download-color;
+              }
+              &:visited {
+                text-decoration: none;
+                color: $link-download-color;
+              }
+              &:hover {
+                text-decoration-line: underline;
+              }
+            }
           }
         }
       }
@@ -162,7 +187,7 @@ export default {
         background: rgba(255, 255, 255, 0.9);
         position: absolute;
         left: 275px;
-        top: 70px;
+        top: 40px;
         text-align: center;
 
         .text {
@@ -218,6 +243,7 @@ export default {
     font-size: 12px;
     display: flex;
     justify-content: center;
+    cursor: pointer;
 
     .text {
       display: block;
