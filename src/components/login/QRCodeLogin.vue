@@ -40,13 +40,16 @@
       </div>
     </div>
 
-    <div class="mode">
+    <div class="mode" @click="updateMode('menu')">
       <div class="text">选择其他登录模式</div>
     </div>
   </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const { mapMutations } = createNamespacedHelpers("login");
+
 import { QRKeyApi } from "@/api/login.js";
 import { QRCreateApi } from "@/api/login.js";
 import { QRCheckApi } from "@/api/login.js";
@@ -66,6 +69,8 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateMode"]),
+
     getQRImage() {
       let params = {
         timestamp: this.getTimestamp(),

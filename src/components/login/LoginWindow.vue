@@ -19,8 +19,11 @@
       <div class="mode">{{ loginTitle }}</div>
       <div class="close" @click="closeWindow">x</div>
     </div>
-    <login-menu />
-    <q-r-code-login v-show="false" />
+    <login-menu v-if="mode == 'menu'" />
+    <q-r-code-login v-if="mode == 'QRCode'" />
+    <div class="tip">
+      请勾选同意《服务条款》、《隐私政策》、《儿童隐私政策》
+    </div>
   </div>
 </template>
 

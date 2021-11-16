@@ -23,6 +23,9 @@ const mutations = {
   },
   updateWindowShow(state, payload) {
     state.windowShow = payload
+  },
+  updateMode(state, payload) {
+    state.mode = payload
   }
 };
 

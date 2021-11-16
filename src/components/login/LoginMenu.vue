@@ -25,22 +25,75 @@
         </div>
       </div>
       <div class="other-login">
-        <div class="">微信登录</div>
-        <div class="">微信登录</div>
-        <div class="">微信登录</div>
-        <div class="">微信登录</div>
+        <div class="item">
+          <img src="../../assets/login/logo_0.png" alt="" />
+          <div class="text">微信登录</div>
+        </div>
+        <div class="item">
+          <img src="../../assets/login/logo_1.png" alt="" />
+          <div class="text">QQ登录</div>
+        </div>
+        <div class="item">
+          <img src="../../assets/login/logo_2.png" alt="" />
+          <div class="text">微博登录</div>
+        </div>
+        <div class="item">
+          <img src="../../assets/login/logo_3.png" alt="" />
+          <div class="text">网易云邮箱账号登录</div>
+        </div>
       </div>
     </div>
     <div class="foot">
-      <div class="policy">政策</div>
-      <div class="scan">扫码</div>
+      <div class="policy">
+        <input
+          type="checkbox"
+          v-model="agreePolicy"
+          name="policy"
+          class="input"
+        />
+        <div class="text">
+          <label for="jpolicy">同意</label>
+          <a
+            href="http://st.music.163.com/official-terms/service"
+            target="_blank"
+            class="link"
+            >《服务条款》</a
+          >
+          <a
+            href="http://st.music.163.com/official-terms/privacy"
+            target="_blank"
+            class="link"
+            >《隐私政策》</a
+          >
+          <a
+            href="https://st.music.163.com/official-terms/children"
+            target="_blank"
+            class="link"
+            >《儿童隐私政策》</a
+          >
+        </div>
+      </div>
+      <div class="scan" @click="updateMode('QRCode')">
+        <img class="image" src="../../assets/login/qr_login_icon.png" alt="" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const { mapMutations } = createNamespacedHelpers("login");
+
 export default {
   name: "LoginMenu",
+  data() {
+    return {
+      agreePolicy: false,
+    };
+  },
+  methods: {
+    ...mapMutations(["updateMode"]),
+  },
 };
 </script>
 
@@ -84,9 +137,70 @@ export default {
         }
       }
     }
+    .other-login {
+      padding-left: 40px;
+      border-left: solid 1px #ccc;
+      margin-left: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .item {
+        display: flex;
+        cursor: pointer;
+        .text {
+          height: 12px;
+          font-size: 12px;
+          margin-top: 10px;
+          margin-left: 20px;
+          &:hover {
+            border-bottom: solid 1px;
+          }
+        }
+      }
+    }
   }
   .foot {
     display: flex;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    .policy {
+      display: flex;
+      margin-left: 40px;
+      margin-top: 40px;
+      .input {
+        background-color: #0060df;
+      }
+      .text {
+        transform: scale(0.8);
+        margin-left: -25px;
+        margin-top: -3px;
+        .link {
+          color: #507daf;
+          &:link {
+            text-decoration: none;
+          }
+          &:hover {
+            text-decoration-line: underline;
+          }
+          &:focus {
+            text-decoration-line: underline;
+          }
+          &:visited {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    .scan {
+      .image {
+        width: 52px;
+        height: 52px;
+        margin-left: 186px;
+        margin-top: 28px;
+        cursor: pointer;
+      }
+    }
   }
 }
 </style>
