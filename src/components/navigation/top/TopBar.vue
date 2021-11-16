@@ -64,8 +64,8 @@ export default {
       }
     },
     toggleLoginWindowShow() {
-      this.$store.commit("updateLoginState", {
-        loginWindowShow: true,
+      this.$store.commit("login/updateState", {
+        windowShow: true,
       });
     },
     isActive(index) {

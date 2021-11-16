@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-11-15 10:19:48
+ * @LastEditTime: 2021-11-16 15:53:34
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -10,8 +10,8 @@
   <div
     class="login-window"
     ref="loginWindow"
-    :style="loginWindowStyle"
-    v-if="loginWindowShow"
+    :style="windowStyle"
+    v-if="windowShow"
     @mousemove="move"
     @mouseup="afterMove"
   >
@@ -20,12 +20,13 @@
       <div class="close" @click="closeWindow">x</div>
     </div>
     <login-menu />
-    <q-r-code-login />
+    <q-r-code-login v-show="false" />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapMutations } = createNamespacedHelpers("login");
 
 import LoginMenu from "./LoginMenu.vue";
 import QRCodeLogin from "./QRCodeLogin.vue";
@@ -43,13 +44,9 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      loginWindowShow: (state) => state.login.loginWindowShow,
-      loginWindowMove: (state) => state.login.loginWindowMove,
-      loginMode: (state) => state.login.loginMode,
-    }),
+    ...mapState(["windowShow", "windowMove", "mode"]),
 
-    loginWindowStyle() {
+    windowStyle() {
       return {
         left: `${this.left}px`,
         top: `${this.top}px`,
@@ -57,16 +54,15 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["updateState"]),
+
     beforeMove(e) {
       this.diffX = e["offsetX"];
       this.diffY = e["offsetY"];
-      // this.$store.commit("updateLoginWindowMove", true);
-      this.$store.commit("updateLoginState", {
-        loginWindowMove: true,
-      });
+      this.updateState({ windowMove: true });
     },
     move(e) {
-      if (this.loginWindowMove) {
+      if (this.windowMove) {
         this.left = this.limitPosition(
           e["clientX"] - this.diffX,
           window.innerWidth - 530
@@ -78,16 +74,10 @@ export default {
       }
     },
     afterMove() {
-      // this.$store.commit("updateLoginWindowMove", false);
-      this.$store.commit("updateLoginState", {
-        loginWindowMove: false,
-      });
+      this.updateState({ windowMove: false });
     },
     closeWindow() {
-      // this.$store.commit("updateLoginWindowShow", false);
-      this.$store.commit("updateLoginState", {
-        loginWindowShow: false,
-      });
+      this.updateState({ windowShow: false });
     },
     limitPosition(value, max) {
       if (value <= 0) {
