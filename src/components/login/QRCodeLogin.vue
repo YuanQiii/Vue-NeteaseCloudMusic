@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-11-15 10:06:46
+ * @LastEditTime: 2021-11-17 10:10:19
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="mode" @click="updateMode('menu')">
+    <div class="mode" @click="UPDATE_LOGIN_MODE('menu')">
       <div class="text">选择其他登录模式</div>
     </div>
   </div>
@@ -59,6 +59,9 @@ export default {
   created() {
     this.getQRImage();
   },
+  beforeDestroy() {
+    clearInterval(this.checkInterval);
+  },
   data() {
     return {
       uniKey: "",
@@ -69,7 +72,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["updateMode"]),
+    ...mapMutations(["UPDATE_LOGIN_MODE"]),
 
     getQRImage() {
       let params = {

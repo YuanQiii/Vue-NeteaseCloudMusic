@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-16 15:47:59
+ * @LastEditTime: 2021-11-17 10:30:39
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
@@ -17,6 +17,8 @@
         <router-view />
       </keep-alive>
     </div>
+    <policy-tip />
+
     <music-player />
   </div>
 </template>
@@ -25,19 +27,19 @@
 import LoginWindow from "./components/login/LoginWindow.vue";
 import NavigationBar from "./components/navigation/NavigationBar.vue";
 import MusicPlayer from "./components/player/MusicPlayer.vue";
+import PolicyTip from "./components/Tip/PolicyTip.vue";
 
 export default {
   components: {
     NavigationBar,
     MusicPlayer,
     LoginWindow,
+    PolicyTip,
   },
   methods: {
     updateIsMouseDown() {
       this.$store.commit("updateIsMouseDown", false);
-      this.$store.commit("login/updateState", {
-        windowMove: false,
-      });
+      this.$store.commit("login/UPDATE_LOGIN_WINDOW_MOVE", false);
     },
   },
 };

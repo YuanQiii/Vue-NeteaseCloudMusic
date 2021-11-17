@@ -35,13 +35,12 @@ export default {
     };
   },
   computed: {
-    subBarShow() {
-      let currentPageName = this.$store.state.navigation.currentPageName;
-      let subBarItemNamesKeys = Object.keys(this.subBarItemNames);
-      return subBarItemNamesKeys.indexOf(currentPageName) > -1 ? true : false;
-    },
     currentPageName() {
       return this.subBarItemNames[this.$route.name];
+    },
+    subBarShow() {
+      let subBarItemNamesKeys = Object.keys(this.subBarItemNames);
+      return subBarItemNamesKeys.indexOf(this.$route.name) > -1 ? true : false;
     },
   },
 };

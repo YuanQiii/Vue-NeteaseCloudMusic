@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-15 09:48:10
- * @LastEditTime: 2021-11-16 16:37:56
+ * @LastEditTime: 2021-11-17 11:42:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginMenu.vue
@@ -11,11 +11,11 @@
     <div class="main">
       <div class="phone-login">
         <img src="../../assets/login/platform.png" alt="" />
-        <div class="phone">
+        <div class="phone" @click="toWindow('phone')">
           <img class="image" src="../../assets/login/phone_button.png" alt="" />
           <div class="text">手机号登录</div>
         </div>
-        <div class="register">
+        <div class="register" @click="toWindow('register')">
           <img
             class="image"
             src="../../assets/login/regiter_button.png"
@@ -52,7 +52,7 @@
           class="input"
         />
         <div class="text">
-          <label for="jpolicy">同意</label>
+          <label for="policy">同意</label>
           <a
             href="http://st.music.163.com/official-terms/service"
             target="_blank"
@@ -73,7 +73,7 @@
           >
         </div>
       </div>
-      <div class="scan" @click="updateMode('QRCode')">
+      <div class="scan" @click="toWindow('QRCode')">
         <img class="image" src="../../assets/login/qr_login_icon.png" alt="" />
       </div>
     </div>
@@ -89,10 +89,30 @@ export default {
   data() {
     return {
       agreePolicy: false,
+      tipTimeout: null,
     };
   },
   methods: {
-    ...mapMutations(["updateMode"]),
+    ...mapMutations([
+      "UPDATE_LOGIN_MODE",
+      "UPDATE_LOGIN_POLICY_SHOW",
+      "UPDATE_LOGIN_TITLE",
+    ]),
+
+    toWindow(mode) {
+      if (this.agreePolicy) {
+        this.UPDATE_LOGIN_MODE(mode);
+      } else {
+        if (this.tipTimeout) {
+          clearTimeout(this.tipTimeout);
+        }
+        this.UPDATE_LOGIN_POLICY_SHOW(true);
+
+        this.tipTimeout = setTimeout(() => {
+          this.UPDATE_LOGIN_POLICY_SHOW(false);
+        }, 1000);
+      }
+    },
   },
 };
 </script>

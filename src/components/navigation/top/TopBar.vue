@@ -13,23 +13,23 @@
       </top-bar-item>
       <search />
       <div class="center">创作者中心</div>
-      <a class="login" @click="toggleLoginWindowShow">登录</a>
+      <a class="login" @click="UPDATE_LOGIN_WINDOW_SHOW(true)">登录</a>
     </div>
   </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const { mapMutations } = createNamespacedHelpers("login");
+
 import Search from "../../search/search.vue";
 import TopBarItem from "./TopBarItem.vue";
-// import UserLogin from "../UserLogin/UserLogin";
+
 export default {
   name: "TopBar",
   components: {
     TopBarItem,
     Search,
-  },
-  created() {
-    this.getCurrentPageName();
   },
   data() {
     return {
@@ -49,12 +49,17 @@ export default {
         "Musician",
         "Download",
       ],
-      currentIndex: "Recommend",
       isShow: false,
       count: 0,
     };
   },
+  computed: {
+    currentIndex() {
+      return this.topBarPathNames.indexOf(this.$route.name);
+    },
+  },
   methods: {
+    ...mapMutations(["UPDATE_LOGIN_WINDOW_SHOW"]),
     toPage(index) {
       this.currentIndex = index;
 
@@ -63,18 +68,8 @@ export default {
         this.$router.push({ name: pathName });
       }
     },
-    toggleLoginWindowShow() {
-      this.$store.commit("login/updateState", {
-        windowShow: true,
-      });
-    },
     isActive(index) {
       return index == this.currentIndex ? "active" : "";
-    },
-    getCurrentPageName() {
-      this.currentIndex = this.topBarPathNames.indexOf(
-        this.$store.state.navigation.currentPageName
-      );
     },
   },
 };

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-10-19 09:48:46
+ * @LastEditTime: 2021-11-17 17:42:16
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\router\index.js
+ */
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store/index.js";
@@ -74,10 +82,10 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  store.commit("changeCurrentPageName", to.name);
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   store.commit("changeCurrentPageName", to.name);
+//   next()
+// })
 
 
 

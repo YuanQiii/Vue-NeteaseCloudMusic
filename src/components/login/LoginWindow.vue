@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-11-16 15:53:34
+ * @LastEditTime: 2021-11-17 11:41:56
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -11,7 +11,7 @@
     class="login-window"
     ref="loginWindow"
     :style="windowStyle"
-    v-if="windowShow"
+    v-if="loginWindowShow"
     @mousemove="move"
     @mouseup="afterMove"
   >
@@ -19,27 +19,27 @@
       <div class="mode">{{ loginTitle }}</div>
       <div class="close" @click="closeWindow">x</div>
     </div>
-    <login-menu v-if="mode == 'menu'" />
-    <q-r-code-login v-if="mode == 'QRCode'" />
-    <div class="tip">
-      请勾选同意《服务条款》、《隐私政策》、《儿童隐私政策》
+    <div>
+      <login-menu v-if="loginMode == 'menu'" />
+      <q-r-code-login v-if="loginMode == 'QRCode'" />
+      <phone-login v-if="loginMode == 'phone'" />
     </div>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from "vuex";
-const { mapState, mapMutations } = createNamespacedHelpers("login");
+const { mapState, mapGetters, mapMutations } = createNamespacedHelpers("login");
 
 import LoginMenu from "./LoginMenu.vue";
+import PhoneLogin from "./PhoneLogin.vue";
 import QRCodeLogin from "./QRCodeLogin.vue";
 
 export default {
-  components: { QRCodeLogin, LoginMenu },
+  components: { QRCodeLogin, LoginMenu, PhoneLogin },
   name: "LoginWindow",
   data() {
     return {
-      loginTitle: "登录",
       left: 800,
       top: 400,
       diffX: 0,
@@ -47,7 +47,9 @@ export default {
     };
   },
   computed: {
-    ...mapState(["windowShow", "windowMove", "mode"]),
+    ...mapState(["loginWindowShow", "loginWindowMove", "loginMode"]),
+
+    ...mapGetters(["loginTitle"]),
 
     windowStyle() {
       return {
@@ -57,15 +59,19 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["updateState"]),
+    ...mapMutations([
+      "UPDATE_LOGIN_WINDOW_SHOW",
+      "UPDATE_LOGIN_WINDOW_MOVE",
+      "UPDATE_LOGIN_MODE",
+    ]),
 
     beforeMove(e) {
       this.diffX = e["offsetX"];
       this.diffY = e["offsetY"];
-      this.updateState({ windowMove: true });
+      this.UPDATE_LOGIN_WINDOW_MOVE(true);
     },
     move(e) {
-      if (this.windowMove) {
+      if (this.loginWindowMove) {
         this.left = this.limitPosition(
           e["clientX"] - this.diffX,
           window.innerWidth - 530
@@ -77,10 +83,10 @@ export default {
       }
     },
     afterMove() {
-      this.updateState({ windowMove: false });
+      this.UPDATE_LOGIN_WINDOW_MOVE(false);
     },
     closeWindow() {
-      this.updateState({ windowShow: false });
+      this.UPDATE_LOGIN_WINDOW_SHOW(false);
     },
     limitPosition(value, max) {
       if (value <= 0) {
