@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-11-17 10:10:19
+ * @LastEditTime: 2021-11-19 17:50:36
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -75,19 +75,10 @@ export default {
     ...mapMutations(["UPDATE_LOGIN_MODE"]),
 
     getQRImage() {
-      let params = {
-        timestamp: this.getTimestamp(),
-      };
-
-      QRKeyApi(params)
+      QRKeyApi(this.getTimestamp())
         .then((response) => {
           this.uniKey = response["data"]["data"]["unikey"];
-          let params = {
-            key: this.uniKey,
-            qrimg: true,
-            timestamp: this.getTimestamp(),
-          };
-          return QRCreateApi(params);
+          return QRCreateApi(this.uniKey, true, this.getTimestamp());
         })
         .then((response) => {
           this.$refs.QRImage.src = response["data"]["data"]["qrimg"];
@@ -100,12 +91,7 @@ export default {
       }
 
       this.checkInterval = setInterval(() => {
-        let params = {
-          key: this.uniKey,
-          timestamp: this.getTimestamp(),
-        };
-
-        QRCheckApi(params).then((response) => {
+        QRCheckApi(this.uniKey, this.getTimestamp()).then((response) => {
           this.code = response["data"]["code"];
           this.cookie = response["data"]["cookie"];
           this.handleQRCode();

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-18 17:32:39
+ * @LastEditTime: 2021-11-19 17:46:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -29,7 +29,7 @@
             v-model="captcha"
           />
         </div>
-        <div class="send">
+        <div class="send" @click="getCaptcha">
           <img
             src="../../assets/login/captcha_button.png"
             alt=""
@@ -72,7 +72,7 @@
           <div class="button1"></div>
           <div class="button2"></div>
         </div>
-        <div class="text" @click="userLogin">登录</div>
+        <div class="text" @click="login">登录</div>
       </div>
     </div>
 
@@ -100,19 +100,23 @@ export default {
   name: "PhoneLogin",
   data() {
     return {
-      phone: "",
+      phone: "18908077873",
       captcha: "",
       password: "",
-      mode: "password",
+      sent: false,
+      receive: false,
+      sendCaptcha: null,
+      mode: "captcha",
       warnText: [
         "请输入正确的手机号",
         "请输入验证码",
-        "该手机号尚未注册",
+        "发送验证码间隔过短",
         "验证码错误",
+        "该手机号尚未注册",
         "手机号或密码错误",
       ],
       warnIndex: -1,
-      phoneRegExp: "/^1(3d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8d|9[0-35-9])d{8}$/",
+      phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
     };
   },
   computed: {
@@ -126,26 +130,63 @@ export default {
   methods: {
     ...mapMutations(["UPDATE_LOGIN_MODE"]),
 
+    getCaptcha() {
+      if (!this.sent) {
+        if (this.verifyPhoneFormat()) {
+          captchaSentApi(this.phone).then((response) => {
+            this.receive = response["data"]["data"];
+          });
+          this.sent = true;
+          setTimeout(() => {
+            this.sent = false;
+          }, 1000 * 60);
+        }
+      } else {
+        this.warnIndex = 2;
+      }
+    },
+
     toggleLoginMode() {
       this.mode = this.mode == "password" ? "captcha" : "password";
     },
 
-    userLogin() {},
+    login() {
+      if (this.captcha) {
+        this.verifyCaptcha();
+      } else {
+        this.warnIndex = 1;
+      }
+    },
 
     // 验证手机号格式
-    verifyPhoneFormat() {},
+    verifyPhoneFormat() {
+      if (this.phoneRegExp.test(this.phone)) {
+        return true;
+      } else {
+        this.warnIndex = 0;
+        return false;
+      }
+    },
 
     // 检查验证码格式
     verifyCaptchaFormat() {},
 
     // 验证手机号是否注册
-    verifyPhoneExistence() {},
+    verifyPhoneExistence() {
+      this.cellphoneCheckApi(this.phone);
+    },
 
     // 检查验证码是否正确
-    verifyCaptcha() {},
-
-    // 验证密码是否正确
-    verifyCaptcha() {},
+    verifyCaptcha() {
+      captchaVerifyApi(this.phone, this.captcha).then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
 };
 </script>

@@ -1,37 +1,63 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 16:41:11
- * @LastEditTime: 2021-11-18 17:06:54
+ * @LastEditTime: 2021-11-19 17:59:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\api\login.js
  */
 import request from "@/api/request"; // 引入封装好的axios
 
-// QRKey
-export function QRKeyApi(params) {
+/**
+ * @description: 获取二维码unikey
+ * @param {*} timestamp
+ * @return {*}
+ */
+export function QRKeyApi(timestamp) {
   return request({
     url: "login/qr/key",
     method: "get",
-    params
+    params: {
+      timestamp
+    }
   });
 }
 
-// QRCreate
-export function QRCreateApi(params) {
+
+/**
+ * @description: 创建二维码
+ * @param {*} key
+ * @param {*} qrimg
+ * @param {*} timestamp
+ * @return {*}
+ */
+export function QRCreateApi(key, qrimg, timestamp) {
   return request({
     url: "login/qr/create",
     method: "get",
-    params
+    params: {
+      key,
+      qrimg,
+      timestamp
+    }
   });
 }
 
-// QRCheck
-export function QRCheckApi(params) {
+
+/**
+ * @description: 检查二维码是否可用
+ * @param {*} key
+ * @param {*} timestamp
+ * @return {*}
+ */
+export function QRCheckApi(key, timestamp) {
   return request({
     url: "login/qr/check",
     method: "get",
-    params
+    params: {
+      key,
+      timestamp
+    }
   });
 }
 
@@ -45,11 +71,22 @@ export function registerApi(params) {
 }
 
 // cellphone
-export function cellPhoneApi(params) {
+/**
+ * @description: 手机号验证码或密码登录
+ * @param {*} phone
+ * @param {*} password
+ * @param {*} captcha
+ * @return {*}
+ */
+export function cellPhoneApi(phone, password, captcha) {
   return request({
     url: "login/cellphone",
-    method: "get",
-    params
+    method: "post",
+    data: {
+      phone,
+      password,
+      captcha
+    }
   });
 }
 
@@ -63,28 +100,50 @@ export function emailApi(params) {
 }
 
 // captchaSent
-export function captchaSentApi(params) {
+/**
+ * @description: 发送验证码
+ * @param {*} phone
+ * @return {*}
+ */
+export function captchaSentApi(phone) {
   return request({
     url: "captcha/sent",
     method: "get",
-    params
+    params: {
+      phone
+    }
   });
 }
 
 // captchaVerify
-export function captchaVerifyApi(params) {
+/**
+ * @description: 检验验证码是否正确
+ * @param {*} phone
+ * @param {*} captcha
+ * @return {*}
+ */
+export function captchaVerifyApi(phone, captcha) {
   return request({
     url: "captcha/verify",
-    method: "get",
-    params
+    method: "post",
+    data: {
+      phone,
+      captcha
+    }
   });
 }
 
-// ccellphoneCheck
-export function cellphoneCheckApi(params) {
+/**
+ * @description: 手机号是否存在
+ * @param {*} phone
+ * @return {*}
+ */
+export function cellphoneCheckApi(phone) {
   return request({
     url: "cellphone/existence/check",
     method: "get",
-    params
+    params: {
+      phone
+    }
   });
 }
