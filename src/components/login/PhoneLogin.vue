@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-19 17:46:25
+ * @LastEditTime: 2021-11-21 17:23:01
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -77,10 +77,16 @@
     </div>
 
     <div class="bottom">
-      <div class="other" @click="UPDATE_LOGIN_MODE('menu')">< 其他登录方式</div>
-      <div class="register" @click="UPDATE_LOGIN_MODE('register')">
-        没有帐号？免费注册 >
+      <div class="other" @click="UPDATE_LOGIN_MODE('menu')">
+        &lt; 其他登录方式
       </div>
+      <div class="register" @click="UPDATE_LOGIN_MODE('register')">
+        没有帐号？免费注册 &gt;
+      </div>
+    </div>
+
+    <div class="tip">
+      <captcha-tip />
     </div>
   </div>
 </template>
@@ -90,14 +96,21 @@ import { createNamespacedHelpers } from "vuex";
 const { mapMutations } = createNamespacedHelpers("login");
 
 import {
-  cellphoneApi,
+  cellPhoneCaptchaApi,
+  cellPhonePasswordApi,
   captchaSentApi,
   captchaVerifyApi,
   cellphoneCheckApi,
 } from "@/api/login.js";
 
+import CaptchaTip from "../Tip/CaptchaTip.vue";
+
 export default {
   name: "PhoneLogin",
+  components: {
+    CaptchaTip,
+  },
+
   data() {
     return {
       phone: "18908077873",
@@ -152,7 +165,25 @@ export default {
 
     login() {
       if (this.captcha) {
-        this.verifyCaptcha();
+        if (this.mode == "captcha") {
+          if (this.verifyPhoneFormat()) {
+            if (this.verifyCaptcha()) {
+              cellPhoneCaptchaApi(this.phone, this.captcha).then(
+                (response) => {
+                  console.log(response);
+                },
+                (error) => {
+                  console.log(error);
+                }
+              );
+            } else {
+              this.warnIndex = 3;
+            }
+          } else {
+            this.warnIndex = 0;
+          }
+        } else {
+        }
       } else {
         this.warnIndex = 1;
       }
@@ -178,12 +209,17 @@ export default {
 
     // 检查验证码是否正确
     verifyCaptcha() {
-      captchaVerifyApi(this.phone, this.captcha).then(
+      return captchaVerifyApi(this.phone, this.captcha).then(
         (response) => {
-          console.log(response);
+          return response["data"]["data"];
         },
         (error) => {
-          console.log(error);
+          console.log(
+            "🚀 ~ file: PhoneLogin.vue ~ line 199 ~ verifyCaptcha ~ error",
+            error
+          );
+          this.warnIndex = 3;
+          return false;
         }
       );
     },
