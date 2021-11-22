@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 09:10:23
- * @LastEditTime: 2021-11-21 17:21:35
+ * @LastEditTime: 2021-11-22 11:04:58
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\login.js
@@ -22,7 +22,10 @@ const state = {
     reset: "重设密码",
   },
   loginPolicyTipShow: false,
-  loginCaptchaTipShow: true,
+  loginCaptchaTipShow: false,
+
+  loginCaptchaCount: 0,
+  autoLogin: false
 };
 
 const getters = {
@@ -47,6 +50,12 @@ const mutations = {
   [types.UPDATE_LOGIN_CAPTCHA_TIP_SHOW](state, payload) {
     state.loginCaptchaTipShow = payload;
   },
+  [types.UPDATE_AUTO_LOGIN](state, payload) {
+    state.autoLogin = payload
+  },
+  [types.INCREASE_LOGIN_CAPTCHA_COUNT](state) {
+    state.loginCaptchaCount++
+  }
 };
 
 const actions = {};

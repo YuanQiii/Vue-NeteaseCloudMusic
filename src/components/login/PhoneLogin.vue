@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-21 17:23:01
+ * @LastEditTime: 2021-11-22 17:59:29
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -63,6 +63,7 @@
             name="auto-login"
             id="auto-login"
             class="input"
+            v-model="autoLogin"
           />
           <label for="auto-login" class="text">自动登录</label>
         </div>
@@ -72,7 +73,7 @@
           <div class="button1"></div>
           <div class="button2"></div>
         </div>
-        <div class="text" @click="login">登录</div>
+        <div class="text" @click="login">{{ loginButtonText }}</div>
       </div>
     </div>
 
@@ -93,7 +94,11 @@
 
 <script>
 import { createNamespacedHelpers } from "vuex";
-const { mapMutations } = createNamespacedHelpers("login");
+const { mapState, mapMutations } = createNamespacedHelpers("login");
+
+const userNamespeace = createNamespacedHelpers("user");
+const userMapState = userNamespeace.mapState;
+const userMapMutations = userNamespeace.mapMutations;
 
 import {
   cellPhoneCaptchaApi,
@@ -127,12 +132,65 @@ export default {
         "验证码错误",
         "该手机号尚未注册",
         "手机号或密码错误",
+        "发送验证码超过限制：每个手机号一天只能发送5条验证码",
       ],
       warnIndex: -1,
       phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+      loginButtonText: "登录",
+      autoLogin: false,
+      loginStatus: 0,
+      rules: [
+        {
+          match() {
+            return this.verifyPhoneFormat();
+          },
+          action(result) {
+            if (!result) {
+              this.warnIndex = 0;
+            }
+          },
+        },
+        {
+          match() {
+            return this.captcha;
+          },
+          action(result) {
+            if (!result) {
+              this.warnIndex = 1;
+            }
+          },
+        },
+        {
+          match() {
+            return this.sent;
+          },
+          action(result) {
+            if (result) {
+              this.warnIndex = 2;
+            }
+          },
+        },
+        {
+          match() {
+            return this.verifyCaptcha();
+          },
+          action(result) {
+            if (!result) {
+              this.warnIndex = 3;
+            }
+          },
+        },
+      ],
     };
   },
+  watch: {
+    autoLogin(newValue) {
+      this.UPDATE_AUTO_LOGIN(newValue);
+    },
+  },
   computed: {
+    ...mapState(["loginCaptchaCount"]),
+
     modeText() {
       return this.mode == "captcha" ? "密码登录" : "短信登录";
     },
@@ -141,73 +199,113 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_LOGIN_MODE"]),
+    ...mapMutations([
+      "UPDATE_LOGIN_MODE",
+      "UPDATE_LOGIN_CAPTCHA_TIP_SHOW",
+      "INCREASE_LOGIN_CAPTCHA_COUNT",
+      "UPDATE_AUTO_LOGIN",
+    ]),
 
-    getCaptcha() {
-      if (!this.sent) {
-        if (this.verifyPhoneFormat()) {
-          captchaSentApi(this.phone).then((response) => {
-            this.receive = response["data"]["data"];
-          });
-          this.sent = true;
-          setTimeout(() => {
-            this.sent = false;
-          }, 1000 * 60);
-        }
-      } else {
-        this.warnIndex = 2;
-      }
-    },
+    ...userMapMutations([]),
 
+    /**
+     * @description: 切换手机号登录方式
+     */
     toggleLoginMode() {
       this.mode = this.mode == "password" ? "captcha" : "password";
     },
 
-    login() {
-      if (this.captcha) {
-        if (this.mode == "captcha") {
+    /**
+     * @description: 发送验证码
+     */
+    getCaptcha() {
+      if (this.loginCaptchaCount <= 5) {
+        if (!this.sent) {
           if (this.verifyPhoneFormat()) {
-            if (this.verifyCaptcha()) {
-              cellPhoneCaptchaApi(this.phone, this.captcha).then(
-                (response) => {
-                  console.log(response);
-                },
-                (error) => {
-                  console.log(error);
-                }
-              );
-            } else {
-              this.warnIndex = 3;
-            }
+            captchaSentApi(this.phone).then((response) => {
+              this.receive = response["data"]["data"];
+            });
+            this.sent = true;
+            setTimeout(() => {
+              this.sent = false;
+            }, 1000 * 60);
+
+            INCREASE_LOGIN_CAPTCHA_COUNT();
           } else {
-            this.warnIndex = 0;
           }
         } else {
+          this.warnIndex = 2;
+        }
+      } else {
+        this.warnIndex = 6;
+      }
+    },
+
+    /**
+     * @description: 登录
+     */
+    login() {
+      // 判断登录方式
+      if (this.mode == "captcha") {
+        this.applyCaptchaLogin();
+      } else {
+      }
+    },
+
+    /**
+     * @description: 验证码登录
+     */
+    applyCaptchaLogin() {
+      // 检查验证码是否填写
+      if (this.captcha) {
+        // 检查手机号格式
+        if (this.verifyPhoneFormat()) {
+          // 检查验证码是否正确
+          if (this.verifyCaptcha()) {
+            this.loginButtonText = "登录中...";
+
+            cellPhoneCaptchaApi(this.phone, this.captcha).then(
+              (response) => {
+                console.log(response);
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          } else {
+            this.warnIndex = 3;
+          }
+        } else {
+          this.warnIndex = 0;
         }
       } else {
         this.warnIndex = 1;
       }
     },
 
-    // 验证手机号格式
+    /**
+     * @description: 验证手机号格式
+     * @return {*}true/false
+     */
     verifyPhoneFormat() {
       if (this.phoneRegExp.test(this.phone)) {
         return true;
       } else {
-        this.warnIndex = 0;
         return false;
       }
     },
 
-    // 检查验证码格式
-    verifyCaptchaFormat() {},
-
-    // 验证手机号是否注册
+    /**
+     * @description: 验证手机号是否注册
+     */
     verifyPhoneExistence() {
       this.cellphoneCheckApi(this.phone);
     },
 
-    // 检查验证码是否正确
+    /**
+     * @description: 检查验证码是否正确
+     * @return {*}true/false
+     */
     verifyCaptcha() {
       return captchaVerifyApi(this.phone, this.captcha).then(
         (response) => {
@@ -222,6 +320,17 @@ export default {
           return false;
         }
       );
+    },
+
+    /**
+     * @description: 显示验证码已发送提示信息
+     */
+    showCaptchaTip() {
+      this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(true);
+
+      setTimeout(() => {
+        this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(false);
+      }, 1000);
     },
   },
 };
@@ -329,6 +438,7 @@ export default {
         background-position: -50px -270px;
       }
       .text {
+        width: 180px;
         margin-left: 10px;
         margin-bottom: 5px;
         color: #e33232;
