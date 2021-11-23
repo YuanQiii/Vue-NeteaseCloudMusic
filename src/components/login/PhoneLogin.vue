@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-22 17:59:29
+ * @LastEditTime: 2021-11-23 17:54:55
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -121,66 +121,29 @@ export default {
       phone: "18908077873",
       captcha: "",
       password: "",
-      sent: false,
+      allowSend: false,
       receive: false,
-      sendCaptcha: null,
+
       mode: "captcha",
-      warnText: [
-        "请输入正确的手机号",
-        "请输入验证码",
-        "发送验证码间隔过短",
-        "验证码错误",
-        "该手机号尚未注册",
-        "手机号或密码错误",
+
+      phoneWarn: ["请输入手机号", "请输入正确的手机号", "该手机号尚未注册"],
+      captchaWarn: [
         "发送验证码超过限制：每个手机号一天只能发送5条验证码",
+        "发送验证码间隔过短",
       ],
+      captchaLoginWarn: ["请输入验证码", "验证码错误"],
+      passwordLoginWarn: ["请输入登录密码", "手机号或密码错误"],
+
+      warn: [
+        [this.phone, "请输入手机号"],
+        [this.phoneFormatCorrect, "请输入正确的手机号"],
+        [],
+      ],
+
       warnIndex: -1,
       phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
       loginButtonText: "登录",
       autoLogin: false,
-      loginStatus: 0,
-      rules: [
-        {
-          match() {
-            return this.verifyPhoneFormat();
-          },
-          action(result) {
-            if (!result) {
-              this.warnIndex = 0;
-            }
-          },
-        },
-        {
-          match() {
-            return this.captcha;
-          },
-          action(result) {
-            if (!result) {
-              this.warnIndex = 1;
-            }
-          },
-        },
-        {
-          match() {
-            return this.sent;
-          },
-          action(result) {
-            if (result) {
-              this.warnIndex = 2;
-            }
-          },
-        },
-        {
-          match() {
-            return this.verifyCaptcha();
-          },
-          action(result) {
-            if (!result) {
-              this.warnIndex = 3;
-            }
-          },
-        },
-      ],
     };
   },
   watch: {
@@ -196,6 +159,9 @@ export default {
     },
     warn() {
       return this.warnIndex == -1 ? "" : this.warnText[this.warnIndex];
+    },
+    phoneFormatCorrect() {
+      return this.phoneRegExp.test(this.phone);
     },
   },
   methods: {
@@ -220,17 +186,17 @@ export default {
      */
     getCaptcha() {
       if (this.loginCaptchaCount <= 5) {
-        if (!this.sent) {
+        if (this.allowSend) {
           if (this.verifyPhoneFormat()) {
             captchaSentApi(this.phone).then((response) => {
               this.receive = response["data"]["data"];
             });
-            this.sent = true;
+            this.allowSend = false;
             setTimeout(() => {
-              this.sent = false;
+              this.allowSend = true;
             }, 1000 * 60);
 
-            INCREASE_LOGIN_CAPTCHA_COUNT();
+            this.INCREASE_LOGIN_CAPTCHA_COUNT();
           } else {
           }
         } else {
@@ -249,6 +215,7 @@ export default {
       if (this.mode == "captcha") {
         this.applyCaptchaLogin();
       } else {
+        this.applyPasswordLogin();
       }
     },
 
@@ -283,16 +250,14 @@ export default {
       }
     },
 
+    applyPasswordLogin() {},
+
     /**
      * @description: 验证手机号格式
      * @return {*}true/false
      */
     verifyPhoneFormat() {
-      if (this.phoneRegExp.test(this.phone)) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.phoneRegExp.test(this.phone);
     },
 
     /**
@@ -307,19 +272,16 @@ export default {
      * @return {*}true/false
      */
     verifyCaptcha() {
-      return captchaVerifyApi(this.phone, this.captcha).then(
-        (response) => {
-          return response["data"]["data"];
-        },
-        (error) => {
-          console.log(
-            "🚀 ~ file: PhoneLogin.vue ~ line 199 ~ verifyCaptcha ~ error",
-            error
-          );
-          this.warnIndex = 3;
-          return false;
-        }
-      );
+      if (this.phoneFormatCorrect) {
+        return captchaVerifyApi(this.phone, this.captcha).then(
+          (response) => {
+            return response["data"]["data"];
+          },
+          (error) => {
+            return false;
+          }
+        );
+      }
     },
 
     /**
