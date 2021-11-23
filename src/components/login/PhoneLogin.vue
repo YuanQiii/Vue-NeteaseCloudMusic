@@ -108,6 +108,8 @@ import {
   cellphoneCheckApi,
 } from "@/api/login.js";
 
+import { debounce } from "@/utils/debounce.js";
+
 import CaptchaTip from "../Tip/CaptchaTip.vue";
 
 export default {
@@ -119,36 +121,34 @@ export default {
   data() {
     return {
       phone: "18908077873",
+      phoneExist: false,
+
       captcha: "",
+      captchaCorrect: false,
+
       password: "",
+      passwordCorrect: false,
+
       allowSend: false,
       receive: false,
 
       mode: "captcha",
-
-      phoneWarn: ["请输入手机号", "请输入正确的手机号", "该手机号尚未注册"],
-      captchaWarn: [
-        "发送验证码超过限制：每个手机号一天只能发送5条验证码",
-        "发送验证码间隔过短",
-      ],
-      captchaLoginWarn: ["请输入验证码", "验证码错误"],
-      passwordLoginWarn: ["请输入登录密码", "手机号或密码错误"],
-
-      warn: [
-        [this.phone, "请输入手机号"],
-        [this.phoneFormatCorrect, "请输入正确的手机号"],
-        [],
-      ],
-
-      warnIndex: -1,
-      phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+      warn: "",
       loginButtonText: "登录",
+
+      phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+
       autoLogin: false,
     };
   },
   watch: {
     autoLogin(newValue) {
       this.UPDATE_AUTO_LOGIN(newValue);
+    },
+    phone() {
+      if (this.phoneFormatCorrect) {
+        this._debounce(this.verifyPhoneExistence, 500)();
+      }
     },
   },
   computed: {
@@ -157,11 +157,41 @@ export default {
     modeText() {
       return this.mode == "captcha" ? "密码登录" : "短信登录";
     },
-    warn() {
-      return this.warnIndex == -1 ? "" : this.warnText[this.warnIndex];
-    },
+
     phoneFormatCorrect() {
       return this.phoneRegExp.test(this.phone);
+    },
+
+    phoneWarn() {
+      return [
+        [this.phone, "请输入手机号"],
+        [this.phoneFormatCorrect, "请输入正确的手机号"],
+        [this.phoneExist, "该手机号尚未注册"],
+      ];
+    },
+
+    captchSendWarn() {
+      return [
+        [
+          this.loginCaptchaCount <= 5,
+          "发送验证码超过限制：每个手机号一天只能发送5条验证码",
+        ],
+        [this.allowSend, "发送验证码间隔过短"],
+      ];
+    },
+
+    captchaLoginWarn() {
+      return [
+        [this.captcha, "请输入验证码"],
+        [this.captchaCorrect, "验证码错误"],
+      ];
+    },
+
+    passwordLoginWarn() {
+      return [
+        [this.password, "请输入登录密码"],
+        [this.passwordCorrect, "手机号或密码错误"],
+      ];
     },
   },
   methods: {
@@ -174,6 +204,10 @@ export default {
 
     ...userMapMutations([]),
 
+    _debounce(fun, delay) {
+      return debounce(fun, delay);
+    },
+
     /**
      * @description: 切换手机号登录方式
      */
@@ -185,25 +219,26 @@ export default {
      * @description: 发送验证码
      */
     getCaptcha() {
-      if (this.loginCaptchaCount <= 5) {
-        if (this.allowSend) {
-          if (this.verifyPhoneFormat()) {
-            captchaSentApi(this.phone).then((response) => {
-              this.receive = response["data"]["data"];
-            });
-            this.allowSend = false;
-            setTimeout(() => {
-              this.allowSend = true;
-            }, 1000 * 60);
+      this.warn = "";
+      this.verifyFormat(this.phoneWarn);
+      captchaSentApi(this.phone).then((response) => {
+        this.receive = response["data"]["data"];
+      });
+      this.allowSend = false;
+      setTimeout(() => {
+        this.allowSend = true;
+      }, 1000 * 60);
 
-            this.INCREASE_LOGIN_CAPTCHA_COUNT();
-          } else {
-          }
-        } else {
-          this.warnIndex = 2;
+      this.INCREASE_LOGIN_CAPTCHA_COUNT();
+    },
+
+    verifyFormat(warnType) {
+      for (let index = 0; index < warnType.length; index++) {
+        const element = warnType[index];
+        console.log(element);
+        if (!element[0]) {
+          return (this.warn = element[1]);
         }
-      } else {
-        this.warnIndex = 6;
       }
     },
 
@@ -253,18 +288,22 @@ export default {
     applyPasswordLogin() {},
 
     /**
-     * @description: 验证手机号格式
-     * @return {*}true/false
-     */
-    verifyPhoneFormat() {
-      return this.phoneRegExp.test(this.phone);
-    },
-
-    /**
      * @description: 验证手机号是否注册
      */
     verifyPhoneExistence() {
-      this.cellphoneCheckApi(this.phone);
+      cellphoneCheckApi(this.phone).then(
+        (response) => {
+          if (response["data"]["exist"] == 1) {
+            this.phoneExist = true;
+          } else {
+            this.phoneExist = false;
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.phoneExist = false;
+        }
+      );
     },
 
     /**

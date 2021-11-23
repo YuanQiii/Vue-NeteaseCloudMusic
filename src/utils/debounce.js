@@ -13,7 +13,7 @@
  * @param {*} delay
  * @return {*}
  */
-function debounce(fun, delay) {
+export function debounce(fun, delay) {
   return function (args) {
     let that = this
     let _args = args
