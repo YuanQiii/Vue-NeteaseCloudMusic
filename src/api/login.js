@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 16:41:11
- * @LastEditTime: 2021-11-20 22:18:38
+ * @LastEditTime: 2021-11-24 14:07:11
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\api\login.js
@@ -70,7 +70,7 @@ export function registerApi(params) {
 
 // cellphone
 /**
- * @description: 手机号验证码或密码登录
+ * @description: 手机号验证码登录
  * @param {*} phone
  * @param {*} password
  * @param {*} captcha
@@ -91,16 +91,15 @@ export function cellPhoneCaptchaApi(phone, captcha) {
  * @description: 手机号密码登录
  * @param {*} phone
  * @param {*} password
- * @param {*} captcha
  * @return {*}
  */
-export function cellPhonePasswordApi(phone, password) {
+export function cellPhonePasswordApi(phone, md5_password) {
   return request({
     url: "login/cellphone",
     method: "post",
     data: {
       phone,
-      password,
+      md5_password,
     },
   });
 }

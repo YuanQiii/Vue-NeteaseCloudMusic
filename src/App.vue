@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-17 10:30:39
+ * @LastEditTime: 2021-11-24 11:12:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
@@ -9,15 +9,21 @@
 <template>
   <div @mouseup="updateIsMouseDown" class="app">
     <navigation-bar />
+
     <div>
       <login-window />
     </div>
+
     <div>
       <keep-alive>
         <router-view />
       </keep-alive>
     </div>
-    <policy-tip />
+
+    <div>
+      <policy-tip />
+      <captcha-tip />
+    </div>
 
     <music-player />
   </div>
@@ -27,6 +33,7 @@
 import LoginWindow from "./components/login/LoginWindow.vue";
 import NavigationBar from "./components/navigation/NavigationBar.vue";
 import MusicPlayer from "./components/player/MusicPlayer.vue";
+import CaptchaTip from "./components/Tip/CaptchaTip.vue";
 import PolicyTip from "./components/Tip/PolicyTip.vue";
 
 export default {
@@ -35,6 +42,7 @@ export default {
     MusicPlayer,
     LoginWindow,
     PolicyTip,
+    CaptchaTip,
   },
   methods: {
     updateIsMouseDown() {

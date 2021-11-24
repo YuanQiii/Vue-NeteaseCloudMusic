@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-23 17:54:55
+ * @LastEditTime: 2021-11-24 15:00:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -44,6 +44,7 @@
           type="password"
           placeholder="请输入密码"
           autocomplete="new-password"
+          v-model="password"
         />
         <div class="forget" @click="UPDATE_LOGIN_MODE('reset')">
           <div class="text">忘记密码？</div>
@@ -85,19 +86,16 @@
         没有帐号？免费注册 &gt;
       </div>
     </div>
-
-    <div class="tip">
-      <captcha-tip />
-    </div>
   </div>
 </template>
 
 <script>
+import md5 from "js-md5";
+
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapMutations } = createNamespacedHelpers("login");
 
 const userNamespeace = createNamespacedHelpers("user");
-const userMapState = userNamespeace.mapState;
 const userMapMutations = userNamespeace.mapMutations;
 
 import {
@@ -110,13 +108,8 @@ import {
 
 import { debounce } from "@/utils/debounce.js";
 
-import CaptchaTip from "../Tip/CaptchaTip.vue";
-
 export default {
   name: "PhoneLogin",
-  components: {
-    CaptchaTip,
-  },
 
   data() {
     return {
@@ -129,7 +122,7 @@ export default {
       password: "",
       passwordCorrect: false,
 
-      allowSend: false,
+      allowSend: true,
       receive: false,
 
       mode: "captcha",
@@ -145,11 +138,6 @@ export default {
     autoLogin(newValue) {
       this.UPDATE_AUTO_LOGIN(newValue);
     },
-    phone() {
-      if (this.phoneFormatCorrect) {
-        this._debounce(this.verifyPhoneExistence, 500)();
-      }
-    },
   },
   computed: {
     ...mapState(["loginCaptchaCount"]),
@@ -158,22 +146,30 @@ export default {
       return this.mode == "captcha" ? "密码登录" : "短信登录";
     },
 
-    phoneFormatCorrect() {
+    phoneCorrect() {
       return this.phoneRegExp.test(this.phone);
+    },
+
+    captchaUnlimite() {
+      return this.loginCaptchaCount <= 5;
+    },
+
+    md5Password() {
+      return md5(this.password);
     },
 
     phoneWarn() {
       return [
         [this.phone, "请输入手机号"],
-        [this.phoneFormatCorrect, "请输入正确的手机号"],
-        [this.phoneExist, "该手机号尚未注册"],
+        [this.phoneCorrect, "请输入正确的手机号"],
+        [this.verifyPhoneExistence, "该手机号尚未注册", this.phoneExist],
       ];
     },
 
     captchSendWarn() {
       return [
         [
-          this.loginCaptchaCount <= 5,
+          this.captchaUnlimite,
           "发送验证码超过限制：每个手机号一天只能发送5条验证码",
         ],
         [this.allowSend, "发送验证码间隔过短"],
@@ -183,15 +179,12 @@ export default {
     captchaLoginWarn() {
       return [
         [this.captcha, "请输入验证码"],
-        [this.captchaCorrect, "验证码错误"],
+        [this.verifyCaptcha, "验证码错误", this.captchaCorrect],
       ];
     },
 
     passwordLoginWarn() {
-      return [
-        [this.password, "请输入登录密码"],
-        [this.passwordCorrect, "手机号或密码错误"],
-      ];
+      return [[this.password, "请输入登录密码"]];
     },
   },
   methods: {
@@ -200,9 +193,10 @@ export default {
       "UPDATE_LOGIN_CAPTCHA_TIP_SHOW",
       "INCREASE_LOGIN_CAPTCHA_COUNT",
       "UPDATE_AUTO_LOGIN",
+      "UPDATE_LOGIN_WINDOW_SHOW",
     ]),
 
-    ...userMapMutations([]),
+    ...userMapMutations(["UPDATE_USER_LOGIN_INFO"]),
 
     _debounce(fun, delay) {
       return debounce(fun, delay);
@@ -216,29 +210,29 @@ export default {
     },
 
     /**
-     * @description: 发送验证码
+     * @description: 获取验证码
      */
     getCaptcha() {
       this.warn = "";
-      this.verifyFormat(this.phoneWarn);
-      captchaSentApi(this.phone).then((response) => {
-        this.receive = response["data"]["data"];
-      });
-      this.allowSend = false;
-      setTimeout(() => {
-        this.allowSend = true;
-      }, 1000 * 60);
 
-      this.INCREASE_LOGIN_CAPTCHA_COUNT();
-    },
+      if (
+        this.verifyFormat(this.phoneWarn) &&
+        this.verifyFormat(this.captchSendWarn)
+      ) {
+        this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(true);
+        setTimeout(() => {
+          this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(false);
+        }, 1000);
 
-    verifyFormat(warnType) {
-      for (let index = 0; index < warnType.length; index++) {
-        const element = warnType[index];
-        console.log(element);
-        if (!element[0]) {
-          return (this.warn = element[1]);
-        }
+        captchaSentApi(this.phone).then((response) => {
+          console.log(response["data"]["data"]);
+        });
+
+        this.allowSend = false;
+        setTimeout(() => {
+          this.allowSend = true;
+        }, 1000 * 60);
+        this.INCREASE_LOGIN_CAPTCHA_COUNT();
       }
     },
 
@@ -258,40 +252,84 @@ export default {
      * @description: 验证码登录
      */
     applyCaptchaLogin() {
-      // 检查验证码是否填写
-      if (this.captcha) {
-        // 检查手机号格式
-        if (this.verifyPhoneFormat()) {
-          // 检查验证码是否正确
-          if (this.verifyCaptcha()) {
-            this.loginButtonText = "登录中...";
+      this.warn = "";
+      if (
+        this.verifyFormat(this.phoneWarn) &&
+        this.verifyFormat(this.captchaLoginWarn)
+      ) {
+        this.loginButtonText = "登录中...";
 
-            cellPhoneCaptchaApi(this.phone, this.captcha).then(
-              (response) => {
-                console.log(response);
-              },
-              (error) => {
-                console.log(error);
-              }
-            );
-          } else {
-            this.warnIndex = 3;
+        cellPhoneCaptchaApi(this.phone, this.captcha).then(
+          (response) => {
+            if (response["data"]["code"] == 200) {
+              this.UPDATE_USER_LOGIN_INFO(response["data"]);
+              this.UPDATE_LOGIN_WINDOW_SHOW(false);
+            }
+          },
+          (error) => {
+            console.log(error);
+            this.loginButtonText = "登录";
           }
-        } else {
-          this.warnIndex = 0;
-        }
-      } else {
-        this.warnIndex = 1;
+        );
       }
     },
 
-    applyPasswordLogin() {},
+    /**
+     * @description: 密码登录
+     */
+    applyPasswordLogin() {
+      this.warn = "";
+      if (this.verifyFormat(this.phone)) {
+        this.loginButtonText = "登录中...";
+
+        cellPhonePasswordApi(this.phone, this.md5Password).then(
+          (response) => {
+            if (response["data"]["code"] == 200) {
+              this.UPDATE_USER_LOGIN_INFO(response["data"]);
+              this.UPDATE_LOGIN_WINDOW_SHOW(false);
+            } else {
+              this.warn = this.warn = "手机号或密码错误";
+            }
+          },
+          (error) => {
+            this.warn = "手机号或密码错误";
+            this.loginButtonText = "登录";
+            console.log(error);
+          }
+        );
+      }
+    },
+
+    /**
+     * @description: 判断手机号、验证码、密码是否符合要求
+     * @param {*} warnType
+     * @return {*} true/false
+     */
+    verifyFormat(warnType) {
+      (async () => {
+        for (let index = 0; index < warnType.length; index++) {
+          const element = warnType[index];
+          if (typeof element[0] == "function") {
+            await element[0]();
+            if (!element[2]) {
+              return (this.warn = element[1]);
+            }
+          } else {
+            if (!element[0]) {
+              return (this.warn = element[1]);
+            }
+          }
+        }
+      })();
+
+      return true;
+    },
 
     /**
      * @description: 验证手机号是否注册
      */
     verifyPhoneExistence() {
-      cellphoneCheckApi(this.phone).then(
+      return cellphoneCheckApi(this.phone).then(
         (response) => {
           if (response["data"]["exist"] == 1) {
             this.phoneExist = true;
@@ -311,16 +349,14 @@ export default {
      * @return {*}true/false
      */
     verifyCaptcha() {
-      if (this.phoneFormatCorrect) {
-        return captchaVerifyApi(this.phone, this.captcha).then(
-          (response) => {
-            return response["data"]["data"];
-          },
-          (error) => {
-            return false;
-          }
-        );
-      }
+      return captchaVerifyApi(this.phone, this.captcha).then(
+        (response) => {
+          this.captchaCorrect = response["data"]["data"];
+        },
+        (error) => {
+          this.captchaCorrect = false;
+        }
+      );
     },
 
     /**
@@ -395,7 +431,7 @@ export default {
         height: 31px;
         line-height: 31px;
         color: #333;
-        margin-left: 10px;
+        margin-left: 12px;
         cursor: pointer;
         &:hover {
           opacity: 0.8;
@@ -416,7 +452,7 @@ export default {
       .input {
         border: none;
         outline: none;
-        padding-left: 5px;
+        padding: 5px 8px 5px;
       }
       .forget {
         cursor: pointer;
