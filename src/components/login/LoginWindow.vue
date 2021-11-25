@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-11-17 11:41:56
+ * @LastEditTime: 2021-11-25 15:29:48
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -20,9 +20,10 @@
       <div class="close" @click="closeWindow">x</div>
     </div>
     <div>
-      <login-menu v-if="loginMode == 'menu'" />
+      <login-menu v-show="loginMode == 'menu'" />
       <q-r-code-login v-if="loginMode == 'QRCode'" />
       <phone-login v-if="loginMode == 'phone'" />
+      <reset v-if="loginMode == 'reset'" />
     </div>
   </div>
 </template>
@@ -34,9 +35,10 @@ const { mapState, mapGetters, mapMutations } = createNamespacedHelpers("login");
 import LoginMenu from "./LoginMenu.vue";
 import PhoneLogin from "./PhoneLogin.vue";
 import QRCodeLogin from "./QRCodeLogin.vue";
+import Reset from "./Reset.vue";
 
 export default {
-  components: { QRCodeLogin, LoginMenu, PhoneLogin },
+  components: { QRCodeLogin, LoginMenu, PhoneLogin, Reset },
   name: "LoginWindow",
   data() {
     return {
@@ -104,7 +106,7 @@ export default {
 <style lang="scss" scoped>
 .login-window {
   width: 530px;
-  height: 350px;
+  min-height: 350px;
   background-color: #fff;
   display: flex;
   flex-direction: column;

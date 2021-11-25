@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-24 15:00:57
+ * @LastEditTime: 2021-11-25 09:59:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -10,7 +10,10 @@
   <div class="phone-login">
     <div class="main">
       <div class="phone">
-        <div class="countrycode">+86</div>
+        <div class="countrycode">
+          +86
+          <div class="icon"></div>
+        </div>
         <input
           type="text"
           placeholder="请输入手机号"
@@ -402,6 +405,17 @@ export default {
         line-height: 30px;
         padding: 0 18px 0 5px;
         border-right: 1px solid #cdcdcd;
+        .icon {
+          position: absolute;
+          top: 15px;
+          left: 32px;
+          background-image: url(https://s2.music.126.net/style/web2/img/icon2.png?56b9f5388f2a3efdf3e44cb9a0d2a018);
+          background-position: -260px -450px;
+          color: #333333;
+          line-height: 30px;
+          width: 7px;
+          height: 4px;
+        }
       }
       .input {
         padding: 5px 8px 5px;
