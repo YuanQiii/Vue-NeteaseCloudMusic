@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-17 11:37:51
- * @LastEditTime: 2021-11-25 15:14:43
+ * @LastEditTime: 2021-11-26 17:29:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\Reset.vue
@@ -28,16 +28,18 @@
       <div class="title">密码：</div>
       <div class="password">
         <input
-          type="text"
-          placeholder="请输入手机号"
+          type="password"
+          placeholder="设置登录密码，不少于8位"
           autocomplete="off"
           class="input"
-          v-model="phone"
+          :style="passwordWarnStyle"
+          v-model="password"
+          @focus="styleShow = true"
         />
       </div>
 
       <div class="warn">
-        <div class="item" v-for="(value, index) in warnText">
+        <div class="item" v-for="(value, index) in pwdWarnText">
           <div
             :class="_elementIsActive(currentWarn[index], true, 'icon')"
           ></div>
@@ -47,7 +49,7 @@
         </div>
       </div>
 
-      <div class="next" @click="toNext">
+      <div class="next">
         <login-button :text="'下一步'" :disable="btnDisable" />
       </div>
     </div>
@@ -62,7 +64,7 @@ import { createNamespacedHelpers } from "vuex";
 const { mapMutations } = createNamespacedHelpers("login");
 
 import { elementIsActive } from "@/utils/elementIsActive.js";
-import LoginButton from "../button/LoginButton.vue";
+import LoginButton from "../control/LoginButton.vue";
 
 export default {
   components: { LoginButton },
@@ -70,26 +72,61 @@ export default {
   data() {
     return {
       phone: "",
-      warnText: [
+      password: "",
+      phoneWarnText: ["请输入手机号", "请输入正确的手机号"],
+      pwdWarnText: [
         "密码不能包含空格",
         "包含字母、数字、符号中至少两种",
         "密码长度为8-20位",
       ],
-      passwordBlank: false,
-      passwordType: true,
-      passwordLength: true,
-      btnDisable: false,
+      phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+      passwordExp:
+        /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{2,30}$/,
+      styleShow: false,
     };
   },
   computed: {
     currentWarn() {
-      return [this.passwordBlank, this.passwordType, this.passwordLength];
+      return [this.BlankWarn, this.TypeWarn, this.LengthWarn];
+    },
+
+    btnDisable() {
+      if (this.password) {
+        return this.BlankWarn || this.TypeWarn || this.LengthWarn;
+      } else {
+        return true;
+      }
+    },
+
+    BlankWarn() {
+      return this.password.split("").some((value) => {
+        return value == " ";
+      });
+    },
+
+    TypeWarn() {
+      return !this.passwordExp.test(this.password);
+    },
+
+    LengthWarn() {
+      let pwdLength = this.password.length;
+      return pwdLength < 8 || pwdLength > 20;
+    },
+
+    phoneCorrect() {
+      return this.phoneRegExp.test(this.phone);
+    },
+
+    passwordWarnStyle() {
+      return this.btnDisable && this.styleShow
+        ? {
+            border: "solid 1px #f08b8b",
+          }
+        : {};
     },
   },
   watch: {
-    phone(newValue) {
-      console.log(newValue);
-    },
+    phone(newValue) {},
   },
   methods: {
     ...mapMutations(["UPDATE_LOGIN_MODE"]),
@@ -198,11 +235,6 @@ export default {
     }
 
     .next {
-      // width: 220px;
-      // height: 31px;
-      // color: #bebebe;
-      // line-height: 31px;
-      // text-align: center;
       margin-top: 20px;
 
       .image {

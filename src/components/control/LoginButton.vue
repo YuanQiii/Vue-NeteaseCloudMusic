@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-25 11:25:11
- * @LastEditTime: 2021-11-25 15:01:47
+ * @LastEditTime: 2021-11-26 14:17:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\button\TheButton.vue
@@ -28,6 +28,9 @@ export default {
   props: {
     text: String,
     disable: Boolean,
+  },
+  mounted() {
+    this.initStatus();
   },
   data() {
     return {
@@ -78,8 +81,17 @@ export default {
     },
   },
   methods: {
+    initStatus() {
+      if (this.disable) {
+        this.status = "disable";
+      } else {
+        this.status = "normal";
+      }
+    },
     changeStatus(status) {
-      this.status = status;
+      if (!this.disable) {
+        this.status = status;
+      }
     },
   },
 };
@@ -94,6 +106,7 @@ $button-background-image: url(https://s2.music.126.net/style/web2/img/button2.pn
   color: #bebebe;
   line-height: 31px;
   text-align: center;
+  font-size: 12px;
 
   .image {
     display: flex;

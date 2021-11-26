@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-24 11:12:21
+ * @LastEditTime: 2021-11-26 09:30:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
@@ -33,8 +33,8 @@
 import LoginWindow from "./components/login/LoginWindow.vue";
 import NavigationBar from "./components/navigation/NavigationBar.vue";
 import MusicPlayer from "./components/player/MusicPlayer.vue";
-import CaptchaTip from "./components/Tip/CaptchaTip.vue";
-import PolicyTip from "./components/Tip/PolicyTip.vue";
+import CaptchaTip from "./components/tip/CaptchaTip.vue";
+import PolicyTip from "./components/tip/PolicyTip.vue";
 
 export default {
   components: {

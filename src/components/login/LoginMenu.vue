@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-15 09:48:10
- * @LastEditTime: 2021-11-21 17:16:15
+ * @LastEditTime: 2021-11-26 09:51:15
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginMenu.vue
@@ -12,16 +12,10 @@
       <div class="phone-login">
         <img src="../../assets/login/platform.png" alt="" />
         <div class="phone" @click="toWindow('phone')">
-          <img class="image" src="../../assets/login/phone_button.png" alt="" />
-          <div class="text">手机号登录</div>
+          <login-button :text="'手机号登录'" :disable="false" />
         </div>
         <div class="register" @click="toWindow('register')">
-          <img
-            class="image"
-            src="../../assets/login/regiter_button.png"
-            alt=""
-          />
-          <div class="text">注册</div>
+          <register-button :text="'注册'" />
         </div>
       </div>
       <div class="other-login">
@@ -82,9 +76,14 @@
 
 <script>
 import { createNamespacedHelpers } from "vuex";
+
 const { mapMutations } = createNamespacedHelpers("login");
 
+import LoginButton from "../control/LoginButton.vue";
+import RegisterButton from "../control/RegisterButton.vue";
+
 export default {
+  components: { RegisterButton, LoginButton },
   name: "LoginMenu",
   data() {
     return {

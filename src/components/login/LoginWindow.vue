@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-11-25 15:29:48
+ * @LastEditTime: 2021-11-26 10:03:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -11,9 +11,9 @@
     class="login-window"
     ref="loginWindow"
     :style="windowStyle"
-    v-if="loginWindowShow"
     @mousemove="move"
     @mouseup="afterMove"
+    v-if="loginWindowShow"
   >
     <div class="head" @mousedown="beforeMove">
       <div class="mode">{{ loginTitle }}</div>
@@ -89,6 +89,7 @@ export default {
     },
     closeWindow() {
       this.UPDATE_LOGIN_WINDOW_SHOW(false);
+      this.UPDATE_LOGIN_MODE("menu");
     },
     limitPosition(value, max) {
       if (value <= 0) {
