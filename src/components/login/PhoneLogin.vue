@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-25 09:59:21
+ * @LastEditTime: 2021-11-28 14:27:06
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -132,7 +132,7 @@ export default {
       warn: "",
       loginButtonText: "登录",
 
-      phoneRegExp: /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/,
+      phoneRegExp: /^1[3456789]\d{9}$/,
 
       autoLogin: false,
     };
@@ -226,11 +226,13 @@ export default {
         setTimeout(() => {
           this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(false);
         }, 1000);
-
         captchaSentApi(this.phone).then((response) => {
-          console.log(response["data"]["data"]);
+          if (response["data"]["data"]) {
+            console.log("验证码发送成功");
+          } else {
+            console.log("验证码发送失败");
+          }
         });
-
         this.allowSend = false;
         setTimeout(() => {
           this.allowSend = true;
@@ -309,23 +311,34 @@ export default {
      * @return {*} true/false
      */
     verifyFormat(warnType) {
+      let verifyResult = true;
       (async () => {
         for (let index = 0; index < warnType.length; index++) {
-          const element = warnType[index];
+          let element = warnType[index];
           if (typeof element[0] == "function") {
             await element[0]();
+
+            // 更新数组变量值
+            if (warnType.length == 3) {
+              element = this.phoneWarn[index];
+            } else {
+              element = this.captchaLoginWarn[index];
+            }
+
             if (!element[2]) {
-              return (this.warn = element[1]);
+              this.warn = element[1];
+              verifyResult = false;
             }
           } else {
             if (!element[0]) {
-              return (this.warn = element[1]);
+              this.warn = element[1];
+              verifyResult = false;
             }
           }
         }
       })();
 
-      return true;
+      return verifyResult;
     },
 
     /**
