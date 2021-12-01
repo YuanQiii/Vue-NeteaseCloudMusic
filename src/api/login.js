@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 16:41:11
- * @LastEditTime: 2021-11-24 14:07:11
+ * @LastEditTime: 2021-12-01 16:57:49
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\api\login.js
@@ -59,12 +59,25 @@ export function QRCheckApi(key, timestamp) {
   });
 }
 
-// register
-export function registerApi(params) {
+
+/**
+ * @description: 注册(修改密码)
+ * @param {*} phone
+ * @param {*} password
+ * @param {*} captcha
+ * @param {*} nickname
+ * @return {*}
+ */
+export function registerApi(phone, password, captcha, nickname) {
   return request({
     url: "register/cellphone",
-    method: "get",
-    params,
+    method: "post",
+    data: {
+      phone,
+      password,
+      captcha,
+      nickname
+    }
   });
 }
 

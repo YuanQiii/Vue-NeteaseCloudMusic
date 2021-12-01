@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-17 11:37:51
- * @LastEditTime: 2021-11-26 17:29:38
+ * @LastEditTime: 2021-12-01 17:57:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\Reset.vue
@@ -10,7 +10,7 @@
   <div class="reset">
     <div class="main">
       <div class="title">手机号：</div>
-      <div class="phone">
+      <div class="phone" :style="phoneWarnStyle">
         <div class="countrycode">
           +86
           <div class="icon"></div>
@@ -22,6 +22,7 @@
           autocomplete="off"
           class="input"
           v-model="phone"
+          @blur="styleShow = true"
         />
       </div>
 
@@ -49,7 +50,7 @@
         </div>
       </div>
 
-      <div class="next">
+      <div class="next" @click="toVerify">
         <login-button :text="'下一步'" :disable="btnDisable" />
       </div>
     </div>
@@ -62,6 +63,8 @@
 <script>
 import { createNamespacedHelpers } from "vuex";
 const { mapMutations } = createNamespacedHelpers("login");
+
+import { captchaSentApi, captchaVerifyApi } from "@/api/login.js";
 
 import { elementIsActive } from "@/utils/elementIsActive.js";
 import LoginButton from "../control/LoginButton.vue";
@@ -124,15 +127,40 @@ export default {
           }
         : {};
     },
-  },
-  watch: {
-    phone(newValue) {},
+
+    phoneWarnStyle() {
+      return this.phone == "" && this.styleShow
+        ? {
+            border: "solid 1px #f08b8b",
+          }
+        : {};
+    },
   },
   methods: {
-    ...mapMutations(["UPDATE_LOGIN_MODE"]),
+    ...mapMutations([
+      "UPDATE_LOGIN_MODE",
+      "UPDATE_LOGIN_PHONE",
+      "UPDATE_LOGIN_PASSWORD",
+    ]),
 
     _elementIsActive(current, self, origin) {
       return elementIsActive(current, self, origin);
+    },
+
+    toVerify() {
+      if (!this.btnDisable) {
+        captchaSentApi(this.phone).then((response) => {
+          if (response["data"]["data"]) {
+            console.log("验证码发送成功");
+          } else {
+            console.log("验证码发送失败");
+          }
+        });
+
+        this.UPDATE_LOGIN_PHONE(this.phone);
+        this.UPDATE_LOGIN_PASSWORD(this.password);
+        this.UPDATE_LOGIN_MODE("verify");
+      }
     },
 
     toWindow(mode) {

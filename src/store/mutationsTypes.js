@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-11-24 14:50:26
+ * @LastEditTime: 2021-12-01 17:39:44
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -34,6 +34,14 @@ const INCREASE_LOGIN_CAPTCHA_COUNT = "INCREASE_LOGIN_CAPTCHA_COUNT";
 // 用户登录信息
 const UPDATE_USER_LOGIN_INFO = "UPDATE_USER_LOGIN_INFO";
 
+// 登录手机号
+const UPDATE_LOGIN_PHONE = "LOGIN_PHONE";
+
+// 登录密码
+const UPDATE_LOGIN_PASSWORD = "LOGIN_PASSWORD";
+
+
+
 
 export {
   UPDATE_AUTO_LOGIN,
@@ -44,7 +52,9 @@ export {
   UPDATE_LOGIN_POLICY_TIP_SHOW,
   UPDATE_LOGIN_CAPTCHA_TIP_SHOW,
   INCREASE_LOGIN_CAPTCHA_COUNT,
-  UPDATE_USER_LOGIN_INFO
+  UPDATE_USER_LOGIN_INFO,
+  UPDATE_LOGIN_PHONE,
+  UPDATE_LOGIN_PASSWORD
 }
 
 
