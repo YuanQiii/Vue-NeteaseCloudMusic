@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-15 09:48:10
- * @LastEditTime: 2021-11-26 09:51:15
+ * @LastEditTime: 2021-12-02 17:52:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginMenu.vue
@@ -79,8 +79,8 @@ import { createNamespacedHelpers } from "vuex";
 
 const { mapMutations } = createNamespacedHelpers("login");
 
-import LoginButton from "../control/LoginButton.vue";
-import RegisterButton from "../control/RegisterButton.vue";
+import LoginButton from "@/ui/Button/LoginButton.vue";
+import RegisterButton from "@/ui/Button/RegisterButton.vue";
 
 export default {
   components: { RegisterButton, LoginButton },

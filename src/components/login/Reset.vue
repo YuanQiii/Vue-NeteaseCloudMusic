@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-17 11:37:51
- * @LastEditTime: 2021-12-01 17:57:03
+ * @LastEditTime: 2021-12-02 17:51:47
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\Reset.vue
@@ -67,7 +67,7 @@ const { mapMutations } = createNamespacedHelpers("login");
 import { captchaSentApi, captchaVerifyApi } from "@/api/login.js";
 
 import { elementIsActive } from "@/utils/elementIsActive.js";
-import LoginButton from "../control/LoginButton.vue";
+import LoginButton from "@/ui/Button/LoginButton.vue";
 
 export default {
   components: { LoginButton },
@@ -149,14 +149,14 @@ export default {
 
     toVerify() {
       if (!this.btnDisable) {
-        captchaSentApi(this.phone).then((response) => {
-          if (response["data"]["data"]) {
-            console.log("验证码发送成功");
-          } else {
-            console.log("验证码发送失败");
-          }
-        });
-
+        // captchaSentApi(this.phone).then((response) => {
+        //   if (response["data"]["data"]) {
+        //     console.log("验证码发送成功");
+        //   } else {
+        //     console.log("验证码发送失败");
+        //   }
+        // });
+        console.log("验证码发送成功");
         this.UPDATE_LOGIN_PHONE(this.phone);
         this.UPDATE_LOGIN_PASSWORD(this.password);
         this.UPDATE_LOGIN_MODE("verify");
