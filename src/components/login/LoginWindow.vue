@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-12-01 17:01:56
+ * @LastEditTime: 2021-12-03 15:25:10
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -23,7 +23,7 @@
       <login-menu v-show="loginMode == 'menu'" />
       <q-r-code-login v-if="loginMode == 'QRCode'" />
       <phone-login v-if="loginMode == 'phone'" />
-      <reset v-if="loginMode == 'reset'" />
+      <reset v-if="loginMode == 'reset' || loginMode == 'register'" />
       <verify-code v-if="loginMode == 'verify'" />
     </div>
   </div>
@@ -109,7 +109,7 @@ export default {
 <style lang="scss" scoped>
 .login-window {
   width: 530px;
-  min-height: 350px;
+  min-height: 315px;
   background-color: #fff;
   display: flex;
   flex-direction: column;

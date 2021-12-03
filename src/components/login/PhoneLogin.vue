@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-11-28 14:27:06
+ * @LastEditTime: 2021-12-03 15:18:49
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -73,11 +73,12 @@
         </div>
       </div>
       <div class="login">
-        <div class="button">
+        <login-button :text="loginButtonText" @click.native="login" />
+        <!-- <div class="button">
           <div class="button1"></div>
           <div class="button2"></div>
         </div>
-        <div class="text" @click="login">{{ loginButtonText }}</div>
+        <div class="text" @click="login">{{ loginButtonText }}</div> -->
       </div>
     </div>
 
@@ -110,8 +111,10 @@ import {
 } from "@/api/login.js";
 
 import { debounce } from "@/utils/debounce.js";
+import LoginButton from "@/ui/Button/LoginButton.vue";
 
 export default {
+  components: { LoginButton },
   name: "PhoneLogin",
 
   data() {
@@ -527,38 +530,6 @@ export default {
         .input {
           margin-right: 5px;
         }
-      }
-    }
-    .login {
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      &:hover {
-        opacity: 0.8;
-      }
-      .button {
-        display: flex;
-        height: 30px;
-
-        .button1 {
-          width: 215px;
-          background-image: url(https://s2.music.126.net/style/web2/img/button2.png?328b698cc3d7fa28ef0aedeed773d27c);
-          background-position: 0 -387px;
-        }
-        .button2 {
-          width: 5px;
-          background-image: url(https://s2.music.126.net/style/web2/img/button2.png?328b698cc3d7fa28ef0aedeed773d27c);
-          background-position: right -428px;
-        }
-      }
-      .text {
-        width: 220px;
-        text-align: center;
-        color: #fff;
-        position: relative;
-        height: 30px;
-        line-height: 30px;
-        top: -30px;
       }
     }
   }

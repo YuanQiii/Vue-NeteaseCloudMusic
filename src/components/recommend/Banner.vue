@@ -87,7 +87,7 @@ export default {
       if (this.currentBannerIndex < 0) {
         this.currentBannerIndex = 8;
       }
-      if (this.currentBannerIndex > 8) {
+      if (this.currentBannerIndex > 9) {
         this.currentBannerIndex = 0;
       }
       this.bannerImageChange();
@@ -101,7 +101,7 @@ export default {
         clearInterval(this.autoInterval);
       }
       this.autoInterval = setInterval(() => {
-        if (this.currentBannerIndex == 8) {
+        if (this.currentBannerIndex == 9) {
           this.currentBannerIndex = 0;
         } else {
           this.currentBannerIndex++;

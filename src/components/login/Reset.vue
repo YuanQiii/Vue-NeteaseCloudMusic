@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-17 11:37:51
- * @LastEditTime: 2021-12-02 17:51:47
+ * @LastEditTime: 2021-12-03 15:30:39
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\Reset.vue
@@ -39,11 +39,10 @@
         />
       </div>
 
-      <div class="warn">
+      <div class="warn" v-show="styleShow">
         <div class="item" v-for="(value, index) in pwdWarnText">
-          <div
-            :class="_elementIsActive(currentWarn[index], true, 'icon')"
-          ></div>
+          <error-icon v-if="currentWarn[index]" />
+          <conform-icon v-else />
           <div :class="_elementIsActive(currentWarn[index], true, 'text')">
             {{ value }}
           </div>
@@ -51,7 +50,7 @@
       </div>
 
       <div class="next" @click="toVerify">
-        <login-button :text="'下一步'" :disable="btnDisable" />
+        <login-button :text="buttonText" :disable="btnDisable" />
       </div>
     </div>
     <div class="bottom">
@@ -64,13 +63,13 @@
 import { createNamespacedHelpers } from "vuex";
 const { mapMutations } = createNamespacedHelpers("login");
 
-import { captchaSentApi, captchaVerifyApi } from "@/api/login.js";
-
 import { elementIsActive } from "@/utils/elementIsActive.js";
 import LoginButton from "@/ui/Button/LoginButton.vue";
+import ConformIcon from "@/ui/Icon/ConformIcon.vue";
+import ErrorIcon from "@/ui/Icon/ErrorIcon.vue";
 
 export default {
-  components: { LoginButton },
+  components: { LoginButton, ConformIcon, ErrorIcon },
   name: "Reset",
   data() {
     return {
@@ -86,6 +85,7 @@ export default {
       passwordExp:
         /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{2,30}$/,
       styleShow: false,
+      buttonText: "下一步",
     };
   },
   computed: {
@@ -157,6 +157,7 @@ export default {
         //   }
         // });
         console.log("验证码发送成功");
+        this.buttonText = "发送中...";
         this.UPDATE_LOGIN_PHONE(this.phone);
         this.UPDATE_LOGIN_PASSWORD(this.password);
         this.UPDATE_LOGIN_MODE("verify");

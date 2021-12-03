@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-02 10:08:47
- * @LastEditTime: 2021-12-02 16:37:53
+ * @LastEditTime: 2021-12-03 14:25:16
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\control\CodeInput.vue
@@ -64,25 +64,25 @@ export default {
   watch: {
     value1(newValue) {
       if (newValue) {
-        getCaptcha();
+        this.getCaptcha();
         this.$refs.codeInput2.focus();
       }
     },
     value2(newValue) {
       if (newValue) {
-        getCaptcha();
+        this.getCaptcha();
         this.$refs.codeInput3.focus();
       }
     },
     value3(newValue) {
       if (newValue) {
-        getCaptcha();
+        this.getCaptcha();
         this.$refs.codeInput4.focus();
       }
     },
     value4(newValue) {
       if (newValue) {
-        getCaptcha();
+        this.getCaptcha();
         this.$refs.codeInput4.blur();
       }
     },
