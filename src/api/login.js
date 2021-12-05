@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 16:41:11
- * @LastEditTime: 2021-12-01 16:57:49
+ * @LastEditTime: 2021-12-04 13:49:16
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\api\login.js
@@ -11,7 +11,6 @@ import request from "@/api/request"; // 引入封装好的axios
 /**
  * @description: 获取二维码unikey
  * @param {*} timestamp
- * @return {*}
  */
 export function QRKeyApi(timestamp) {
   return request({
@@ -28,7 +27,6 @@ export function QRKeyApi(timestamp) {
  * @param {*} key
  * @param {*} qrimg
  * @param {*} timestamp
- * @return {*}
  */
 export function QRCreateApi(key, qrimg, timestamp) {
   return request({
@@ -46,7 +44,6 @@ export function QRCreateApi(key, qrimg, timestamp) {
  * @description: 检查二维码是否可用
  * @param {*} key
  * @param {*} timestamp
- * @return {*}
  */
 export function QRCheckApi(key, timestamp) {
   return request({
@@ -59,14 +56,12 @@ export function QRCheckApi(key, timestamp) {
   });
 }
 
-
 /**
  * @description: 注册(修改密码)
  * @param {*} phone
  * @param {*} password
  * @param {*} captcha
  * @param {*} nickname
- * @return {*}
  */
 export function registerApi(phone, password, captcha, nickname) {
   return request({
@@ -76,8 +71,8 @@ export function registerApi(phone, password, captcha, nickname) {
       phone,
       password,
       captcha,
-      nickname
-    }
+      nickname,
+    },
   });
 }
 
@@ -87,7 +82,6 @@ export function registerApi(phone, password, captcha, nickname) {
  * @param {*} phone
  * @param {*} password
  * @param {*} captcha
- * @return {*}
  */
 export function cellPhoneCaptchaApi(phone, captcha) {
   return request({
@@ -104,7 +98,6 @@ export function cellPhoneCaptchaApi(phone, captcha) {
  * @description: 手机号密码登录
  * @param {*} phone
  * @param {*} password
- * @return {*}
  */
 export function cellPhonePasswordApi(phone, md5_password) {
   return request({
@@ -117,20 +110,10 @@ export function cellPhonePasswordApi(phone, md5_password) {
   });
 }
 
-// email
-export function emailApi(params) {
-  return request({
-    url: "login/email",
-    method: "get",
-    params,
-  });
-}
-
 // captchaSent
 /**
  * @description: 发送验证码
  * @param {*} phone
- * @return {*}
  */
 export function captchaSentApi(phone) {
   return request({
@@ -147,7 +130,6 @@ export function captchaSentApi(phone) {
  * @description: 检验验证码是否正确
  * @param {*} phone
  * @param {*} captcha
- * @return {*}
  */
 export function captchaVerifyApi(phone, captcha) {
   return request({
@@ -163,7 +145,6 @@ export function captchaVerifyApi(phone, captcha) {
 /**
  * @description: 手机号是否存在
  * @param {*} phone
- * @return {*}
  */
 export function cellphoneCheckApi(phone) {
   return request({
@@ -172,5 +153,15 @@ export function cellphoneCheckApi(phone) {
     params: {
       phone,
     },
+  });
+}
+
+/**
+ * @description: 登录状态
+ */
+export function loginStatusApi() {
+  return request({
+    url: "login/status",
+    method: "get",
   });
 }

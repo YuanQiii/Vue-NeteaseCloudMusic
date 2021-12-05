@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-12-03 16:51:11
+ * @LastEditTime: 2021-12-04 22:56:15
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div class="step-two" v-show="code == 802">
+      <div class="step-two" v-show="code == 802 || code == 803">
         <img class="image" src="../../assets/login/scan_success.png" alt="" />
         <div class="text1">扫描成功</div>
         <div class="text2">请在手机上确认登录</div>
@@ -47,12 +47,14 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from "vuex";
-const { mapMutations } = createNamespacedHelpers("login");
+import { mapMutations } from "vuex";
 
-import { QRKeyApi } from "@/api/login.js";
-import { QRCreateApi } from "@/api/login.js";
-import { QRCheckApi } from "@/api/login.js";
+import {
+  QRKeyApi,
+  QRCreateApi,
+  QRCheckApi,
+  loginStatusApi,
+} from "@/api/login.js";
 
 export default {
   name: "QRCodeLogin",
@@ -66,13 +68,12 @@ export default {
     return {
       uniKey: "",
       code: 801,
-      validCode: [801, 802, 803],
-      cookie: "",
       checkInterval: null,
     };
   },
   methods: {
-    ...mapMutations(["UPDATE_LOGIN_MODE", "UPDATE_LOGIN_WINDOW_SHOW"]),
+    ...mapMutations("login", ["UPDATE_LOGIN_MODE", "UPDATE_LOGIN_WINDOW_SHOW"]),
+    ...mapMutations("user", ["UPDATE_USER_LOGIN"]),
 
     getQRImage() {
       QRKeyApi(this.getTimestamp())
@@ -92,17 +93,21 @@ export default {
 
       this.checkInterval = setInterval(() => {
         QRCheckApi(this.uniKey, this.getTimestamp()).then((response) => {
-          this.code = response["data"]["code"];
-          this.cookie = response["data"]["cookie"];
-          this.handleQRCode();
+          this.handleQRCode(response["data"]["code"]);
+          console.log(response["data"]["code"]);
         });
       }, 1000);
     },
-    handleQRCode() {
-      if (!this.validCode.includes(this.code)) {
-        this.cookie = "";
+    handleQRCode(code) {
+      if (code == 800) {
         clearInterval(this.checkInterval);
         console.log("二维码已过期");
+      } else if (code == 803) {
+        this.code = code;
+        this.UPDATE_USER_LOGIN(true);
+        this.UPDATE_LOGIN_WINDOW_SHOW(false);
+      } else {
+        this.code = code;
       }
     },
     getTimestamp() {

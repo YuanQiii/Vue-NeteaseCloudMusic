@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-12-03 15:18:49
+ * @LastEditTime: 2021-12-04 23:39:41
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -32,14 +32,12 @@
             v-model="captcha"
           />
         </div>
-        <div class="send" @click="getCaptcha">
-          <img
-            src="../../assets/login/captcha_button.png"
-            alt=""
-            class="image"
-          />
-          <div class="text">获取验证码</div>
-        </div>
+
+        <send-button
+          text="获取验证码"
+          @click.native="getCaptcha"
+          class="send"
+        />
       </div>
       <div class="password" v-show="mode == 'password'">
         <input
@@ -74,11 +72,6 @@
       </div>
       <div class="login">
         <login-button :text="loginButtonText" @click.native="login" />
-        <!-- <div class="button">
-          <div class="button1"></div>
-          <div class="button2"></div>
-        </div>
-        <div class="text" @click="login">{{ loginButtonText }}</div> -->
       </div>
     </div>
 
@@ -95,12 +88,7 @@
 
 <script>
 import md5 from "js-md5";
-
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapMutations } = createNamespacedHelpers("login");
-
-const userNamespeace = createNamespacedHelpers("user");
-const userMapMutations = userNamespeace.mapMutations;
+import { mapState, mapMutations } from "vuex";
 
 import {
   cellPhoneCaptchaApi,
@@ -112,9 +100,10 @@ import {
 
 import { debounce } from "@/utils/debounce.js";
 import LoginButton from "@/ui/Button/LoginButton.vue";
+import SendButton from "@/ui/Button/SendButton.vue";
 
 export default {
-  components: { LoginButton },
+  components: { LoginButton, SendButton },
   name: "PhoneLogin",
 
   data() {
@@ -146,7 +135,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["loginCaptchaCount"]),
+    ...mapState("login", ["loginCaptchaCount"]),
 
     modeText() {
       return this.mode == "captcha" ? "密码登录" : "短信登录";
@@ -194,7 +183,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
+    ...mapMutations("login", [
       "UPDATE_LOGIN_MODE",
       "UPDATE_LOGIN_CAPTCHA_TIP_SHOW",
       "INCREASE_LOGIN_CAPTCHA_COUNT",
@@ -202,7 +191,7 @@ export default {
       "UPDATE_LOGIN_WINDOW_SHOW",
     ]),
 
-    ...userMapMutations(["UPDATE_USER_LOGIN_INFO"]),
+    ...mapMutations("user", ["UPDATE_USER_LOGIN_INFO", "UPDATE_USER_LOGIN"]),
 
     _debounce(fun, delay) {
       return debounce(fun, delay);
@@ -270,10 +259,10 @@ export default {
         cellPhoneCaptchaApi(this.phone, this.captcha).then(
           (response) => {
             if (response["data"]["code"] == 200) {
-              this.UPDATE_USER_LOGIN_INFO(response["data"]);
-              this.UPDATE_LOGIN_WINDOW_SHOW(false);
+              this.handleLoginSuccess();
             }
           },
+
           (error) => {
             console.log(error);
             this.loginButtonText = "登录";
@@ -293,8 +282,7 @@ export default {
         cellPhonePasswordApi(this.phone, this.md5Password).then(
           (response) => {
             if (response["data"]["code"] == 200) {
-              this.UPDATE_USER_LOGIN_INFO(response["data"]);
-              this.UPDATE_LOGIN_WINDOW_SHOW(false);
+              this.handleLoginSuccess();
             } else {
               this.warn = this.warn = "手机号或密码错误";
             }
@@ -388,6 +376,11 @@ export default {
         this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(false);
       }, 1000);
     },
+    handleLoginSuccess() {
+      this.UPDATE_USER_LOGIN(true);
+      this.UPDATE_USER_LOGIN_INFO(response["data"]);
+      this.UPDATE_LOGIN_WINDOW_SHOW(false);
+    },
   },
 };
 </script>
@@ -458,19 +451,7 @@ export default {
         }
       }
       .send {
-        height: 31px;
-        line-height: 31px;
-        color: #333;
         margin-left: 12px;
-        cursor: pointer;
-        &:hover {
-          opacity: 0.8;
-        }
-        .text {
-          position: relative;
-          top: -42px;
-          left: 5px;
-        }
       }
     }
     .password {

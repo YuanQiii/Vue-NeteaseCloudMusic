@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-15 09:48:10
- * @LastEditTime: 2021-12-03 15:25:32
+ * @LastEditTime: 2021-12-04 12:59:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginMenu.vue
@@ -14,7 +14,7 @@
         <div class="phone" @click="toWindow('phone')">
           <login-button :text="'手机号登录'" :disable="false" />
         </div>
-        <div class="register" @click="toWindow('reset')">
+        <div class="register" @click="toWindow('register')">
           <register-button :text="'注册'" />
         </div>
       </div>

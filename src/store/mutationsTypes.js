@@ -1,14 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-12-02 16:39:44
+ * @LastEditTime: 2021-12-04 14:19:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
  */
 
 // 自动登录
-const UPDATE_AUTO_LOGIN = 'UPDATE_AUTO_LOGIN'
+const UPDATE_AUTO_LOGIN = "UPDATE_AUTO_LOGIN";
 
 // 登录窗口显示
 const UPDATE_LOGIN_WINDOW_SHOW = "UPDATE_LOGIN_WINDOW_SHOW";
@@ -40,8 +40,8 @@ const UPDATE_LOGIN_PHONE = "UPDATE_LOGIN_PHONE";
 // 登录密码
 const UPDATE_LOGIN_PASSWORD = "UPDATE_LOGIN_PASSWORD";
 
-
-
+// 用户登录状态
+const UPDATE_USER_LOGIN = "UPDATE_USER_LOGIN";
 
 export {
   UPDATE_AUTO_LOGIN,
@@ -54,9 +54,6 @@ export {
   INCREASE_LOGIN_CAPTCHA_COUNT,
   UPDATE_USER_LOGIN_INFO,
   UPDATE_LOGIN_PHONE,
-  UPDATE_LOGIN_PASSWORD
-}
-
-
-
-
+  UPDATE_LOGIN_PASSWORD,
+  UPDATE_USER_LOGIN,
+};

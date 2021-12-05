@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2021-12-02 15:56:36
+ * @LastEditTime: 2021-12-04 23:05:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -105,20 +105,31 @@ const state = {
     ],
     cookie:
       "MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/api/clientlog;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/neapi/clientlog;;NMTID=00OB1xhP8o5vncsYEZOkx7D-qAgsSYAAAF9PdFYCg; Max-Age=315360000; Expires=Tue, 18 Nov 2031 14:47:49 GMT; Path=/;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/openapi/clientlog;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/neapi/feedback;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/neapi/feedback;;__remember_me=true; Max-Age=1296000; Expires=Sun, 5 Dec 2021 14:47:49 GMT; Path=/;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/eapi/feedback;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/weapi/feedback;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/api/feedback;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/wapi/clientlog;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/api/feedback;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/api/clientlog;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/eapi/feedback;;MUSIC_U=ec298cb182ba5efee545c7a618c952170ad612707baeb750e136da7a596af7da1e8907c67206e1edd78b6050a17a35e705925a4e6992f61d07c385928f88e8de; Max-Age=1296000; Expires=Sun, 5 Dec 2021 14:47:49 GMT; Path=/;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/wapi/clientlog;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/weapi/clientlog;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/eapi/clientlog;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/eapi/clientlog;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/weapi/clientlog;;__csrf=e8ce432cb776a8e0f222de1431b125e3; Max-Age=1296010; Expires=Sun, 5 Dec 2021 14:47:59 GMT; Path=/;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/wapi/feedback;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/weapi/feedback;;MUSIC_R_T=1466338928117; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/wapi/feedback;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/neapi/clientlog;;MUSIC_A_T=1466338605305; Max-Age=2147483647; Expires=Thu, 8 Dec 2089 18:01:56 GMT; Path=/openapi/clientlog;",
-  }
+  },
+  userLogin: false,
 };
 
 const getters = {
-  userNickname(state){
-    return state.userLoginInfo['profile']['nickname']
-  }
+  userNickname(state) {
+    return state.userLoginInfo["profile"]["nickname"];
+  },
 };
 
 const mutations = {
   [types.UPDATE_USER_LOGIN_INFO](state, payload) {
-    state.userLoginInfo = payload
-    console.log("🚀 ~ file: user.js ~ line 33 ~ state.userLoginInfo", state.userLoginInfo)
-  }
+    state.userLoginInfo = payload;
+    console.log(
+      "🚀 ~ file: user.js ~ line 33 ~ state.userLoginInfo",
+      state.userLoginInfo
+    );
+  },
+  [types.UPDATE_USER_LOGIN](state, payload) {
+    state.userLogin = payload;
+    console.log(
+      "🚀 ~ file: user.js ~ line 128 ~ state.userLogin",
+      state.userLogin
+    );
+  },
 };
 
 const actions = {};
