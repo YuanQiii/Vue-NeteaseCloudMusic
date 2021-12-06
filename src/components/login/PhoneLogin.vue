@@ -96,9 +96,11 @@ import {
   captchaSentApi,
   captchaVerifyApi,
   cellphoneCheckApi,
+  loginStatusApi,
 } from "@/api/login.js";
 
-import { debounce } from "@/utils/debounce.js";
+import { userDetailApi } from "@/api/user.js";
+
 import LoginButton from "@/ui/Button/LoginButton.vue";
 import SendButton from "@/ui/Button/SendButton.vue";
 
@@ -191,14 +193,9 @@ export default {
       "UPDATE_LOGIN_WINDOW_SHOW",
     ]),
 
-    ...mapMutations("user", ["UPDATE_USER_LOGIN"]),
+    ...mapMutations("user", ["UPDATE_USER_ACCOUNT", "UPDATE_USER_DETAIL"]),
 
-    ...mapActions("user", ["getLoginStatus"]),
-
-    _debounce(fun, delay) {
-      return debounce(fun, delay);
-    },
-
+    ...mapActions("user", ["getUserInfo"]),
     /**
      * @description: 切换手机号登录方式
      */
@@ -378,11 +375,29 @@ export default {
         this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(false);
       }, 1000);
     },
+
     handleLoginSuccess() {
-      this.getLoginStatus();
+      this.getUserInfo();
       this.UPDATE_USER_LOGIN(true);
       this.UPDATE_LOGIN_WINDOW_SHOW(false);
     },
+
+    // getUserInfo() {
+    //   loginStatusApi()
+    //     .then((response) => {
+    //       console.log(response);
+    //       if (response["data"]["code"] == 200) {
+    //         this.UPDATE_USER_ACCOUNT(response["data"]["account"]);
+    //         return userDetailApi();
+    //       }
+    //     })
+    //     .then((response) => {
+    //       console.log(response);
+    //       if (response["data"]["code"] == 200) {
+    //         this.UPDATE_USER_DETAIL(response["data"]);
+    //       }
+    //     });
+    // },
   },
 };
 </script>

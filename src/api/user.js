@@ -9,16 +9,6 @@
 import request from "@/api/request"; // 引入封装好的axios
 
 /**
- * @description: 账号信息
- */
-export function userAccountApi() {
-  return request({
-    url: "user/account",
-    method: "get"
-  });
-}
-
-/**
  * @description: 用户详情
  * @param {*} uid
  */

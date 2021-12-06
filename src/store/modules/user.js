@@ -15,7 +15,7 @@
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\login.js
  */
 
-import * as types from "../mutationsTypes.js";
+import {UPDATE_USER_LOGIN, UPDATE_USER_ACCOUNT, UPDATE_USER_DETAIL} from "../mutationsTypes.js";
 
 import {userAccountApi, userDetailApi} from '@/api/user.js'
 import {loginStatusApi} from '@/api/login.js'
@@ -36,47 +36,8 @@ const state = {
   //   vipType: 0,
   //   whitelistAuthority: 0,
   // },
-  // userProfile: {
-  //   accountStatus: 0,
-  //   accountType: 1,
-  //   anchor: false,
-  //   authStatus: 0,
-  //   authenticated: false,
-  //   authenticationTypes: 0,
-  //   authority: 0,
-  //   avatarDetail: null,
-  //   avatarImgId: 18633423557581540,
-  //   avatarUrl: "http://p2.music.126.net/GJ5qTHTRTHFWUX2u3-AfnA==/18633423557581539.jpg",
-  //   backgroundImgId: 2002210674180203,
-  //   backgroundUrl: "http://p1.music.126.net/bmA_ablsXpq3Tk9HlEg9sA==/2002210674180203.jpg",
-  //   birthday: -2209017600000,
-  //   city: 510100,
-  //   createTime: 1466338928117,
-  //   defaultAvatar: false,
-  //   description: null,
-  //   detailDescription: null,
-  //   djStatus: 0,
-  //   expertTags: null,
-  //   experts: null,
-  //   followed: false,
-  //   gender: 0,
-  //   lastLoginIP: "3.91.149.82",
-  //   lastLoginTime: 1638757202499,
-  //   locationStatus: 30,
-  //   mutual: false,
-  //   nickname: "农企要翻身",
-  //   province: 510000,
-  //   remarkName: null,
-  //   shortUserName: "********873",
-  //   signature: "",
-  //   userId: 292515621,
-  //   userName: "1_********873",
-  //   userType: 0,
-  //   vipType: 0,
-  //   viptypeVersion: 1614443578814,
-  // },
   userAccount: null,
-  userProfile: null,
+  userDetail: null,
   userLogin: false,
 };
 
@@ -85,14 +46,14 @@ const getters = {
 };
 
 const mutations = {
-  updateUserAccount(state, payload){
+  [UPDATE_USER_ACCOUNT](state, payload){
     state.userAccount = payload
   },
-  updateUserProfile(state, payload){
+  [UPDATE_USER_DETAIL](state, payload){
     state.userProfile = payload
   },
 
-  [types.UPDATE_USER_LOGIN](state, payload) {
+  [UPDATE_USER_LOGIN](state, payload) {
     state.userLogin = payload;
   },
    
@@ -100,29 +61,23 @@ const mutations = {
 
 const actions = {
 
-  getLoginStatus({dispatch, commit}){
-    return loginStatusApi().then(response => {
-      console.log("🚀 ~ file: user.js ~ line 108 ~ returnloginStatusApi ~ response", response)
-      if(response['data']['code'] == 200){
-        commit('updateUserAccount', response['data']['account'])
-        commit('updateUserProfile', response['data']['profile'])
-        
-        
-      }
-    })
-  },
-
-  getUserAccount({dispatch}){
-    return userAccountApi().then(response => {
-    console.log("🚀 ~ file: user.js ~ line 119 ~ returnuserAccountApi ~ response", response)
-    dispatch('getUserDeatil')
-    })
-  },
-
-  getUserDeatil({state}){
-    return userDetailApi(state.userAccount['id']).then(response => {
-    console.log("🚀 ~ file: user.js ~ line 126 ~ returnuserDetailApi ~ response", response)
-    })
+  getUserInfo({commit}) {
+    loginStatusApi()
+      .then((response) => {
+        console.log(response);
+        if (response["data"]["code"] == 200) {
+          commit(UPDATE_USER_ACCOUNT, response["data"]["account"])
+          // this.UPDATE_USER_ACCOUNT(response["data"]["account"]);
+          return userDetailApi();
+        }
+      })
+      .then((response) => {
+        console.log(response);
+        if (response["data"]["code"] == 200) {
+          commit(UPDATE_USER_DETAIL, response["data"])
+          // this.UPDATE_USER_DETAIL(response["data"]);
+        }
+      });
   }
 };
 

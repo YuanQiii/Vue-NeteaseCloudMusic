@@ -56,8 +56,6 @@ import {
   loginStatusApi,
 } from "@/api/login.js";
 
-import * as types from "@/store/mutationsTypes.js";
-
 export default {
   name: "QRCodeLogin",
   created() {
@@ -74,11 +72,8 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("login", [
-      types.UPDATE_LOGIN_MODE,
-      types.UPDATE_LOGIN_WINDOW_SHOW,
-    ]),
-    ...mapMutations("user", [types.UPDATE_USER_LOGIN]),
+    ...mapMutations("login", ["UPDATE_LOGIN_MODE", "UPDATE_LOGIN_WINDOW_SHOW"]),
+    ...mapMutations("user", ["UPDATE_USER_LOGIN"]),
 
     getQRImage() {
       QRKeyApi(this.getTimestamp())
