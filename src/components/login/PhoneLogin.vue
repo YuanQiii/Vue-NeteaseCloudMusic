@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-12-04 23:39:41
+ * @LastEditTime: 2021-12-06 14:31:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -88,7 +88,7 @@
 
 <script>
 import md5 from "js-md5";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 import {
   cellPhoneCaptchaApi,
@@ -191,7 +191,9 @@ export default {
       "UPDATE_LOGIN_WINDOW_SHOW",
     ]),
 
-    ...mapMutations("user", ["UPDATE_USER_LOGIN_INFO", "UPDATE_USER_LOGIN"]),
+    ...mapMutations("user", ["UPDATE_USER_LOGIN"]),
+
+    ...mapActions("user", ["getLoginStatus"]),
 
     _debounce(fun, delay) {
       return debounce(fun, delay);
@@ -377,8 +379,8 @@ export default {
       }, 1000);
     },
     handleLoginSuccess() {
+      this.getLoginStatus();
       this.UPDATE_USER_LOGIN(true);
-      this.UPDATE_USER_LOGIN_INFO(response["data"]);
       this.UPDATE_LOGIN_WINDOW_SHOW(false);
     },
   },

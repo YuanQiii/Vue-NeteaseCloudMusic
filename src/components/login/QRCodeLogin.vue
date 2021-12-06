@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-12-04 22:56:15
+ * @LastEditTime: 2021-12-06 13:36:45
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -56,6 +56,8 @@ import {
   loginStatusApi,
 } from "@/api/login.js";
 
+import * as types from "@/store/mutationsTypes.js";
+
 export default {
   name: "QRCodeLogin",
   created() {
@@ -72,8 +74,11 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("login", ["UPDATE_LOGIN_MODE", "UPDATE_LOGIN_WINDOW_SHOW"]),
-    ...mapMutations("user", ["UPDATE_USER_LOGIN"]),
+    ...mapMutations("login", [
+      types.UPDATE_LOGIN_MODE,
+      types.UPDATE_LOGIN_WINDOW_SHOW,
+    ]),
+    ...mapMutations("user", [types.UPDATE_USER_LOGIN]),
 
     getQRImage() {
       QRKeyApi(this.getTimestamp())
@@ -94,7 +99,6 @@ export default {
       this.checkInterval = setInterval(() => {
         QRCheckApi(this.uniKey, this.getTimestamp()).then((response) => {
           this.handleQRCode(response["data"]["code"]);
-          console.log(response["data"]["code"]);
         });
       }, 1000);
     },
