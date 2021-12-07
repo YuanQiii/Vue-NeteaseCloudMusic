@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-12-06 14:31:38
+ * @LastEditTime: 2021-12-07 10:24:36
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -96,10 +96,7 @@ import {
   captchaSentApi,
   captchaVerifyApi,
   cellphoneCheckApi,
-  loginStatusApi,
 } from "@/api/login.js";
-
-import { userDetailApi } from "@/api/user.js";
 
 import LoginButton from "@/ui/Button/LoginButton.vue";
 import SendButton from "@/ui/Button/SendButton.vue";
@@ -193,7 +190,11 @@ export default {
       "UPDATE_LOGIN_WINDOW_SHOW",
     ]),
 
-    ...mapMutations("user", ["UPDATE_USER_ACCOUNT", "UPDATE_USER_DETAIL"]),
+    ...mapMutations("user", [
+      "UPDATE_USER_LOGIN",
+      "UPDATE_USER_ACCOUNT",
+      "UPDATE_USER_DETAIL",
+    ]),
 
     ...mapActions("user", ["getUserInfo"]),
     /**
@@ -381,23 +382,6 @@ export default {
       this.UPDATE_USER_LOGIN(true);
       this.UPDATE_LOGIN_WINDOW_SHOW(false);
     },
-
-    // getUserInfo() {
-    //   loginStatusApi()
-    //     .then((response) => {
-    //       console.log(response);
-    //       if (response["data"]["code"] == 200) {
-    //         this.UPDATE_USER_ACCOUNT(response["data"]["account"]);
-    //         return userDetailApi();
-    //       }
-    //     })
-    //     .then((response) => {
-    //       console.log(response);
-    //       if (response["data"]["code"] == 200) {
-    //         this.UPDATE_USER_DETAIL(response["data"]);
-    //       }
-    //     });
-    // },
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-12-06 13:36:45
+ * @LastEditTime: 2021-12-07 10:43:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -47,14 +47,9 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
-import {
-  QRKeyApi,
-  QRCreateApi,
-  QRCheckApi,
-  loginStatusApi,
-} from "@/api/login.js";
+import { QRKeyApi, QRCreateApi, QRCheckApi } from "@/api/login.js";
 
 export default {
   name: "QRCodeLogin",
@@ -74,6 +69,7 @@ export default {
   methods: {
     ...mapMutations("login", ["UPDATE_LOGIN_MODE", "UPDATE_LOGIN_WINDOW_SHOW"]),
     ...mapMutations("user", ["UPDATE_USER_LOGIN"]),
+    ...mapActions("user", ["getUserInfo"]),
 
     getQRImage() {
       QRKeyApi(this.getTimestamp())
@@ -103,6 +99,7 @@ export default {
         console.log("二维码已过期");
       } else if (code == 803) {
         this.code = code;
+        this.getUserInfo();
         this.UPDATE_USER_LOGIN(true);
         this.UPDATE_LOGIN_WINDOW_SHOW(false);
       } else {

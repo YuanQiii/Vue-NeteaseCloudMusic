@@ -13,16 +13,14 @@
       </top-bar-item>
       <search />
       <div class="center">创作者中心</div>
-      <a class="login" @click="UPDATE_LOGIN_WINDOW_SHOW(true)">登录</a>
+      <user-center />
     </div>
   </div>
 </template>
 
 <script>
-import { createNamespacedHelpers } from "vuex";
-const { mapMutations } = createNamespacedHelpers("login");
-
 import Search from "../../search/search.vue";
+import UserCenter from "../../user/UserCenter.vue";
 import TopBarItem from "./TopBarItem.vue";
 
 export default {
@@ -30,6 +28,7 @@ export default {
   components: {
     TopBarItem,
     Search,
+    UserCenter,
   },
   data() {
     return {
@@ -59,7 +58,6 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_LOGIN_WINDOW_SHOW"]),
     toPage(index) {
       this.currentIndex = index;
 
@@ -125,17 +123,6 @@ export default {
 
   &.active {
     border-color: transparent transparent #c20c0c;
-  }
-}
-
-.login {
-  color: #787878;
-  font-size: 12px;
-  margin-top: 28px;
-  margin-left: 20px;
-  text-decoration: none;
-  &:hover {
-    color: #000;
   }
 }
 </style>
