@@ -65,7 +65,6 @@ const mutations = {
    * @return {*}
    */
   updatePlayListSongsAndId(state, payload) {
-
     let addSongs = []
     if (Array.isArray(payload)) {
       addSongs = payload

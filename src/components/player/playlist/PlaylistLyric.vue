@@ -50,10 +50,12 @@ export default {
      * @return {*}
      */
     lyric() {
+      this.lyricTimestamp = [];
+
       let songLyric = this.playListSongsLyric[this.currentPlaySongId];
 
       if (songLyric) {
-        let lyricList = songLyric.split("\n");
+        let lyricList = songLyric.split("\n").slice(0, -1);
         let timeLyric = {};
 
         lyricList.forEach((element) => {
@@ -66,7 +68,6 @@ export default {
         });
         return timeLyric;
       }
-
       return {};
     },
 
@@ -76,19 +77,17 @@ export default {
      * @return {*}
      */
     lyricIndex() {
-      let timestampIndex = 0;
-      for (
-        let index = this.lastLyricIndex;
-        index < this.lyricTimestamp.length;
-        index++
-      ) {
-        const value = this.lyricTimestamp[index];
-        if (this.currentPlayTime <= value) {
-          timestampIndex = index;
-          break;
+      for (let index = 0; index < this.lyricTimestamp.length; index++) {
+        let value1 = this.lyricTimestamp[index];
+        let value2 = 9999;
+        if (index + 1 < this.lyricTimestamp.length) {
+          value2 = this.lyricTimestamp[index + 1];
+        }
+        if (value1 <= this.currentPlayTime && this.currentPlayTime <= value2) {
+          this.lastLyricIndex = index;
         }
       }
-      return timestampIndex;
+      return this.lastLyricIndex;
     },
   },
   watch: {

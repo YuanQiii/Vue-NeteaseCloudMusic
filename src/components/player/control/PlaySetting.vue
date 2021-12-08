@@ -228,7 +228,7 @@ export default {
     width: 32px;
     height: 103px;
     background-color: #040506;
-    z-index: 9;
+    z-index: 999;
     position: relative;
     left: -200px;
     top: -103px;

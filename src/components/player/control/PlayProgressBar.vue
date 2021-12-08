@@ -124,7 +124,7 @@ export default {
   },
   watch: {
     currentPlayTime: {
-      handler(newValue, oldValue) {
+      handler(newValue) {
         let currentRate = (newValue * 1000) / this.playSongDurationTime;
         this.handleCurrentTime(currentRate);
       },
