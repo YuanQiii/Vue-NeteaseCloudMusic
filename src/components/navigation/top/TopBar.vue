@@ -13,14 +13,14 @@
       </top-bar-item>
       <search />
       <div class="center">创作者中心</div>
-      <user-center />
+      <user-menu />
     </div>
   </div>
 </template>
 
 <script>
 import Search from "../../search/search.vue";
-import UserCenter from "../../user/UserCenter.vue";
+import UserMenu from "../../user/UserMenu.vue";
 import TopBarItem from "./TopBarItem.vue";
 
 export default {
@@ -28,7 +28,7 @@ export default {
   components: {
     TopBarItem,
     Search,
-    UserCenter,
+    UserMenu,
   },
   data() {
     return {
