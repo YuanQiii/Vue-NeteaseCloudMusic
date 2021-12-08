@@ -98,7 +98,7 @@ export default {
 
       let currentPlayTimeInterval = setInterval(() => {
         this.$store.commit("updateCurrentPlayTime", this.audio.currentTime);
-      }, 100);
+      }, 200);
 
       this.$store.commit("updateAudioInterval", currentPlayTimeInterval);
     },
@@ -112,7 +112,6 @@ export default {
   height: 53px;
   background-image: linear-gradient(0deg, #242323, #363636);
   width: 100vw;
-  overflow: hidden;
   top: 90%;
   opacity: 0.98;
   display: flex;
