@@ -60,17 +60,14 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      playListSongs: (state) => state.player.playListSongs,
-      currentPLayIndex: (state) => state.player.currentPLayIndex,
-      currentPlayTime: (state) => state.player.currentPlayTime,
-
-      audio: (state) => state.player.audio,
-
-      isMouseDown: (state) => state.isMouseDown,
-    }),
-
-    ...mapGetters(["playSongDurationTime", "currentPlaySongId"]),
+    ...mapState(["isMouseDown"]),
+    ...mapState("player", [
+      "playListSongs",
+      "currentPLayIndex",
+      "audioCurrentTime",
+      "audio",
+    ]),
+    ...mapGetters("player", ["playSongDurationTime", "currentPlaySongId"]),
 
     // 歌曲信息
     playSongInfoShow() {

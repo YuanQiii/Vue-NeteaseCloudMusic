@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-12-08 10:51:30
+ * @LastEditTime: 2021-12-09 17:49:54
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -55,6 +55,24 @@ const UPDATE_USER_SUBCOUNT = "UPDATE_USER_SUBCOUNT";
 // 用户私信
 const UPDATE_USER_MSG_PRIVATE = "UPDATE_USER_MSG_PRIVATE";
 
+// 音频播放器
+const INIT_PLAYER_AUDIO = "INIT_PLAYER_AUDIO";
+
+// 音频播放器配置
+const UPDATE_PLAYER_AUDIO_CONFIG = "UPDATE_PLAYER_AUDIO_CONFIG";
+
+// 当前音乐播放时间
+const UPDATE_AUDIO_CURRENT_TIME = "UPDATE_AUDIO_CURRENT_TIME";
+
+// 音乐播放Interval
+const UPDATE_AUDIO_INTERVAL = "UPDATE_AUDIO_INTERVAL";
+
+// 增加歌曲信息
+const ADD_PLAYLIST_SONGS_INFO = "ADD_PLAYLIST_SONGS_INFO";
+
+//删除歌曲信息
+const DELETE_PLAYLIST_SONGS_INFO = "DELETE_PLAYLIST_SONGS_INFO";
+
 
 export {
   UPDATE_AUTO_LOGIN,
@@ -72,5 +90,11 @@ export {
   UPDATE_USER_ACCOUNT,
   UPDATE_USER_DETAIL,
   UPDATE_USER_SUBCOUNT,
-  UPDATE_USER_MSG_PRIVATE
+  UPDATE_USER_MSG_PRIVATE,
+  ADD_PLAYLIST_SONGS_INFO,
+  DELETE_PLAYLIST_SONGS_INFO,
+  INIT_PLAYER_AUDIO,
+  UPDATE_PLAYER_AUDIO_CONFIG,
+  UPDATE_AUDIO_CURRENT_TIME,
+  UPDATE_AUDIO_INTERVAL
 };

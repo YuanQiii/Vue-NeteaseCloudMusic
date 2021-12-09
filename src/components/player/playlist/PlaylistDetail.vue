@@ -17,29 +17,27 @@
         <div
           v-for="(value, index) in playListSongsId"
           :key="index"
-          :class="elementIsActive(currentPlaySongId, value)"
+          :class="elementIsActive(currentPlaySongId, value, 'item')"
           @click="changeCurrentPLayIndex(index)"
         >
-          <div class="item">
-            <img
-              class="arrow-image"
-              src="../../../assets/player/triangle.png"
-              v-show="currentPlaySongId == value"
-            />
-            <div class="song-name">
-              {{ playListSongs[value]["name"] }}
-            </div>
-            <div class="operation">
-              <song-operation :songDetail="playListSongs[value]" />
-            </div>
-            <div class="artist-name">
-              {{ playListSongs[value]["ar"][0]["name"] }}
-            </div>
-            <div class="duration">
-              {{ parseDurationTime(playListSongs[value]["dt"]) }}
-            </div>
-            <img class="link-image" src="../../../assets/player/link.png" />
+          <img
+            class="arrow-image"
+            src="../../../assets/player/triangle.png"
+            v-show="currentPlaySongId == value"
+          />
+          <div class="song-name">
+            {{ playListSongs[value]["name"] }}
           </div>
+          <div class="operation">
+            <song-operation :songDetail="playListSongs[value]" />
+          </div>
+          <div class="artist-name">
+            {{ playListSongs[value]["ar"][0]["name"] }}
+          </div>
+          <div class="duration">
+            {{ parseDurationTime(playListSongs[value]["dt"]) }}
+          </div>
+          <img class="link-image" src="../../../assets/player/link.png" />
         </div>
       </div>
     </div>
@@ -52,23 +50,21 @@ import { mapState, mapGetters } from "vuex";
 import { parseDurationTime } from "@/utils/parseDurationTime.js";
 import { elementIsActive } from "@/utils/elementIsActive.js";
 
-import SongOperation from "../../operation/SongOperation.vue";
+import SongOperation from "@/components/player/operation/SongOperation.vue";
 
 export default {
-  components: { SongOperation },
   name: "PlaylistDetail",
+  components: {
+    SongOperation,
+  },
   data() {
     return {
       musicAudioId: null,
     };
   },
   computed: {
-    ...mapState({
-      playListSongs: (state) => state.player.playListSongs,
-      playListSongsId: (state) => state.player.playListSongsId,
-    }),
-
-    ...mapGetters(["currentPlaySongId"]),
+    ...mapState("player", ["playListSongs", "playListSongsId"]),
+    ...mapGetters("player", ["currentPlaySongId"]),
   },
   methods: {
     toPage(pageName) {
@@ -115,15 +111,6 @@ export default {
     border-radius: 5px;
   }
 
-  .active {
-    opacity: 1;
-    background-color: #131211;
-  }
-
-  .deactive {
-    opacity: 0.7;
-  }
-
   .image {
     cursor: pointer;
   }
@@ -161,10 +148,12 @@ export default {
 
       &:hover {
         background-color: #131211;
+        .operation {
+          visibility: visible;
+        }
       }
 
       .song-name,
-      .operate,
       .artist-name,
       .duration {
         line-height: 28px;
@@ -181,26 +170,20 @@ export default {
         overflow: hidden;
         cursor: pointer;
       }
-
       .operation {
-        margin-top: -7px;
-        opacity: 0;
-        &:hover {
-          opacity: 1;
-        }
+        opacity: 1;
+        visibility: hidden;
       }
-
       .artist-name {
         width: 70px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        text-align: left;
       }
-
       .duration {
         padding-left: 0;
       }
-
       .arrow-image {
         opacity: 1;
         width: 10px;
@@ -210,7 +193,6 @@ export default {
         margin-left: 10px;
         margin-right: 10px;
       }
-
       .link-image {
         width: 14px;
         height: 16px;
@@ -218,6 +200,24 @@ export default {
         top: 7px;
         margin-left: 10px;
         margin-right: 10px;
+      }
+    }
+
+    .active {
+      .song-name,
+      .artist-name,
+      .duration {
+        opacity: 0.7;
+      }
+
+      background-color: #131211;
+    }
+
+    .deactive {
+      .song-name,
+      .artist-name,
+      .duration {
+        opacity: 0.7;
       }
     }
   }

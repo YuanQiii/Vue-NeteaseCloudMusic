@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-02 12:00:01
+ * @LastEditTime: 2021-12-09 17:49:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit 
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\player\MusicPlayer.vue
@@ -21,7 +21,7 @@ import PlaySongControl from "./control/PlaySongControl.vue";
 import PlayStatusControl from "./control/PlayStatusControl.vue";
 
 import { songDetailApi, songLyricApi } from "@/api/song.js";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -55,6 +55,13 @@ export default {
   },
 
   methods: {
+    ...mapMutations("player", [
+      "INIT_PLAYER_AUDIO",
+      "UPDATE_PLAYER_AUDIO_CONFIG",
+      "UPDATE_AUDIO_CURRENT_TIME",
+      "UPDATE_AUDIO_INTERVAL",
+    ]),
+
     getSongs() {
       let params = {
         ids: "1398663411,346576",
@@ -89,18 +96,16 @@ export default {
       });
     },
     initAudio() {
-      this.$store.commit("initAudioObject");
-
-      this.$store.commit("updateAudioConfig", {
+      this.INIT_PLAYER_AUDIO();
+      this.UPDATE_PLAYER_AUDIO_CONFIG({
         preload: "auto",
         autoplay: true,
       });
-
       let currentPlayTimeInterval = setInterval(() => {
-        this.$store.commit("updateCurrentPlayTime", this.audio.currentTime);
+        this.UPDATE_AUDIO_CURRENT_TIME(this.audio.currentTime);
       }, 200);
 
-      this.$store.commit("updateAudioInterval", currentPlayTimeInterval);
+      this.UPDATE_AUDIO_INTERVAL(currentPlayTimeInterval);
     },
   },
 };

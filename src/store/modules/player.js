@@ -1,12 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-11-02 17:22:10
+ * @LastEditTime: 2021-12-09 17:46:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
  */
 import Vue from "vue";
+
+import * as types from '../mutationsTypes'
 
 const state = {
 
@@ -26,7 +28,7 @@ const state = {
   currentPLayIndex: 0,
 
   // 当前播放歌曲时间
-  currentPlayTime: 0,
+  audioCurrentTime: 0,
 
   // 播放歌曲索引历史
   playIndexHistory: [],
@@ -42,19 +44,15 @@ const state = {
 };
 
 const mutations = {
-  initAudioObject(state) {
+  [types.INIT_PLAYER_AUDIO](state) {
     state.audio = new Audio();
   },
-  updateAudioConfig(state, payload) {
+  [types.UPDATE_PLAYER_AUDIO_CONFIG](state, payload) {
     for (const key in payload) {
       if (Object.hasOwnProperty.call(payload, key)) {
         state.audio[key] = payload[key];
       }
     }
-  },
-
-  updateAudioInterval(state, payload) {
-    state.audioInterval = payload || clearInterval(state.audioInterval)
   },
 
   /**
@@ -64,7 +62,7 @@ const mutations = {
    * @param {*} payload 类型为array
    * @return {*}
    */
-  updatePlayListSongsAndId(state, payload) {
+   [types.ADD_PLAYLIST_SONGS_INFO](state, payload) {
     let addSongs = []
     if (Array.isArray(payload)) {
       addSongs = payload
@@ -75,12 +73,11 @@ const mutations = {
     addSongs.forEach((element) => {
       if (!state.playListSongs.hasOwnProperty(element.id)) {
         Vue.set(state.playListSongs, element.id, element);
-        state.playListSongsId.push(element.id);
+        state.playListSongsId.push(element.id)
       } else {
         console.log('已添加到播放列表');
       }
     });
-
   },
 
   /**
@@ -90,7 +87,7 @@ const mutations = {
    * @param {*} payload 歌曲id
    * @return {*}
    */
-  deletePlayListSongsAndId(state, payload) {
+  [types.DELETE_PLAYLIST_SONGS_INFO](state, payload) {
     if (payload) {
       Vue.delete(state.playListSongs, payload)
       Vue.delete(state.playListSongsId, state.playListSongsId.indexOf(payload))
@@ -195,16 +192,20 @@ const mutations = {
    * @param {*} payload
    * @return {*}
    */
-  updateCurrentPlayTime(state, payload) {
-    state.currentPlayTime = payload;
+  [types.UPDATE_AUDIO_CURRENT_TIME](state, payload) {
+    state.audioCurrentTime = payload;
   },
+
+  [types.UPDATE_AUDIO_INTERVAL](state, payload) {
+    state.audioInterval = payload || clearInterval(state.audioInterval)
+  },
+
   updatePlaylistShow(state, payload) {
     state.playlistShow = payload
   }
 };
 
 const getters = {
-
 
   /**
    * @description: 歌曲时长
@@ -264,10 +265,12 @@ const getters = {
   }
 };
 
-const actions = {};
+const actions = {
+};
 
 // 最后统一导出
 export default {
+  namespaced: true,
   state,
   getters,
   actions,

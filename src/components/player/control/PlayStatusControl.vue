@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-10-19 09:48:46
+ * @LastEditTime: 2021-12-09 17:55:15
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \Vue-NeteaseCloudMusic\src\components\player\control\PlayStatusControl.vue
+-->
 <template>
   <div class="play-control">
     <div class="play-control-previous" @click="playPreviousSong">
@@ -19,13 +27,8 @@ import { mapGetters, mapState } from "vuex";
 export default {
   name: "PlayStatusControl",
   computed: {
-    ...mapState({
-      playStatus: (state) => state.player.playStatus,
-      playMode: (state) => state.player.playMode,
-      currentPLayIndex: (state) => state.player.currentPLayIndex,
-    }),
-
-    ...mapGetters(["playSongsCount", "playIndexHistoryCount"]),
+    ...mapState("player", ["playStatus", "playMode", "currentPLayIndex"]),
+    ...mapGetters("player", ["playSongsCount", "playIndexHistoryCount"]),
   },
   methods: {
     playPreviousSong() {

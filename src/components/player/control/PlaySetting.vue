@@ -74,15 +74,10 @@ export default {
     this.initVolume();
   },
   computed: {
-    ...mapState({
-      audio: (state) => state.player.audio,
-      playMode: (state) => state.player.playMode,
-      playlistShow: (state) => state.player.playlistShow,
+    ...mapState("player", ["audio", "playMode", "playlistShow"]),
+    ...mapState(["isMouseDown"]),
 
-      isMouseDown: (state) => state.isMouseDown,
-    }),
-
-    ...mapGetters(["playSongsCount"]),
+    ...mapGetters("player", ["playSongsCount"]),
 
     surplusBarStyle() {
       return {
