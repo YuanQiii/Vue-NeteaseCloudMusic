@@ -22,24 +22,26 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 export default {
   name: "PlaylistHead",
   data() {
     return {};
   },
   computed: {
-    ...mapState({
-      playlistShow: (state) => state.playlistShow,
-    }),
-    ...mapGetters(["currentPLaySongName", "playSongsCount"]),
+    ...mapState("player", ["playlistShow"]),
+    ...mapGetters("player", ["currentPLaySongName", "playSongsCount"]),
   },
   methods: {
+    ...mapMutations("player", [
+      "DELETE_PLAYLIST_SONGS_INFO",
+      "UPDATE_PLAYLIST_SHOW",
+    ]),
     clearPlaylist() {
-      this.$store.commit("deletePlayListSongsAndId", null);
+      this.DELETE_PLAYLIST_SONGS_INFO(null);
     },
     closePlaylistShow() {
-      this.$store.commit("updatePlaylistShow", false);
+      this.UPDATE_PLAYLIST_SHOW(false);
     },
   },
 };

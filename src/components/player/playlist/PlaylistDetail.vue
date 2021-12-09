@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import { parseDurationTime } from "@/utils/parseDurationTime.js";
 import { elementIsActive } from "@/utils/elementIsActive.js";
@@ -67,17 +67,22 @@ export default {
     ...mapGetters("player", ["currentPlaySongId"]),
   },
   methods: {
+    ...mapMutations("player", [
+      "UPDATE_PLAYLIST_SHOW",
+      "UPDATE_CURRENT_PLAY_INDEX",
+    ]),
+
     toPage(pageName) {
       if (this.$route.name != pageName) {
         this.$router.push({
           name: pageName,
         });
       }
-      this.$store.commit("updatePlaylistShow", false);
+      this.UPDATE_PLAYLIST_SHOW(false);
     },
 
     changeCurrentPLayIndex(index) {
-      this.$store.commit("updateCurrentPLayIndex", index);
+      this.UPDATE_CURRENT_PLAY_INDEX(index);
     },
 
     parseDurationTime(time) {

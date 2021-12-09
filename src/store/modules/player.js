@@ -103,7 +103,7 @@ const mutations = {
    * @param {*} payload 对象，键名为id，值为歌词对象
    * @return {*}
    */
-  updatePlayListSongsLyric(state, payload) {
+  [types.UPDATE_PLAYLIST_SONGS_LYRIC](state, payload) {
     Object.keys(payload).forEach(index => {
       if (!state.playListSongsLyric.hasOwnProperty(index)) {
         Vue.set(state.playListSongsLyric, index, payload[index])
@@ -112,7 +112,7 @@ const mutations = {
     console.log("🚀 ~ file: player.js ~ line 118 ~ Object.keys ~ state.playListSongsLyric", state.playListSongsLyric)
   },
 
-  switchPlayStatus(state) {
+  [types.SWITCH_PLAY_STATUS](state) {
     if (state.playStatus) {
       state.playStatus = 0
       state.audio.pause()
@@ -129,9 +129,9 @@ const mutations = {
    * @param {*} payload
    * @return {*}
    */
-  updateCurrentPLayIndex(state, payload) {
+  [types.UPDATE_CURRENT_PLAY_INDEX](state, payload) {
     state.currentPLayIndex = payload;
-    mutations.updateAudioSrc(state)
+    this[types.UPDATE_AUDIO_SRC](state)
   },
 
   /**
@@ -139,7 +139,7 @@ const mutations = {
    * @param {*} state
    * @return {*}
    */
-  updateAudioSrc(state) {
+  [types.UPDATE_AUDIO_SRC](state) {
     if (state.audioStateInterval) {
       clearInterval(state.audioStateInterval)
     }
@@ -159,7 +159,7 @@ const mutations = {
    * @param {*} payload
    * @return {*}
    */
-  updateplayIndexHistory(state, payload) {
+  [types.UPDATE_PLAY_INDEX_HISTORY](state, payload) {
     if (payload == -1) {
       mutations.updateCurrentPLayIndex(state, state.playIndexHistory.pop())
     } else {
@@ -172,7 +172,7 @@ const mutations = {
    * @param {*} state
    * @return {*}
    */
-  switchPlayMode(state) {
+  [types.SWITCH_PLAY_MODE](state) {
     switch (state.playMode) {
       case '循环':
         state.playMode = '随机'
@@ -200,7 +200,7 @@ const mutations = {
     state.audioInterval = payload || clearInterval(state.audioInterval)
   },
 
-  updatePlaylistShow(state, payload) {
+  [types.UPDATE_PLAYLIST_SHOW](state, payload) {
     state.playlistShow = payload
   }
 };

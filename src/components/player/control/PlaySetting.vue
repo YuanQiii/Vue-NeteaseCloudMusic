@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 import PlaylistDisplay from "../playlist/PlaylistDisplay.vue";
 export default {
   components: { PlaylistDisplay },
@@ -100,6 +100,8 @@ export default {
     },
   },
   methods: {
+    ...mapMutations("player", ["UPDATE_PLAYLIST_SHOW", "UPDATE_PLAY_MODE"]),
+
     initVolume() {
       this.handleVolume(this.audio.volume);
     },
@@ -107,10 +109,11 @@ export default {
       this.volumeShow = !this.volumeShow;
     },
     switchPlaylistShow() {
-      this.$store.commit("updatePlaylistShow", !this.playlistShow);
+      this.UPDATE_PLAYLIST_SHOW(!this.playlistShow);
     },
     switchPlayMode() {
-      this.$store.commit("switchPlayMode");
+      this.SWITCH_PLAY_MODE();
+
       this.modeTipShow = true;
       if (this.modeTipTimeOut) {
         clearTimeout(this.modeTipTimeOut);

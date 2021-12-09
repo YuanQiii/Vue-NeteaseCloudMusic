@@ -36,12 +36,8 @@ export default {
     this.lyricBox = this.$refs.playlistLyric;
   },
   computed: {
-    ...mapState({
-      playListSongsLyric: (state) => state.player.playListSongsLyric,
-      currentPlayTime: (state) => state.player.currentPlayTime,
-    }),
-
-    ...mapGetters(["currentPlaySongId"]),
+    ...mapState("player", ["playListSongsLyric", "audioCurrentTime"]),
+    ...mapGetters("player", ["currentPlaySongId"]),
 
     /**
      * @description: 歌词对象，时间戳为键，歌词为值
@@ -83,7 +79,10 @@ export default {
         if (index + 1 < this.lyricTimestamp.length) {
           value2 = this.lyricTimestamp[index + 1];
         }
-        if (value1 <= this.currentPlayTime && this.currentPlayTime <= value2) {
+        if (
+          value1 <= this.audioCurrentTime &&
+          this.audioCurrentTime <= value2
+        ) {
           this.lastLyricIndex = index;
         }
       }

@@ -60,6 +60,8 @@ export default {
       "UPDATE_PLAYER_AUDIO_CONFIG",
       "UPDATE_AUDIO_CURRENT_TIME",
       "UPDATE_AUDIO_INTERVAL",
+      "ADD_PLAYLIST_SONGS_INFO",
+      "UPDATE_PLAYLIST_SONGS_LYRIC",
     ]),
 
     getSongs() {
@@ -67,7 +69,7 @@ export default {
         ids: "1398663411,346576",
       };
       songDetailApi(params).then((response) => {
-        this.$store.commit("updatePlayListSongsAndId", response.data.songs);
+        this.ADD_PLAYLIST_SONGS_INFO(response.data.songs);
         console.log(
           "🚀 ~ file: MusicPlayer.vue ~ line 63 ~ songDetailApi ~ response.data.songs",
           response.data.songs
@@ -80,7 +82,7 @@ export default {
       };
 
       songLyricApi(params).then((response) => {
-        this.$store.commit("updatePlayListSongsLyric", {
+        this.UPDATE_PLAYLIST_SONGS_LYRIC({
           [params["id"]]: response["data"]["lrc"]["lyric"],
         });
 
@@ -89,7 +91,7 @@ export default {
         };
 
         songLyricApi(params).then((response) => {
-          this.$store.commit("updatePlayListSongsLyric", {
+          this.UPDATE_PLAYLIST_SONGS_LYRIC({
             [params["id"]]: response["data"]["lrc"]["lyric"],
           });
         });

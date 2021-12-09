@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 export default {
   name: "PlayStatusControl",
   computed: {
@@ -31,9 +31,15 @@ export default {
     ...mapGetters("player", ["playSongsCount", "playIndexHistoryCount"]),
   },
   methods: {
+    ...mapMutations("player", [
+      "UPDATE_PLAY_INDEX_HISTORY",
+      "UPDATE_CURRENT_PLAY_INDEX",
+      "SWITCH_PLAY_STATUS",
+    ]),
+
     playPreviousSong() {
       if (this.playIndexHistoryCount > 0) {
-        this.$store.commit("updateplayIndexHistory", -1);
+        this.UPDATE_PLAY_INDEX_HISTORY(-1);
       } else {
         this.playNextSong(false);
       }
@@ -48,21 +54,21 @@ export default {
           nextPlayIndex = 0;
         }
 
-        this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
+        this.UPDATE_CURRENT_PLAY_INDEX(nextPlayIndex);
       } else {
         nextPlayIndex = Math.floor(Math.random() * this.playSongsCount);
 
         while (nextPlayIndex == this.currentPLayIndex) {
           nextPlayIndex = Math.floor(Math.random() * this.playSongsCount);
         }
-        this.$store.commit("updateCurrentPLayIndex", nextPlayIndex);
+        this.UPDATE_CURRENT_PLAY_INDEX(nextPlayIndex);
       }
       if (addHistory) {
-        this.$store.commit("updateplayIndexHistory", nextPlayIndex);
+        this.UPDATE_CURRENT_PLAY_INDEX(nextPlayIndex);
       }
     },
     switchPlayStatus() {
-      this.$store.commit("switchPlayStatus");
+      this.SWITCH_PLAY_STATUS();
     },
   },
 };

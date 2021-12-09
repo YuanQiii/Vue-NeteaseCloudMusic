@@ -47,7 +47,7 @@
 <script>
 import { parseDurationTime } from "@/utils/parseDurationTime.js";
 
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
   name: "PlayProgressBar",
@@ -105,7 +105,7 @@ export default {
       return this.parseDurationTime(this.playSongDurationTime);
     },
     elapsedTimeStr() {
-      return this.parseDurationTime(this.currentPlayTime * 1000);
+      return this.parseDurationTime(this.audioCurrentTime * 1000);
     },
 
     // 播放条
@@ -128,6 +128,8 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["updateIsMouseDown"]),
+
     dragstart(e) {
       console.log(e);
     },
@@ -153,7 +155,7 @@ export default {
       }
     },
     getStartPosition(e) {
-      this.$store.commit("updateIsMouseDown", true);
+      this.updateIsMouseDown(true);
     },
     getMoveDistance(e) {
       if (this.isMouseDown) {
