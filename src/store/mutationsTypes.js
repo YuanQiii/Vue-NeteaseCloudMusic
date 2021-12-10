@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-12-09 17:49:54
+ * @LastEditTime: 2021-12-10 17:58:54
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -88,11 +88,12 @@ const UPDATE_PLAY_INDEX_HISTORY = "UPDATE_PLAY_INDEX_HISTORY";
 // 当前播放索引
 const UPDATE_CURRENT_PLAY_INDEX = "UPDATE_CURRENT_PLAY_INDEX";
 
-// 当前播放索引
+// 当前播放状态
 const SWITCH_PLAY_STATUS = "SWITCH_PLAY_STATUS";
 
 // 歌词
 const UPDATE_PLAYLIST_SONGS_LYRIC = "UPDATE_PLAYLIST_SONGS_LYRIC";
+
 
 
 
@@ -126,5 +127,5 @@ export {
   UPDATE_PLAY_INDEX_HISTORY,
   UPDATE_CURRENT_PLAY_INDEX,
   SWITCH_PLAY_STATUS,
-  UPDATE_PLAYLIST_SONGS_LYRIC
+  UPDATE_PLAYLIST_SONGS_LYRIC,
 };

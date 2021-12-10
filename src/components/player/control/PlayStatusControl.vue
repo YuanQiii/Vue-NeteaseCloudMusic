@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-09 17:55:15
- * @LastEditors: your name
+ * @LastEditTime: 2021-12-10 17:59:38
+ * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\player\control\PlayStatusControl.vue
 -->
@@ -12,7 +12,7 @@
       <img src="../../../assets/player/next.png" alt />
     </div>
 
-    <div class="play-control-pause" @click="switchPlayStatus">
+    <div class="play-control-pause" @click="SWITCH_PLAY_STATUS">
       <img src="../../../assets/player/musicplay.png" v-if="playStatus" />
       <img src="../../../assets/player/musicpause.png" v-else />
     </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 export default {
   name: "PlayStatusControl",
   computed: {
@@ -31,20 +31,17 @@ export default {
     ...mapGetters("player", ["playSongsCount", "playIndexHistoryCount"]),
   },
   methods: {
-    ...mapMutations("player", [
-      "UPDATE_PLAY_INDEX_HISTORY",
-      "UPDATE_CURRENT_PLAY_INDEX",
-      "SWITCH_PLAY_STATUS",
-    ]),
+    ...mapMutations("player", ["SWITCH_PLAY_STATUS"]),
+    ...mapActions("player", ["updateCurrentPlaySong"]),
 
     playPreviousSong() {
-      if (this.playIndexHistoryCount > 0) {
-        this.UPDATE_PLAY_INDEX_HISTORY(-1);
+      if (this.playIndexHistoryCount > 1) {
+        this.updateCurrentPlaySong(-1);
       } else {
-        this.playNextSong(false);
+        this.playNextSong();
       }
     },
-    playNextSong(addHistory = true) {
+    playNextSong() {
       let nextPlayIndex = 0;
       if (this.playMode == "循环" || this.playMode == "单曲循环") {
         let temp = this.currentPLayIndex;
@@ -54,21 +51,13 @@ export default {
           nextPlayIndex = 0;
         }
 
-        this.UPDATE_CURRENT_PLAY_INDEX(nextPlayIndex);
+        this.updateCurrentPlaySong(nextPlayIndex);
       } else {
-        nextPlayIndex = Math.floor(Math.random() * this.playSongsCount);
-
-        while (nextPlayIndex == this.currentPLayIndex) {
+        do {
           nextPlayIndex = Math.floor(Math.random() * this.playSongsCount);
-        }
-        this.UPDATE_CURRENT_PLAY_INDEX(nextPlayIndex);
+        } while (nextPlayIndex == this.currentPLayIndex);
+        this.updateCurrentPlaySong(nextPlayIndex);
       }
-      if (addHistory) {
-        this.UPDATE_CURRENT_PLAY_INDEX(nextPlayIndex);
-      }
-    },
-    switchPlayStatus() {
-      this.SWITCH_PLAY_STATUS();
     },
   },
 };

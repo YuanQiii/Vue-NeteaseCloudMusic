@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-09 17:49:05
+ * @LastEditTime: 2021-12-10 17:02:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit 
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\player\MusicPlayer.vue
@@ -20,8 +20,7 @@ import PlaySetting from "./control/PlaySetting.vue";
 import PlaySongControl from "./control/PlaySongControl.vue";
 import PlayStatusControl from "./control/PlayStatusControl.vue";
 
-import { songDetailApi, songLyricApi } from "@/api/song.js";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   components: {
@@ -31,27 +30,17 @@ export default {
     PlaySetting,
   },
   name: "MusicPlayer",
-  created() {
-    this.getSongs();
-    this.getLyric();
+  mounted() {
     this.initAudio();
+    this.getSongsInfo(this.ids);
   },
   data() {
-    return {};
+    return {
+      ids: [1398663411, 346576],
+    };
   },
   computed: {
-    ...mapState({
-      audio: (state) => state.player.audio,
-      audioInterval: (state) => state.player.audioInterval,
-    }),
-    audioCurrentTime() {
-      if (this.audio) {
-        console.log(this.audio.currentTime);
-        return this.audio.currentTime;
-      } else {
-        return 0;
-      }
-    },
+    ...mapState("player", ["audio"]),
   },
 
   methods: {
@@ -60,48 +49,15 @@ export default {
       "UPDATE_PLAYER_AUDIO_CONFIG",
       "UPDATE_AUDIO_CURRENT_TIME",
       "UPDATE_AUDIO_INTERVAL",
-      "ADD_PLAYLIST_SONGS_INFO",
-      "UPDATE_PLAYLIST_SONGS_LYRIC",
     ]),
 
-    getSongs() {
-      let params = {
-        ids: "1398663411,346576",
-      };
-      songDetailApi(params).then((response) => {
-        this.ADD_PLAYLIST_SONGS_INFO(response.data.songs);
-        console.log(
-          "🚀 ~ file: MusicPlayer.vue ~ line 63 ~ songDetailApi ~ response.data.songs",
-          response.data.songs
-        );
-      });
-    },
-    getLyric() {
-      let params = {
-        id: "1398663411",
-      };
+    ...mapActions("player", ["getSongsInfo"]),
 
-      songLyricApi(params).then((response) => {
-        this.UPDATE_PLAYLIST_SONGS_LYRIC({
-          [params["id"]]: response["data"]["lrc"]["lyric"],
-        });
-
-        params = {
-          id: "346576",
-        };
-
-        songLyricApi(params).then((response) => {
-          this.UPDATE_PLAYLIST_SONGS_LYRIC({
-            [params["id"]]: response["data"]["lrc"]["lyric"],
-          });
-        });
-      });
-    },
     initAudio() {
       this.INIT_PLAYER_AUDIO();
       this.UPDATE_PLAYER_AUDIO_CONFIG({
         preload: "auto",
-        autoplay: true,
+        autoplay: false,
       });
       let currentPlayTimeInterval = setInterval(() => {
         this.UPDATE_AUDIO_CURRENT_TIME(this.audio.currentTime);
