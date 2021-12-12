@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:36:57
- * @LastEditTime: 2021-12-03 15:25:10
+ * @LastEditTime: 2021-12-11 20:29:14
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginWindow.vue
@@ -25,6 +25,7 @@
       <phone-login v-if="loginMode == 'phone'" />
       <reset v-if="loginMode == 'reset' || loginMode == 'register'" />
       <verify-code v-if="loginMode == 'verify'" />
+      <download-window v-if="loginMode == 'download'" />
     </div>
   </div>
 </template>
@@ -38,9 +39,17 @@ import PhoneLogin from "./PhoneLogin.vue";
 import QRCodeLogin from "./QRCodeLogin.vue";
 import Reset from "./Reset.vue";
 import VerifyCode from "./VerifyCode.vue";
+import DownloadWindow from "./DownloadWindow.vue";
 
 export default {
-  components: { QRCodeLogin, LoginMenu, PhoneLogin, Reset, VerifyCode },
+  components: {
+    QRCodeLogin,
+    LoginMenu,
+    PhoneLogin,
+    Reset,
+    VerifyCode,
+    DownloadWindow,
+  },
   name: "LoginWindow",
   data() {
     return {
@@ -91,7 +100,7 @@ export default {
     },
     closeWindow() {
       this.UPDATE_LOGIN_WINDOW_SHOW(false);
-      this.UPDATE_LOGIN_MODE("menu");
+      this.UPDATE_LOGIN_MODE("QRCode");
     },
     limitPosition(value, max) {
       if (value <= 0) {
@@ -108,7 +117,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-window {
-  width: 530px;
+  max-width: 530px;
   min-height: 315px;
   background-color: #fff;
   display: flex;

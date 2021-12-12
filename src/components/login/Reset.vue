@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-17 11:37:51
- * @LastEditTime: 2021-12-03 15:30:39
+ * @LastEditTime: 2021-12-11 21:27:55
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\Reset.vue
@@ -40,7 +40,7 @@
       </div>
 
       <div class="warn" v-show="styleShow">
-        <div class="item" v-for="(value, index) in pwdWarnText">
+        <div class="item" v-for="(value, index) in pwdWarnText" :key="index">
           <error-icon v-if="currentWarn[index]" />
           <conform-icon v-else />
           <div :class="_elementIsActive(currentWarn[index], true, 'text')">
@@ -177,6 +177,7 @@ export default {
   flex-direction: column;
   align-items: center;
   font-size: 12px;
+  width: 528px;
   .main {
     width: 220px;
     margin-top: 20px;

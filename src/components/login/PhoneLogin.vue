@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-12-07 10:24:36
+ * @LastEditTime: 2021-12-11 21:26:29
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -394,6 +394,8 @@ export default {
   justify-content: space-between;
   font-size: 12px;
   margin-top: 15px;
+  width: 528px;
+  height: 273px;
 
   .main {
     height: 250px;

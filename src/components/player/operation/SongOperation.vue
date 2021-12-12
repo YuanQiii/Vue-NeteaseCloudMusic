@@ -1,22 +1,22 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2021-12-09 15:53:59
+ * @LastEditTime: 2021-12-11 21:28:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
 -->
 <template>
   <div class="song-operation">
-    <playbar-like @click="addSong" />
+    <playbar-like @click.native="addSong" />
     <playbar-share />
-    <playbar-download />
-    <playbar-delete @click="deleteSong" />
+    <playbar-download @click.native="dwonloadClient" />
+    <playbar-delete @click.native="deleteSong" />
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 import PlaybarDelete from "../../../ui/playbar/PlaybarDelete.vue";
 import PlaybarDownload from "../../../ui/playbar/PlaybarDownload.vue";
@@ -28,14 +28,29 @@ export default {
   props: {
     songDetail: Object,
   },
+  computed: {
+    ...mapState("login", ["userLogin"]),
+  },
   methods: {
-    ...mapMutations("user", [
+    ...mapMutations("login", ["UPDATE_LOGIN_MODE"]),
+
+    ...mapMutations("player", [
       "ADD_PLAYLIST_SONGS_INFO",
       "DELETE_PLAYLIST_SONGS_INFO",
     ]),
 
+    ...mapMutations("login", ["UPDATE_LOGIN_WINDOW_SHOW"]),
+
     addSong() {
-      this.ADD_PLAYLIST_SONGS_INFO(this.songDetail);
+      if (this.userLogin) {
+        this.ADD_PLAYLIST_SONGS_INFO(this.songDetail);
+      } else {
+        this.UPDATE_LOGIN_WINDOW_SHOW(true);
+      }
+    },
+    dwonloadClient() {
+      this.UPDATE_LOGIN_WINDOW_SHOW(true);
+      this.UPDATE_LOGIN_MODE("download");
     },
     deleteSong() {
       this.DELETE_PLAYLIST_SONGS_INFO(this.songDetail["id"]);

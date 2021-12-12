@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-15 09:48:10
- * @LastEditTime: 2021-12-04 12:59:37
+ * @LastEditTime: 2021-12-11 21:24:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginMenu.vue
@@ -121,6 +121,7 @@ export default {
     display: flex;
     margin-left: 40px;
     margin-top: 40px;
+    width: 528px;
     .phone-login {
       text-align: center;
 

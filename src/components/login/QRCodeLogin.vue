@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-12-08 10:51:27
+ * @LastEditTime: 2021-12-11 21:17:16
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -54,7 +54,7 @@ import { QRKeyApi, QRCreateApi, QRCheckApi } from "@/api/login.js";
 export default {
   name: "QRCodeLogin",
   created() {
-    // this.getQRImage();
+    this.getQRImage();
     this.getUserInfo();
   },
   beforeDestroy() {
@@ -119,6 +119,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 528px;
 
   .main {
     display: block;
