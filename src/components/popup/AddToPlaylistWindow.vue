@@ -18,14 +18,35 @@
       <div class="mode">添加到歌单</div>
       <div class="close" @click="closeWindow">x</div>
     </div>
-    <div class="content"></div>
+    <div class="content">
+      <div class="add">
+        <add-to-playlist-icon class="icon" />
+        <div class="text">新歌单</div>
+      </div>
+      <div
+        class="item"
+        v-for="(value, index) in userCreatedPlaylist"
+        :key="index"
+      >
+        <img class="image" :src="value['coverImgUrl']" />
+        <div class="info">
+          <div class="name">{{ value["name"] }}</div>
+          <div class="count">{{ value["trackCount"] }}首</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
+import AddToPlaylistIcon from "../../ui/Icon/AddToPlaylistIcon.vue";
+
 export default {
   name: "AddToPlaylistWindow",
+  components: {
+    AddToPlaylistIcon,
+  },
   data() {
     return {
       left: 800,
@@ -37,6 +58,7 @@ export default {
   },
   computed: {
     ...mapState(["popupAddToPlaylistShow"]),
+    ...mapGetters("user", ["userCreatedPlaylist"]),
     windowStyle() {
       return {
         left: `${this.left}px`,
@@ -123,52 +145,47 @@ export default {
   }
 
   .content {
-    width: 418px;
-    .head {
-      text-align: center;
-      margin-top: 20px;
-      .text1 {
-        font-size: 20px;
-        font-weight: 700;
+    width: 480px;
+    height: 400px;
+    overflow: scroll;
+    cursor: pointer;
+    .add {
+      display: flex;
+      background: #e6e6e6;
+      height: 56px;
+      line-height: 56px;
+      .icon {
+        margin-left: 35px;
+        margin-top: 12px;
+        margin-right: 10px;
+      }
+      .text {
+        font-size: 12px;
         color: #333;
       }
-      .text2 {
-        color: #666;
-        font-size: 12px;
-        font-weight: 700;
-        margin-top: 10px;
-      }
     }
-    .main {
+    .item {
+      height: 55px;
+      padding-left: 35px;
       display: flex;
-      margin-bottom: 36px;
-      .button {
-        padding-top: 24px;
-        margin-left: 36px;
-        margin-top: 16px;
-        width: 181px;
-        height: 162px;
-        border-right: 1px dotted #ccc;
-        .download {
-          margin-bottom: 16px;
-        }
+      font-size: 12px;
+      border-bottom: solid 1px rgb(224, 224, 224);
+
+      &:hover {
+        background-color: #e6e6e6;
       }
-      .scan {
-        .code {
-          width: 86px;
-          height: 86px;
-          background-image: url(https://s2.music.126.net/style/web2/img/qtcode86.png);
-          margin-left: 39px;
-          margin-top: 38px;
-        }
-        .text {
+
+      .image {
+        width: 40px;
+        height: 40px;
+        margin-top: 8px;
+        margin-right: 10px;
+      }
+      .info {
+        margin-top: 8px;
+        .count {
           color: #666;
-          font-size: 12px;
-          margin-top: 14px;
-          width: 164px;
-          height: 16px;
-          line-height: 16px;
-          text-align: center;
+          margin-top: 12px;
         }
       }
     }

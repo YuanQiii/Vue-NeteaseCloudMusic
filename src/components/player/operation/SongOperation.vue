@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 
 import PlaybarDelete from "../../../ui/playbar/PlaybarDelete.vue";
 import PlaybarDownload from "../../../ui/playbar/PlaybarDownload.vue";
@@ -44,10 +44,13 @@ export default {
       "UPDATE_POPUP_ADD_TO_PLAYLIST",
     ]),
 
+    ...mapActions("user", ["getUserPlaylist"]),
+
     addSong() {
       if (this.userLogin) {
         this.ADD_PLAYLIST_SONGS_INFO(this.songDetail);
         this.UPDATE_POPUP_ADD_TO_PLAYLIST(true);
+        this.getUserPlaylist();
       } else {
         this.UPDATE_LOGIN_WINDOW_SHOW(true);
       }

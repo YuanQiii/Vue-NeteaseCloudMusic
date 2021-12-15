@@ -33,6 +33,19 @@ export function userSubcountApi() {
 }
 
 /**
+ * @description: 用户歌单
+ */
+export function userPlaylistApi(uid) {
+  return request({
+    url: "user/playlist",
+    method: "get",
+    params: {
+      uid
+    }
+  });
+}
+
+/**
  * @description: 用户私信
  */
 export function userMsgPrivateApi(limit = 30, offset = 0) {
