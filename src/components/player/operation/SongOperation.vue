@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2021-12-11 21:28:38
+ * @LastEditTime: 2021-12-15 17:46:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
@@ -29,28 +29,31 @@ export default {
     songDetail: Object,
   },
   computed: {
-    ...mapState("login", ["userLogin"]),
+    ...mapState("user", ["userLogin"]),
   },
   methods: {
-    ...mapMutations("login", ["UPDATE_LOGIN_MODE"]),
+    ...mapMutations("login", ["UPDATE_LOGIN_WINDOW_SHOW"]),
 
     ...mapMutations("player", [
       "ADD_PLAYLIST_SONGS_INFO",
       "DELETE_PLAYLIST_SONGS_INFO",
     ]),
 
-    ...mapMutations("login", ["UPDATE_LOGIN_WINDOW_SHOW"]),
+    ...mapMutations([
+      "UPDATE_POPUP_DOWNLOAD_SHOW",
+      "UPDATE_POPUP_ADD_TO_PLAYLIST",
+    ]),
 
     addSong() {
       if (this.userLogin) {
         this.ADD_PLAYLIST_SONGS_INFO(this.songDetail);
+        this.UPDATE_POPUP_ADD_TO_PLAYLIST(true);
       } else {
         this.UPDATE_LOGIN_WINDOW_SHOW(true);
       }
     },
     dwonloadClient() {
-      this.UPDATE_LOGIN_WINDOW_SHOW(true);
-      this.UPDATE_LOGIN_MODE("download");
+      this.UPDATE_POPUP_DOWNLOAD_SHOW(true);
     },
     deleteSong() {
       this.DELETE_PLAYLIST_SONGS_INFO(this.songDetail["id"]);

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 09:10:23
- * @LastEditTime: 2021-12-11 19:55:27
+ * @LastEditTime: 2021-12-15 17:36:22
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\login.js
@@ -20,7 +20,6 @@ const state = {
     register: "手机号注册",
     reset: "重设密码",
     verify: "重设密码",
-    download: "下载",
   },
   loginPolicyTipShow: false,
   loginCaptchaTipShow: false,
