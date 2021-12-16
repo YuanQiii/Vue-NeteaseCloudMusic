@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-12-15 17:39:37
+ * @LastEditTime: 2021-12-16 17:50:32
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -103,6 +103,9 @@ const UPDATE_POPUP_DOWNLOAD_SHOW = "UPDATE_POPUP_DOWNLOAD_SHOW";
 // 添加到歌单弹窗
 const UPDATE_POPUP_ADD_TO_PLAYLIST = "UPDATE_POPUP_ADD_TO_PLAYLIST";
 
+// 创建歌单弹窗
+const UPDATE_POPUP_CREATE_PLAYLIST = "UPDATE_POPUP_CREATE_PLAYLIST";
+
 
 
 
@@ -140,5 +143,5 @@ export {
   UPDATE_PLAYLIST_SONGS_LYRIC,
   UPDATE_POPUP_DOWNLOAD_SHOW,
   UPDATE_POPUP_ADD_TO_PLAYLIST,
-    
+  UPDATE_POPUP_CREATE_PLAYLIST  
 };

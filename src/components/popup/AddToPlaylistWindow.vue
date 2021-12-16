@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-15 15:58:06
- * @LastEditTime: 2021-12-15 17:41:24
+ * @LastEditTime: 2021-12-16 17:48:08
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\AddToPlaylist.vue
@@ -19,7 +19,7 @@
       <div class="close" @click="closeWindow">x</div>
     </div>
     <div class="content">
-      <div class="add">
+      <div class="add" @click="CreatePlaylist">
         <add-to-playlist-icon class="icon" />
         <div class="text">新歌单</div>
       </div>
@@ -67,7 +67,10 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_POPUP_ADD_TO_PLAYLIST"]),
+    ...mapMutations([
+      "UPDATE_POPUP_ADD_TO_PLAYLIST",
+      "UPDATE_POPUP_CREATE_PLAYLIST",
+    ]),
 
     beforeMove(e) {
       this.diffX = e["offsetX"];
@@ -101,11 +104,9 @@ export default {
         return value;
       }
     },
-    downloadClient() {
-      window.open(
-        "https://d1.music.126.net/dmusic/cloudmusicsetup2.7.5.198554.exe",
-        "_blank"
-      );
+    CreatePlaylist() {
+      this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
+      this.UPDATE_POPUP_CREATE_PLAYLIST(true);
     },
   },
 };
@@ -146,8 +147,8 @@ export default {
 
   .content {
     width: 480px;
-    height: 400px;
-    overflow: scroll;
+    height: 380px;
+    overflow-y: scroll;
     cursor: pointer;
     .add {
       display: flex;
