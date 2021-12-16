@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-16 17:27:36
+ * @LastEditTime: 2021-12-16 23:14:09
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\index.js
@@ -20,6 +20,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isMouseDown: false,
+    messageTipText: false,
     popupDownloadShow: false,
     popupAddToPlaylistShow: false,
     popupCreatePlaylistShow: false
@@ -36,12 +37,18 @@ export default new Vuex.Store({
     },
     [types.UPDATE_POPUP_CREATE_PLAYLIST](state, payload){
       state.popupCreatePlaylistShow = payload
+    },
+    [types.UPDATE_MESSAGE_TIP_TEXT](state, payload){
+      state.messageTipText = payload
+      setTimeout(() => {
+        state.messageTipText = ''
+      }, 1000);
     }
   },
   actions: {},
   modules: {
     player,
     login,
-    user
+    user,
   },
 });

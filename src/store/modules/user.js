@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2021-12-10 22:59:35
+ * @LastEditTime: 2021-12-16 22:51:06
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -314,6 +314,7 @@ const state = {
   // userAccount: null,
   // userDetail: null,
   userLogin: true,
+  userOperateSong: 0
 };
 
 const getters = {
@@ -351,6 +352,10 @@ const mutations = {
   },
   [types.UPDATE_USER_PLAYLIST](state, payload){
     state.userPlaylist = payload
+  },
+  [types.UPDATE_USER_OPERATE_SONG](state, payload){
+    console.log(payload);
+    state.userOperateSong = payload
   }
 };
 

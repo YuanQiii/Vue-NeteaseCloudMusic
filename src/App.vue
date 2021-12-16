@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-16 17:48:32
+ * @LastEditTime: 2021-12-16 23:10:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
@@ -23,6 +23,7 @@
     <div>
       <policy-tip />
       <captcha-tip />
+      <message-tip />
 
       <download-window />
       <add-to-playlist-window />
@@ -42,6 +43,7 @@ import MusicPlayer from "./components/player/MusicPlayer.vue";
 import CaptchaTip from "./components/tip/CaptchaTip.vue";
 import PolicyTip from "./components/tip/PolicyTip.vue";
 import CreatePlaylistWindow from "./components/popup/CreatePlaylistWindow.vue";
+import MessageTip from "./components/tip/MessageTip.vue";
 
 export default {
   components: {
@@ -53,6 +55,7 @@ export default {
     DownloadWindow,
     AddToPlaylistWindow,
     CreatePlaylistWindow,
+    MessageTip,
   },
   methods: {
     updateIsMouseDown() {

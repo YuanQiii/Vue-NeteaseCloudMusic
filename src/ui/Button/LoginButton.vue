@@ -107,6 +107,7 @@ $button-background-image: url(https://s2.music.126.net/style/web2/img/button2.pn
   line-height: 31px;
   text-align: center;
   font-size: 12px;
+  cursor: pointer;
 
   .image {
     display: flex;

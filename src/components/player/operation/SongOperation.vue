@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2021-12-15 17:46:18
+ * @LastEditTime: 2021-12-16 22:48:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
@@ -39,6 +39,8 @@ export default {
       "DELETE_PLAYLIST_SONGS_INFO",
     ]),
 
+    ...mapMutations("user", ["UPDATE_USER_OPERATE_SONG"]),
+
     ...mapMutations([
       "UPDATE_POPUP_DOWNLOAD_SHOW",
       "UPDATE_POPUP_ADD_TO_PLAYLIST",
@@ -51,6 +53,7 @@ export default {
         this.ADD_PLAYLIST_SONGS_INFO(this.songDetail);
         this.UPDATE_POPUP_ADD_TO_PLAYLIST(true);
         this.getUserPlaylist();
+        this.UPDATE_USER_OPERATE_SONG(this.songDetail["id"]);
       } else {
         this.UPDATE_LOGIN_WINDOW_SHOW(true);
       }
