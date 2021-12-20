@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-12-16 23:07:49
+ * @LastEditTime: 2021-12-18 11:27:46
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -103,6 +103,9 @@ const UPDATE_PLAYLIST_SONGS_LYRIC = "UPDATE_PLAYLIST_SONGS_LYRIC";
 // 提示信息
 const UPDATE_MESSAGE_TIP_TEXT = "UPDATE_MESSAGE_TIP_TEXT";
 
+// 提示类型
+const UPDATE_MESSAGE_TIP_TYPE = "UPDATE_MESSAGE_TIP_TYPE";
+
 // 下载弹窗
 const UPDATE_POPUP_DOWNLOAD_SHOW = "UPDATE_POPUP_DOWNLOAD_SHOW";
 
@@ -111,10 +114,6 @@ const UPDATE_POPUP_ADD_TO_PLAYLIST = "UPDATE_POPUP_ADD_TO_PLAYLIST";
 
 // 创建歌单弹窗
 const UPDATE_POPUP_CREATE_PLAYLIST = "UPDATE_POPUP_CREATE_PLAYLIST";
-
-
-
-
 
 export {
   UPDATE_AUTO_LOGIN,
@@ -149,7 +148,8 @@ export {
   SWITCH_PLAY_STATUS,
   UPDATE_PLAYLIST_SONGS_LYRIC,
   UPDATE_MESSAGE_TIP_TEXT,
+  UPDATE_MESSAGE_TIP_TYPE,
   UPDATE_POPUP_DOWNLOAD_SHOW,
   UPDATE_POPUP_ADD_TO_PLAYLIST,
-  UPDATE_POPUP_CREATE_PLAYLIST  
+  UPDATE_POPUP_CREATE_PLAYLIST,
 };
