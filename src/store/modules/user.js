@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2021-12-16 22:51:06
+ * @LastEditTime: 2021-12-21 15:05:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -313,7 +313,7 @@ const state = {
 
   // userAccount: null,
   // userDetail: null,
-  userLogin: true,
+  userLogin: false,
   userOperateSong: 0
 };
 
@@ -365,21 +365,21 @@ const actions = {
       .then((response) => {
         console.log(response);
         if (response["data"]["data"]["code"] == 200) {
-          commit(UPDATE_USER_ACCOUNT, response["data"]["data"]["account"]);
+          commit(types.UPDATE_USER_ACCOUNT, response["data"]["data"]["account"]);
           return userDetailApi(getters.userId);
         }
       })
       .then((response) => {
         console.log(response);
         if (response["data"]["code"] == 200) {
-          commit(UPDATE_USER_DETAIL, response["data"]);
+          commit(types.UPDATE_USER_DETAIL, response["data"]);
           return userMsgPrivateApi();
         }
       })
       .then((response) => {
         console.log(response);
         if (response["data"]["code"] == 200) {
-          commit(UPDATE_USER_MSG_PRIVATE, response["data"]);
+          commit(types.UPDATE_USER_MSG_PRIVATE, response["data"]);
         }
       })
       .catch((error) => {
@@ -389,6 +389,7 @@ const actions = {
   getUserPlaylist({commit, getters}){
     userPlaylistApi(getters.userId).then(response => {
       if(response['data']['code'] == 200){
+        console.log(response['data']['playlist']);
         commit(types.UPDATE_USER_PLAYLIST, response['data']['playlist'])
       }else{
         console.log('获取失败');

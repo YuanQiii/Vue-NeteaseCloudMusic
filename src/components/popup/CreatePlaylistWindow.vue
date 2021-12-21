@@ -22,7 +22,11 @@
           class="button1"
           @click.native="createPlaylist"
         />
-        <send-button text="取消" class="button2" @click.native="cancelWindow" />
+        <send-button
+          text="取消"
+          class="button2"
+          @click.native="UPDATE_POPUP_CREATE_PLAYLIST(false)"
+        />
       </div>
     </div>
   </div>
@@ -66,7 +70,8 @@ export default {
   methods: {
     ...mapMutations([
       "UPDATE_POPUP_CREATE_PLAYLIST",
-      "UPDATE_MESSAGE_TIP_TEXT",
+      "UPDATE_MESSAGE_TIP_INFO",
+      "UPDATE_POPUP_CREATE_PLAYLIST",
     ]),
 
     createPlaylist() {
@@ -78,9 +83,13 @@ export default {
         playlistTracksApi("add", pid, this.userOperateSong)
           .then((response) => {
             if (response["data"]["status"] == 200) {
-              console.log("已创建的歌单添加歌曲");
+              console.log("创建歌单添加歌曲");
               this.UPDATE_POPUP_CREATE_PLAYLIST(false);
-              this.UPDATE_MESSAGE_TIP_TEXT("已收藏");
+              this.UPDATE_MESSAGE_TIP_INFO({
+                text: "收藏成功",
+                type: "correct",
+                show: true,
+              });
             }
           })
           .catch((error) => {
@@ -102,7 +111,11 @@ export default {
             if (response["data"]["status"] == 200) {
               console.log("已创建的歌单添加歌曲");
               this.UPDATE_POPUP_CREATE_PLAYLIST(false);
-              this.UPDATE_MESSAGE_TIP_TEXT("已收藏");
+              this.UPDATE_MESSAGE_TIP_INFO({
+                text: "收藏成功",
+                type: "correct",
+                show: true,
+              });
             }
           })
           .catch((error) => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-15 09:48:10
- * @LastEditTime: 2021-12-11 21:24:57
+ * @LastEditTime: 2021-12-21 14:37:12
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\LoginMenu.vue
@@ -75,8 +75,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from "vuex";
-const { mapMutations } = createNamespacedHelpers("login");
+import { mapMutations } from "vuex";
 
 import LoginButton from "@/ui/Button/LoginButton.vue";
 import RegisterButton from "@/ui/Button/RegisterButton.vue";
@@ -91,11 +90,9 @@ export default {
     };
   },
   methods: {
-    ...mapMutations([
-      "UPDATE_LOGIN_MODE",
-      "UPDATE_LOGIN_POLICY_TIP_SHOW",
-      "UPDATE_LOGIN_TITLE",
-    ]),
+    ...mapMutations("login", ["UPDATE_LOGIN_MODE", "UPDATE_LOGIN_TITLE"]),
+
+    ...mapMutations(["UPDATE_MESSAGE_TIP_INFO"]),
 
     toWindow(mode) {
       if (this.agreePolicy) {
@@ -104,11 +101,11 @@ export default {
         if (this.tipTimeout) {
           clearTimeout(this.tipTimeout);
         }
-        this.UPDATE_LOGIN_POLICY_TIP_SHOW(true);
-
-        this.tipTimeout = setTimeout(() => {
-          this.UPDATE_LOGIN_POLICY_TIP_SHOW(false);
-        }, 1000);
+        this.UPDATE_MESSAGE_TIP_INFO({
+          text: "请勾选同意《服务条款》、《隐私政策》、《儿童隐私政策》",
+          type: "",
+          show: true,
+        });
       }
     },
   },

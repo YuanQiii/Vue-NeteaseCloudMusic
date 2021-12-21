@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:38:24
- * @LastEditTime: 2021-12-11 21:26:29
+ * @LastEditTime: 2021-12-21 14:32:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\PhoneLogin.vue
@@ -184,7 +184,6 @@ export default {
   methods: {
     ...mapMutations("login", [
       "UPDATE_LOGIN_MODE",
-      "UPDATE_LOGIN_CAPTCHA_TIP_SHOW",
       "INCREASE_LOGIN_CAPTCHA_COUNT",
       "UPDATE_AUTO_LOGIN",
       "UPDATE_LOGIN_WINDOW_SHOW",
@@ -195,6 +194,8 @@ export default {
       "UPDATE_USER_ACCOUNT",
       "UPDATE_USER_DETAIL",
     ]),
+
+    ...mapMutations(["UPDATE_MESSAGE_TIP_INFO"]),
 
     ...mapActions("user", ["getUserInfo"]),
     /**
@@ -214,10 +215,11 @@ export default {
         this.verifyFormat(this.phoneWarn) &&
         this.verifyFormat(this.captchSendWarn)
       ) {
-        this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(true);
-        setTimeout(() => {
-          this.UPDATE_LOGIN_CAPTCHA_TIP_SHOW(false);
-        }, 1000);
+        this.UPDATE_MESSAGE_TIP_INFO({
+          text: "验证码已发送",
+          type: "",
+          show: true,
+        });
         captchaSentApi(this.phone).then((response) => {
           if (response["data"]["data"]) {
             console.log("验证码发送成功");

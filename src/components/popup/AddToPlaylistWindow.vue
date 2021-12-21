@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-15 15:58:06
- * @LastEditTime: 2021-12-16 17:48:08
+ * @LastEditTime: 2021-12-21 14:53:22
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\AddToPlaylist.vue
@@ -27,6 +27,7 @@
         class="item"
         v-for="(value, index) in userCreatedPlaylist"
         :key="index"
+        @click="addToPlaylist(value['id'])"
       >
         <img class="image" :src="value['coverImgUrl']" />
         <div class="info">
@@ -41,6 +42,8 @@
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex";
 import AddToPlaylistIcon from "../../ui/Icon/AddToPlaylistIcon.vue";
+
+import { playlistTrackAllApi } from "@/api/playlist.js";
 
 export default {
   name: "AddToPlaylistWindow",
@@ -107,6 +110,11 @@ export default {
     CreatePlaylist() {
       this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
       this.UPDATE_POPUP_CREATE_PLAYLIST(true);
+    },
+    addToPlaylist(id) {
+      playlistTrackAllApi(id).then((response) => {
+        console.log(response);
+      });
     },
   },
 };

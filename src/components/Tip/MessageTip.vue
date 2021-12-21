@@ -1,23 +1,23 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-16 23:00:33
- * @LastEditTime: 2021-12-18 13:31:11
+ * @LastEditTime: 2021-12-21 14:28:11
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\tip\MessageTip.vue
 -->
 <template>
-  <div class="mesaage-tip" v-show="messageTipText">
+  <div class="mesaage-tip" v-show="messageTipInfo['show']">
     <div class="icon">
-      <correct-icon v-show="messageTipType == 'correct'" />
-      <error-icon />
+      <correct-icon v-show="messageTipInfo['type'] == 'correct'" />
+      <error-icon v-show="messageTipInfo['type'] == 'error'" />
     </div>
-    <div class="text">{{ messageTipText }}</div>
+    <div class="text">{{ messageTipInfo["text"] }}</div>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapState } from "vuex";
 import CorrectIcon from "../../ui/Icon/CorrectIcon.vue";
 import ErrorIcon from "../../ui/Icon/ErrorIcon.vue";
 
@@ -28,7 +28,7 @@ export default {
     ErrorIcon,
   },
   computed: {
-    ...mapState(["messageTipText"], ["messageTipType"]),
+    ...mapState(["messageTipInfo"]),
   },
 };
 </script>
@@ -49,6 +49,9 @@ export default {
   .icon {
     margin-top: 2px;
     margin-right: 10px;
+  }
+  .text {
+    margin-top: 1px;
   }
 }
 </style>
