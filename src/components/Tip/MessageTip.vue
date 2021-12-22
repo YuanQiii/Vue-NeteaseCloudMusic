@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-16 23:00:33
- * @LastEditTime: 2021-12-21 14:28:11
+ * @LastEditTime: 2021-12-22 22:04:34
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\tip\MessageTip.vue
@@ -46,12 +46,13 @@ export default {
   border-radius: 4px;
   box-shadow: 0 5px 16px rgb(0 0 0 / 80%);
   display: flex;
+  font-size: 12px;
   .icon {
     margin-top: 2px;
     margin-right: 10px;
   }
   .text {
-    margin-top: 1px;
+    margin-top: 4px;
   }
 }
 </style>

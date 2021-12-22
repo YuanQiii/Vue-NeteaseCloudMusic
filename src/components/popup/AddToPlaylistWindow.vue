@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-15 15:58:06
- * @LastEditTime: 2021-12-22 17:57:53
+ * @LastEditTime: 2021-12-22 22:07:35
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\AddToPlaylist.vue
@@ -43,7 +43,7 @@
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import AddToPlaylistIcon from "../../ui/Icon/AddToPlaylistIcon.vue";
 
-import { playlistDetailApi } from "@/api/playlist.js";
+import { playlistTracksApi } from "@/api/playlist.js";
 
 export default {
   name: "AddToPlaylistWindow",
@@ -61,6 +61,7 @@ export default {
   },
   computed: {
     ...mapState(["popupAddToPlaylistShow"]),
+    ...mapState("user", ["userOperateSong"]),
     ...mapGetters("user", ["userCreatedPlaylist"]),
     ...mapGetters("playlist", ["playlistTrackIds"]),
     windowStyle() {
@@ -74,8 +75,9 @@ export default {
     ...mapMutations([
       "UPDATE_POPUP_ADD_TO_PLAYLIST",
       "UPDATE_POPUP_CREATE_PLAYLIST",
+      "UPDATE_MESSAGE_TIP_INFO",
     ]),
-
+    ...mapGetters("playlist", ["playlistTrackIds"]),
     ...mapActions("playlist", ["getPlaylistDetail"]),
 
     beforeMove(e) {
@@ -115,7 +117,35 @@ export default {
       this.UPDATE_POPUP_CREATE_PLAYLIST(true);
     },
     addToPlaylist(id) {
-      console.log(this.getPlaylistDetail(id));
+      this.getPlaylistDetail(id).then(() => {
+        if (this.decideSongExist(id)) {
+        } else {
+          playlistTracksApi("add", id, this.userOperateSong).then(
+            (response) => {
+              if (response["data"]["status"] == 200) {
+                this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
+                this.UPDATE_MESSAGE_TIP_INFO({
+                  text: "收藏成功",
+                  type: "correct",
+                  show: true,
+                });
+              } else {
+                this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
+                this.UPDATE_MESSAGE_TIP_INFO({
+                  text: "歌曲已存在！",
+                  type: "error",
+                  show: true,
+                });
+              }
+            }
+          );
+        }
+      });
+    },
+    decideSongExist(data) {
+      return this.playlistTrackIds.some((element) => {
+        return element["id"] == data;
+      });
     },
   },
 };

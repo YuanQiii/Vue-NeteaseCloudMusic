@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-22 10:26:23
- * @LastEditTime: 2021-12-22 18:01:28
+ * @LastEditTime: 2021-12-22 21:38:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\playlist.js
@@ -255,21 +255,17 @@ const mutations = {
 };
 
 const actions = {
-  getPlaylistDetail({commit, dispatch}, data){
+  getPlaylistDetail({commit}, data){
     return playlistDetailApi(data).then(response => {
       if(response['data']['code'] == 200){ 
         console.log(response['data']);
         commit(types.UPDATE_PLAYLIST_DETAIL, response['data'])
       }
-    }).catch(error => {
+    })
+    .catch(error => {
       console.log(error);
     })
   },
-  getSongExist({getters}, data){
-    return getters.playlistTrackIds.some(element => {
-      return element['id'] == data
-    })
-  }
 };
 
 // 最后统一导出
