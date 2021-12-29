@@ -1,23 +1,13 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-15 15:58:06
- * @LastEditTime: 2021-12-22 22:07:35
+ * @LastEditTime: 2021-12-29 15:48:53
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\AddToPlaylist.vue
 -->
 <template>
-  <div
-    class="add-to-playlist-window"
-    :style="windowStyle"
-    @mousemove="move"
-    @mouseup="afterMove"
-    v-if="popupAddToPlaylistShow"
-  >
-    <div class="header" @mousedown="beforeMove">
-      <div class="mode">添加到歌单</div>
-      <div class="close" @click="closeWindow">x</div>
-    </div>
+  <div class="add-to-playlist-window">
     <div class="content">
       <div class="add" @click="CreatePlaylist">
         <add-to-playlist-icon class="icon" />

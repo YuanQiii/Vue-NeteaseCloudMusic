@@ -1,15 +1,5 @@
 <template>
-  <div
-    class="create-playlist-window"
-    :style="windowStyle"
-    @mousemove="move"
-    @mouseup="afterMove"
-    v-if="popupCreatePlaylistShow"
-  >
-    <div class="header" @mousedown="beforeMove">
-      <div class="mode">新建歌单</div>
-      <div class="close" @click="UPDATE_POPUP_CREATE_PLAYLIST(false)">x</div>
-    </div>
+  <div class="create-playlist-window">
     <div class="content">
       <div class="name">
         <div class="text">歌单名：</div>
@@ -25,7 +15,7 @@
         <send-button
           text="取消"
           class="button2"
-          @click.native="UPDATE_POPUP_CREATE_PLAYLIST(false)"
+          @click.native="UPDATE_POPUP_TYPE(null)"
         />
       </div>
     </div>
@@ -47,32 +37,16 @@ export default {
   },
   data() {
     return {
-      left: 800,
-      top: 400,
-      diffX: 0,
-      diffY: 0,
-      moveEnable: false,
-      text: "新建",
       playlistName: "",
+      text: "新建",
     };
   },
   computed: {
-    ...mapState(["popupCreatePlaylistShow"]),
     ...mapState("user", ["userOperateSong"]),
     ...mapGetters("user", ["userCreatedPlaylist"]),
-    windowStyle() {
-      return {
-        left: `${this.left}px`,
-        top: `${this.top}px`,
-      };
-    },
   },
   methods: {
-    ...mapMutations([
-      "UPDATE_POPUP_CREATE_PLAYLIST",
-      "UPDATE_MESSAGE_TIP_INFO",
-      "UPDATE_POPUP_CREATE_PLAYLIST",
-    ]),
+    ...mapMutations(["UPDATE_POPUP_TYPE", "UPDATE_MESSAGE_TIP_INFO"]),
 
     createPlaylist() {
       this.text = "新建中...";
@@ -84,7 +58,7 @@ export default {
           .then((response) => {
             if (response["data"]["status"] == 200) {
               console.log("创建歌单添加歌曲");
-              this.UPDATE_POPUP_CREATE_PLAYLIST(false);
+              this.UPDATE_POPUP_TYPE(null);
               this.UPDATE_MESSAGE_TIP_INFO({
                 text: "收藏成功",
                 type: "correct",
@@ -110,7 +84,7 @@ export default {
           .then((response) => {
             if (response["data"]["status"] == 200) {
               console.log("已创建的歌单添加歌曲");
-              this.UPDATE_POPUP_CREATE_PLAYLIST(false);
+              this.UPDATE_POPUP_TYPE(null);
               this.UPDATE_MESSAGE_TIP_INFO({
                 text: "收藏成功",
                 type: "correct",
@@ -135,78 +109,20 @@ export default {
       }
       return 0;
     },
-
-    beforeMove(e) {
-      this.diffX = e["offsetX"];
-      this.diffY = e["offsetY"];
-      this.moveEnable = true;
-    },
-    move(e) {
-      if (this.moveEnable) {
-        this.left = this.limitPosition(
-          e["clientX"] - this.diffX,
-          window.innerWidth - 530
-        );
-        this.top = this.limitPosition(
-          e["clientY"] - this.diffY,
-          window.innerHeight - 332
-        );
-      }
-    },
-    afterMove() {
-      this.moveEnable = false;
-    },
-    closeWindow() {
-      this.UPDATE_POPUP_DOWNLOAD_SHOW(false);
-    },
-    limitPosition(value, max) {
-      if (value <= 0) {
-        return 0;
-      } else if (value >= max) {
-        return max;
-      } else {
-        return value;
-      }
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .create-playlist-window {
-  max-width: 480px;
+  width: 480px;
+  height: 210px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  box-shadow: 0 5px 16px rgb(0 0 0 / 80%);
-  z-index: 999;
-  position: absolute;
-  user-select: none;
-
-  .header {
-    color: #fff;
-    height: 38 px;
-    line-height: 38px;
-    display: flex;
-    background: #2d2d2d;
-    justify-content: space-between;
-    cursor: move;
-    border-radius: 4px 4px 0 0;
-  }
-
-  .mode {
-    margin-left: 18px;
-  }
-
-  .close {
-    margin-right: 18px;
-    cursor: pointer;
-  }
 
   .content {
-    width: 480px;
-    height: 210px;
     padding-left: 40px;
     .name {
       display: flex;

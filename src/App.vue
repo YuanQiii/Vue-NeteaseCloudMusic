@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-21 14:37:44
+ * @LastEditTime: 2021-12-29 15:56:09
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
@@ -23,9 +23,11 @@
     <div>
       <message-tip />
 
-      <download-window />
-      <add-to-playlist-window />
-      <create-playlist-window />
+      <popup-window v-if="popupType" :title="popupType['title']">
+        <download-window v-if="popupType['type'] == 'downnload'" />
+        <create-playlist-window v-if="popupType['type'] == 'createPlaylist'" />
+        <add-to-playlist-window v-if="popupType['type'] == 'addToPlaylist'" />
+      </popup-window>
     </div>
 
     <music-player />
@@ -40,6 +42,8 @@ import NavigationBar from "./components/navigation/NavigationBar.vue";
 import MusicPlayer from "./components/player/MusicPlayer.vue";
 import CreatePlaylistWindow from "./components/popup/CreatePlaylistWindow.vue";
 import MessageTip from "./components/tip/MessageTip.vue";
+import PopupWindow from "./components/popup/PopupWindow.vue";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -50,6 +54,10 @@ export default {
     AddToPlaylistWindow,
     CreatePlaylistWindow,
     MessageTip,
+    PopupWindow,
+  },
+  computed: {
+    ...mapState(["popupType"]),
   },
   methods: {
     updateIsMouseDown() {
