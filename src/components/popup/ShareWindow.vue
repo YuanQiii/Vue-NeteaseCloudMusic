@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2021-12-23 22:42:02
+ * @LastEditTime: 2021-12-27 21:41:27
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -19,7 +19,7 @@
     </div>
     <div class="content">
       <div class="nav">
-        <div class="text"></div>
+        <selected-tab text="分享给大家" />
       </div>
     </div>
   </div>
@@ -27,8 +27,10 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import SelectedTab from "../../ui/Tab/SelectedTab.vue";
 
 export default {
+  components: { SelectedTab },
   name: "ShareWindow",
   data() {
     return {

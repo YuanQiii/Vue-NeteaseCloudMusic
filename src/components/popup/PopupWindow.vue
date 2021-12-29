@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 14:32:47
- * @LastEditTime: 2021-12-29 18:00:33
+ * @LastEditTime: 2021-12-29 22:43:18
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\PopupWindow.vue
@@ -13,9 +13,9 @@
     @mousemove="move"
     @mouseup="afterMove"
   >
-    <div class="header" @mousedown="beforeMove">
+    <div class="header" @mousedown="beforeMove" :style="style">
       <span class="title">{{ title }}</span>
-      <span class="close" @click="closeWindow">x</span>
+      <span class="close" @click="UPDATE_POPUP_TYPE(null)">x</span>
     </div>
 
     <div class="content">
@@ -25,10 +25,12 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "PopupWindow",
   props: {
     title: String,
+    style: Object,
   },
   data() {
     return {
@@ -40,6 +42,8 @@ export default {
     };
   },
   computed: {
+    ...mapMutations(["UPDATE_POPUP_TYPE"]),
+
     windowStyle() {
       return {
         left: `${this.left}px`,
@@ -98,7 +102,8 @@ export default {
     height: 38px;
     line-height: 38px;
     width: 100%;
-    // display: flex;
+    display: flex;
+    justify-content: space-between;
     background: #2d2d2d;
 
     cursor: move;

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-15 15:58:06
- * @LastEditTime: 2021-12-29 15:48:53
+ * @LastEditTime: 2021-12-29 22:33:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\AddToPlaylist.vue
@@ -40,71 +40,18 @@ export default {
   components: {
     AddToPlaylistIcon,
   },
-  data() {
-    return {
-      left: 800,
-      top: 400,
-      diffX: 0,
-      diffY: 0,
-      moveEnable: false,
-    };
-  },
   computed: {
-    ...mapState(["popupAddToPlaylistShow"]),
     ...mapState("user", ["userOperateSong"]),
     ...mapGetters("user", ["userCreatedPlaylist"]),
     ...mapGetters("playlist", ["playlistTrackIds"]),
-    windowStyle() {
-      return {
-        left: `${this.left}px`,
-        top: `${this.top}px`,
-      };
-    },
   },
   methods: {
-    ...mapMutations([
-      "UPDATE_POPUP_ADD_TO_PLAYLIST",
-      "UPDATE_POPUP_CREATE_PLAYLIST",
-      "UPDATE_MESSAGE_TIP_INFO",
-    ]),
+    ...mapMutations(["UPDATE_POPUP_TYPE", "UPDATE_MESSAGE_TIP_INFO"]),
     ...mapGetters("playlist", ["playlistTrackIds"]),
     ...mapActions("playlist", ["getPlaylistDetail"]),
 
-    beforeMove(e) {
-      this.diffX = e["offsetX"];
-      this.diffY = e["offsetY"];
-      this.moveEnable = true;
-    },
-    move(e) {
-      if (this.moveEnable) {
-        this.left = this.limitPosition(
-          e["clientX"] - this.diffX,
-          window.innerWidth - 530
-        );
-        this.top = this.limitPosition(
-          e["clientY"] - this.diffY,
-          window.innerHeight - 332
-        );
-      }
-    },
-    afterMove() {
-      this.moveEnable = false;
-    },
-    closeWindow() {
-      this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
-    },
-    limitPosition(value, max) {
-      if (value <= 0) {
-        return 0;
-      } else if (value >= max) {
-        return max;
-      } else {
-        return value;
-      }
-    },
     CreatePlaylist() {
-      this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
-      this.UPDATE_POPUP_CREATE_PLAYLIST(true);
+      this.UPDATE_POPUP_TYPE("createPlaylist");
     },
     addToPlaylist(id) {
       this.getPlaylistDetail(id).then(() => {
@@ -113,14 +60,14 @@ export default {
           playlistTracksApi("add", id, this.userOperateSong).then(
             (response) => {
               if (response["data"]["status"] == 200) {
-                this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
+                this.UPDATE_POPUP_TYPE(null);
                 this.UPDATE_MESSAGE_TIP_INFO({
                   text: "收藏成功",
                   type: "correct",
                   show: true,
                 });
               } else {
-                this.UPDATE_POPUP_ADD_TO_PLAYLIST(false);
+                this.UPDATE_POPUP_TYPE(null);
                 this.UPDATE_MESSAGE_TIP_INFO({
                   text: "歌曲已存在！",
                   type: "error",
@@ -143,16 +90,12 @@ export default {
 
 <style lang="scss" scoped>
 .add-to-playlist-window {
-  max-width: 530px;
-  min-height: 315px;
+  width: 480px;
+  height: 375px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  box-shadow: 0 5px 16px rgb(0 0 0 / 80%);
-  z-index: 999;
-  position: absolute;
-  user-select: none;
 
   .header {
     color: #fff;

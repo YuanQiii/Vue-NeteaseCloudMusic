@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-29 15:54:42
+ * @LastEditTime: 2021-12-29 22:45:59
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\index.js
@@ -26,10 +26,27 @@ export default new Vuex.Store({
       type: 'correct',
       show: false
     },
-    popupType: {
-      title: '添加到歌单',
-      type: 'addToPlaylist'
-    }
+    popupType: null,
+    popupData: {
+      download: {
+        title: '下载',
+        style: {
+          width: '418px'
+        }
+      },
+      addToPlaylist: {
+        title: '添加到歌单',
+        style: {
+          width: '480px'
+        }
+      },
+      createPlaylist: {
+        title: '新建歌单',
+        style: {
+          width: '480px'
+        }
+      }
+    },
   },
   mutations: {
     updateIsMouseDown(state, payload) {
@@ -44,6 +61,15 @@ export default new Vuex.Store({
         Vue.set(state.messageTipInfo, 'show', false)
       }, 1000);
     },
+  },
+  getters: {
+    popupInfo(state){
+      if(state.popupType){
+        return state.popupData[state.popupType]
+      }else{
+        return null
+      }
+    }
   },
   actions: {},
   modules: {
