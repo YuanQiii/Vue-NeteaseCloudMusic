@@ -1,7 +1,11 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
+<<<<<<< HEAD
  * @LastEditTime: 2021-12-29 15:56:09
+=======
+ * @LastEditTime: 2021-12-23 22:13:28
+>>>>>>> 2371ef5fcae4952584b8d59830fe6b112ecf960f
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\App.vue
@@ -23,11 +27,18 @@
     <div>
       <message-tip />
 
+<<<<<<< HEAD
       <popup-window v-if="popupType" :title="popupType['title']">
         <download-window v-if="popupType['type'] == 'downnload'" />
         <create-playlist-window v-if="popupType['type'] == 'createPlaylist'" />
         <add-to-playlist-window v-if="popupType['type'] == 'addToPlaylist'" />
       </popup-window>
+=======
+      <share-window />
+      <download-window />
+      <add-to-playlist-window />
+      <create-playlist-window />
+>>>>>>> 2371ef5fcae4952584b8d59830fe6b112ecf960f
     </div>
 
     <music-player />
@@ -42,8 +53,12 @@ import NavigationBar from "./components/navigation/NavigationBar.vue";
 import MusicPlayer from "./components/player/MusicPlayer.vue";
 import CreatePlaylistWindow from "./components/popup/CreatePlaylistWindow.vue";
 import MessageTip from "./components/tip/MessageTip.vue";
+<<<<<<< HEAD
 import PopupWindow from "./components/popup/PopupWindow.vue";
 import { mapState } from "vuex";
+=======
+import ShareWindow from "./components/popup/ShareWindow.vue";
+>>>>>>> 2371ef5fcae4952584b8d59830fe6b112ecf960f
 
 export default {
   components: {
@@ -54,10 +69,14 @@ export default {
     AddToPlaylistWindow,
     CreatePlaylistWindow,
     MessageTip,
+<<<<<<< HEAD
     PopupWindow,
   },
   computed: {
     ...mapState(["popupType"]),
+=======
+    ShareWindow,
+>>>>>>> 2371ef5fcae4952584b8d59830fe6b112ecf960f
   },
   methods: {
     updateIsMouseDown() {
