@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2021-12-27 21:41:27
+ * @LastEditTime: 2022-01-02 22:48:11
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -20,6 +20,21 @@
     <div class="content">
       <div class="nav">
         <selected-tab text="分享给大家" />
+        <selected-tab text="私信分享" />
+      </div>
+      <div class="edit">
+        <textarea class="area" placeholder="说点什么吧" v-model="editContent" />
+        <div class="thide">
+          <div class="text">单曲：予你 - 队长</div>
+        </div>
+      </div>
+      <div class="operation">
+        <emotion-icon class="emotion" @click="updateEmotionShow" />
+        <emotion-list class="emotion-list" />
+
+        <at-icon class="at" />
+        <image-upload-icon class="upload" />
+        <div class="count" :style="editCountStyle">{{ editCount }}</div>
       </div>
     </div>
   </div>
@@ -27,13 +42,26 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import AtIcon from "../../ui/Icon/AtIcon.vue";
+import EmotionIcon from "../../ui/Icon/EmotionIcon.vue";
+import EmotionList from "../../ui/Icon/EmotionList.vue";
+import ImageUploadIcon from "../../ui/Icon/ImageUploadIcon.vue";
 import SelectedTab from "../../ui/Tab/SelectedTab.vue";
 
 export default {
-  components: { SelectedTab },
+  components: {
+    SelectedTab,
+    EmotionIcon,
+    AtIcon,
+    ImageUploadIcon,
+    EmotionList,
+  },
   name: "ShareWindow",
   data() {
     return {
+      editContent: "嘻嘻",
+      emotionShow: false,
+
       left: 800,
       top: 400,
       diffX: 0,
@@ -49,9 +77,19 @@ export default {
         top: `${this.top}px`,
       };
     },
+    editCount() {
+      return 150 - this.editContent.length;
+    },
+    editCountStyle() {
+      return this.editCount < 0 ? { color: "#c20c2c" } : {};
+    },
   },
   methods: {
     ...mapMutations(["UPDATE_POPUP_DOWNLOAD_SHOW"]),
+
+    updateEmotionShow() {
+      this.emotionShow = !this.emotionShow;
+    },
 
     beforeMove(e) {
       this.diffX = e["offsetX"];
@@ -123,53 +161,62 @@ export default {
   }
 
   .content {
-    width: 418px;
-    .head {
-      text-align: center;
-      margin-top: 20px;
-      .text1 {
-        font-size: 20px;
-        font-weight: 700;
-        color: #333;
-      }
-      .text2 {
-        color: #666;
+    width: 530px;
+    padding: 20px 40px 30px;
+    .nav {
+      display: flex;
+    }
+    .edit {
+      width: 446px;
+      padding: 5px;
+      border: 1px solid #e5e5e5;
+      .area {
+        width: 432px;
+        height: 117px;
+        outline: none;
+        border: none;
+        resize: none;
         font-size: 12px;
-        font-weight: 700;
-        margin-top: 10px;
+        color: #333;
+        padding: 5px 6px 6px;
+      }
+      .thide {
+        .text {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          word-wrap: normal;
+          border-top: 1px solid #e5e5e5;
+          width: 426px;
+          height: 45px;
+          line-height: 45px;
+          color: #333;
+          font-size: 14px;
+          padding-left: 10px;
+        }
       }
     }
-    .main {
+    .operation {
+      margin-top: 10px;
       display: flex;
-      margin-bottom: 36px;
-      .button {
-        padding-top: 24px;
-        margin-left: 36px;
-        margin-top: 16px;
-        width: 181px;
-        height: 162px;
-        border-right: 1px dotted #ccc;
-        .download {
-          margin-bottom: 16px;
-        }
+      position: relative;
+      .emotion {
+        margin-right: 10px;
       }
-      .scan {
-        .code {
-          width: 86px;
-          height: 86px;
-          background-image: url(https://s2.music.126.net/style/web2/img/qtcode86.png);
-          margin-left: 39px;
-          margin-top: 38px;
-        }
-        .text {
-          color: #666;
-          font-size: 12px;
-          margin-top: 14px;
-          width: 164px;
-          height: 16px;
-          line-height: 16px;
-          text-align: center;
-        }
+      .emotion-list {
+        position: absolute;
+        left: -12px;
+        top: 20px;
+      }
+      .at {
+        margin-right: 10px;
+      }
+      .count {
+        color: #999;
+        font-size: 12px;
+        line-height: 18px;
+        margin-left: 362px;
+        text-align: right;
       }
     }
   }

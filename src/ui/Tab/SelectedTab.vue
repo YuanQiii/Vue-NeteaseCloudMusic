@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-27 21:36:40
- * @LastEditTime: 2021-12-27 22:09:48
+ * @LastEditTime: 2022-01-01 20:02:59
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\ui\Tab\SelectedTab.vue
@@ -10,7 +10,7 @@
   <div class="selected-tab">
     <div class="image1"></div>
     <div class="image2"></div>
-    <!-- <div class="text">{{ text }}</div> -->
+    <div class="text">{{ text }}</div>
   </div>
 </template>
 
@@ -30,6 +30,7 @@ export default {
   height: 27px;
   border: 1px solid #dedede;
   margin-bottom: 10px;
+  position: relative;
 
   .image1 {
     display: block;
@@ -48,6 +49,8 @@ export default {
   }
 
   .text {
+    position: absolute;
+    width: 91px;
     font-size: 12px;
     line-height: 27px;
     color: #333;
