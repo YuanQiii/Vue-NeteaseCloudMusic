@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-02 22:48:11
+ * @LastEditTime: 2022-01-04 16:00:50
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -30,7 +30,7 @@
       </div>
       <div class="operation">
         <emotion-icon class="emotion" @click="updateEmotionShow" />
-        <emotion-list class="emotion-list" />
+        <emotion-list class="emotion-list" @getEmotion="getEmotion" />
 
         <at-icon class="at" />
         <image-upload-icon class="upload" />
@@ -89,6 +89,10 @@ export default {
 
     updateEmotionShow() {
       this.emotionShow = !this.emotionShow;
+    },
+
+    getEmotion(value) {
+      console.log(value);
     },
 
     beforeMove(e) {
