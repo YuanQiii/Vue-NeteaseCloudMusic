@@ -1,66 +1,84 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-04 16:00:50
+ * @LastEditTime: 2022-01-05 16:44:28
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
 -->
 <template>
-  <div
-    class="share-window"
-    :style="windowStyle"
-    @mousemove="move"
-    @mouseup="afterMove"
-  >
-    <div class="header" @mousedown="beforeMove">
-      <div class="mode">分享</div>
-      <div class="close" @click="closeWindow">x</div>
-    </div>
+  <div class="share-window">
     <div class="content">
       <div class="nav">
         <selected-tab text="分享给大家" />
         <selected-tab text="私信分享" />
       </div>
       <div class="edit">
-        <textarea class="area" placeholder="说点什么吧" v-model="editContent" />
+        <textarea
+          class="area"
+          ref="area"
+          placeholder="说点什么吧"
+          v-model="editContent"
+        />
         <div class="thide">
-          <div class="text">单曲：予你 - 队长</div>
+          <div class="text">单曲：雅俗共赏 - 许嵩</div>
         </div>
       </div>
       <div class="operation">
-        <emotion-icon class="emotion" @click="updateEmotionShow" />
-        <emotion-list class="emotion-list" @getEmotion="getEmotion" />
+        <emotion-icon class="emotion" @click.native="updateEmotionShow" />
+        <share-emotion-list
+          class="emotion-list"
+          @getEmotion="getEmotion"
+          v-show="emotionShow"
+        />
 
-        <at-icon class="at" />
+        <at-icon class="at" @click.native="updateAtShow" />
+        <share-follows-list
+          class="follows-list"
+          v-show="followMode"
+          :style="followListStyle"
+          :userFollows="userFollows"
+          :followMode="followMode"
+          @getFollowNickname="getFollowNickname"
+        />
+
         <image-upload-icon class="upload" />
-        <div class="count" :style="editCountStyle">{{ editCount }}</div>
+        <div class="count" :style="editWordCountStyle">{{ editWordCount }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 import AtIcon from "../../ui/Icon/AtIcon.vue";
 import EmotionIcon from "../../ui/Icon/EmotionIcon.vue";
-import EmotionList from "../../ui/Icon/EmotionList.vue";
 import ImageUploadIcon from "../../ui/Icon/ImageUploadIcon.vue";
 import SelectedTab from "../../ui/Tab/SelectedTab.vue";
 
+import { userFollowsApi } from "@/api/user.js";
+import ShareFollowsList from "../../ui/List/ShareFollowsList.vue";
+import ShareEmotionList from "../../ui/List/ShareEmotionList.vue";
+
 export default {
+  name: "ShareWindow",
   components: {
     SelectedTab,
     EmotionIcon,
     AtIcon,
     ImageUploadIcon,
-    EmotionList,
+    ShareFollowsList,
+    ShareEmotionList,
   },
-  name: "ShareWindow",
   data() {
     return {
       editContent: "嘻嘻",
       emotionShow: false,
+      userFollows: [],
+      followMode: "",
+      followLeft: 10,
+      followTop: -170,
+      searchKey: "",
 
       left: 800,
       top: 400,
@@ -69,63 +87,101 @@ export default {
       moveEnable: false,
     };
   },
+  watch: {
+    editContent(newValue, oldValue) {
+      if (this.getKeyWord(newValue, oldValue) == "@") {
+        this.followMode = "select";
+        this.getUserFollows();
+      } else {
+        this.followMode = "";
+      }
+
+      this.$refs.area.crea
+    },
+  },
   computed: {
     ...mapState(["popupDownloadShow"]),
+    ...mapGetters("user", ["userId"]),
+
+    followListStyle() {
+      return {
+        left: `${this.followLeft}px`,
+        top: `${this.followTop}px`,
+      };
+    },
     windowStyle() {
       return {
         left: `${this.left}px`,
         top: `${this.top}px`,
       };
     },
-    editCount() {
-      return 150 - this.editContent.length;
+    editWordCount() {
+      let bracketsCount = 0;
+      for (let index = 0; index < this.editContent.length; index++) {
+        const element = this.editContent[index];
+        if (element == "[" || element == "]") {
+          bracketsCount++;
+        }
+      }
+      return 150 - this.editContent.length + Math.floor(bracketsCount / 2);
     },
-    editCountStyle() {
-      return this.editCount < 0 ? { color: "#c20c2c" } : {};
+    editWordCountStyle() {
+      return this.editWordCount < 0 ? { color: "#c20c2c" } : {};
     },
   },
   methods: {
     ...mapMutations(["UPDATE_POPUP_DOWNLOAD_SHOW"]),
 
+    getKeyWord(newValue, oldValue) {
+      let length1 = newValue.length;
+      let length2 = oldValue.length;
+      if (length1 > length2) {
+        return newValue.slice(length2, length1);
+      } else {
+        return oldValue.slice(length1 - 1, length2 - 1);
+      }
+    },
+
+    getSearchKeyWord(newValue, oldValue){
+      if(this.followMode == 'search'){
+
+      }
+    },
+
     updateEmotionShow() {
       this.emotionShow = !this.emotionShow;
     },
-
     getEmotion(value) {
-      console.log(value);
+      this.editContent += `[${value}]`;
+      this.emotionShow = false;
     },
 
-    beforeMove(e) {
-      this.diffX = e["offsetX"];
-      this.diffY = e["offsetY"];
-      this.moveEnable = true;
+    updateAtShow() {
+      this.editContent += "@";
+      this.getUserFollows();
     },
-    move(e) {
-      if (this.moveEnable) {
-        this.left = this.limitPosition(
-          e["clientX"] - this.diffX,
-          window.innerWidth - 530
-        );
-        this.top = this.limitPosition(
-          e["clientY"] - this.diffY,
-          window.innerHeight - 332
-        );
-      }
+    getFollowNickname(value) {
+      this.editContent += `[${value}] `;
+      this.followMode = "";
     },
-    afterMove() {
-      this.moveEnable = false;
-    },
-    closeWindow() {
-      this.UPDATE_POPUP_DOWNLOAD_SHOW(false);
-    },
-    limitPosition(value, max) {
-      if (value <= 0) {
-        return 0;
-      } else if (value >= max) {
-        return max;
-      } else {
-        return value;
-      }
+
+    getUserFollows() {
+      userFollowsApi(this.userId)
+        .then((response) => {
+          console.log(response);
+          if (response["data"]["code"] == 200) {
+            this.userFollows = this.userFollows.concat(
+              response["data"]["follow"]
+            );
+            if (response["data"]["more"]) {
+              this.getUserFollows();
+            }
+          }
+        })
+        .catch((error) => {
+          this.followMore = false;
+          console.log(error);
+        });
     },
   },
 };
@@ -139,30 +195,6 @@ export default {
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  box-shadow: 0 5px 16px rgb(0 0 0 / 80%);
-  z-index: 999;
-  position: absolute;
-  user-select: none;
-
-  .header {
-    color: #fff;
-    height: 38 px;
-    line-height: 38px;
-    display: flex;
-    background: #2d2d2d;
-    justify-content: space-between;
-    cursor: move;
-    border-radius: 4px 4px 0 0;
-  }
-
-  .mode {
-    margin-left: 18px;
-  }
-
-  .close {
-    margin-right: 18px;
-    cursor: pointer;
-  }
 
   .content {
     width: 530px;
@@ -214,6 +246,9 @@ export default {
       }
       .at {
         margin-right: 10px;
+      }
+      .follows-list {
+        position: absolute;
       }
       .count {
         color: #999;

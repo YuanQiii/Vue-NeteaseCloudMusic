@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-06 09:24:01
- * @LastEditTime: 2021-12-08 10:51:31
+ * @LastEditTime: 2022-01-05 09:58:18
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\user.js
@@ -69,6 +69,21 @@ export function userEventApi(pagesize = 20, lasttime = -1) {
     params: {
       pagesize,
       lasttime
+    }
+  });
+}
+
+/**
+ * @description: 用户关注列表
+ */
+export function userFollowsApi(uid, limit = 30, offset = 0) {
+  return request({
+    url: "user/follows",
+    method: "get",
+    params: {
+      uid,
+      limit,
+      offset
     }
   });
 }

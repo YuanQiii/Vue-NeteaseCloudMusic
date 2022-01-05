@@ -1,13 +1,13 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-02 22:38:20
- * @LastEditTime: 2022-01-04 16:00:52
+ * @LastEditTime: 2022-01-05 10:54:33
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\ui\Icon\EmotionList.vue
 -->
 <template>
-  <div class="emotion-list">
+  <div class="share-emotion-list">
     <div class="bg"></div>
     <div class="emotion">
       <div
@@ -43,7 +43,7 @@ import EmotionLeftArrowButton from "../Button/EmotionLeftArrowButton.vue";
 import EmotionRightArrowButton from "../Button/EmotionRightArrowButton.vue";
 export default {
   components: { EmotionLeftArrowButton, EmotionRightArrowButton },
-  name: "EmotionList",
+  name: "ShareEmotionList",
   data() {
     return {
       currentEmotionIndex: 0,
@@ -210,10 +210,10 @@ export default {
             101: "外星",
           },
           {
-            52: "礼物",
+            52: "钻石",
           },
           {
-            107: "钻石",
+            107: "礼物",
           },
           {
             0: "男孩",
@@ -262,7 +262,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.emotion-list {
+.share-emotion-list {
   z-index: 999;
   position: relative;
   .bg {

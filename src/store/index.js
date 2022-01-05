@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-29 22:45:59
+ * @LastEditTime: 2022-01-05 11:43:51
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\index.js
@@ -26,7 +26,7 @@ export default new Vuex.Store({
       type: 'correct',
       show: false
     },
-    popupType: null,
+    popupType: 'share',
     popupData: {
       download: {
         title: '下载',
@@ -45,7 +45,13 @@ export default new Vuex.Store({
         style: {
           width: '480px'
         }
-      }
+      },
+      share: {
+        title: '分享',
+        style: {
+          width: '530px'
+        }
+      },
     },
   },
   mutations: {
