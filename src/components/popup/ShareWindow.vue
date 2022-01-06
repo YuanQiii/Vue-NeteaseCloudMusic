@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-05 16:44:28
+ * @LastEditTime: 2022-01-06 17:52:17
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -14,11 +14,12 @@
         <selected-tab text="私信分享" />
       </div>
       <div class="edit">
-        <textarea
+        <div-editable
           class="area"
-          ref="area"
-          placeholder="说点什么吧"
-          v-model="editContent"
+          :value="editContent"
+          @input="input"
+          @focusFunc="focusFunc"
+          @blurFunc="blurFunc"
         />
         <div class="thide">
           <div class="text">单曲：雅俗共赏 - 许嵩</div>
@@ -51,14 +52,16 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex";
+
+import { userFollowsApi } from "@/api/user.js";
+
 import AtIcon from "../../ui/Icon/AtIcon.vue";
 import EmotionIcon from "../../ui/Icon/EmotionIcon.vue";
 import ImageUploadIcon from "../../ui/Icon/ImageUploadIcon.vue";
 import SelectedTab from "../../ui/Tab/SelectedTab.vue";
-
-import { userFollowsApi } from "@/api/user.js";
 import ShareFollowsList from "../../ui/List/ShareFollowsList.vue";
 import ShareEmotionList from "../../ui/List/ShareEmotionList.vue";
+import DivEditable from "../../ui/Input/DivEditable.vue";
 
 export default {
   name: "ShareWindow",
@@ -69,6 +72,7 @@ export default {
     ImageUploadIcon,
     ShareFollowsList,
     ShareEmotionList,
+    DivEditable,
   },
   data() {
     return {
@@ -79,6 +83,7 @@ export default {
       followLeft: 10,
       followTop: -170,
       searchKey: "",
+      lastEditContent: "",
 
       left: 800,
       top: 400,
@@ -94,9 +99,8 @@ export default {
         this.getUserFollows();
       } else {
         this.followMode = "";
+        this.lastEditContent = "";
       }
-
-      this.$refs.area.crea
     },
   },
   computed: {
@@ -132,20 +136,52 @@ export default {
   methods: {
     ...mapMutations(["UPDATE_POPUP_DOWNLOAD_SHOW"]),
 
-    getKeyWord(newValue, oldValue) {
+    input(value) {
+      this.editContent = value;
+      if (this.followMode) {
+        this.getSearchKeyWord(value);
+      }
+    },
+
+    blurFunc() {
+      this.followMode = "";
+    },
+
+    focusFunc() {
+      if (this.editContent.endsWith("@")) {
+        this.followMode = "search";
+      }
+    },
+
+    getKeyWord(newValue, oldValue, count = 0) {
       let length1 = newValue.length;
       let length2 = oldValue.length;
       if (length1 > length2) {
-        return newValue.slice(length2, length1);
+        return newValue.slice(length2, length1 + count);
       } else {
         return oldValue.slice(length1 - 1, length2 - 1);
       }
     },
 
-    getSearchKeyWord(newValue, oldValue){
-      if(this.followMode == 'search'){
-
+    getSearchKeyWord(newValue) {
+      if (!this.lastEditContent) {
+        this.lastEditContent = newValue;
       }
+
+      console.log(newValue.length - newValue.lastIndexOf("@") - 1);
+
+      // console.log(
+      //   this.getKeyWord(
+      //     newValue,
+      //     this.lastEditContent,
+      //     newValue.length - newValue.lastIndexOf("@")
+      //   )
+      // );
+
+      let selection = document.getSelection();
+      let range = selection.getRangeAt(0);
+      let rect = range.getBoundingClientRect();
+      console.log(rect);
     },
 
     updateEmotionShow() {
