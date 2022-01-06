@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-06 17:52:17
+ * @LastEditTime: 2022-01-06 23:31:28
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -40,6 +40,7 @@
           :style="followListStyle"
           :userFollows="userFollows"
           :followMode="followMode"
+          :searchFollows="searchFollows"
           @getFollowNickname="getFollowNickname"
         />
 
@@ -79,11 +80,13 @@ export default {
       editContent: "嘻嘻",
       emotionShow: false,
       userFollows: [],
+      searchFollows: [],
       followMode: "",
       followLeft: 10,
       followTop: -170,
       searchKey: "",
       lastEditContent: "",
+      trigger: false,
 
       left: 800,
       top: 400,
@@ -94,9 +97,16 @@ export default {
   },
   watch: {
     editContent(newValue, oldValue) {
-      if (this.getKeyWord(newValue, oldValue) == "@") {
-        this.followMode = "select";
-        this.getUserFollows();
+      if (this.getKeyWord(newValue, oldValue) == "@" || this.trigger) {
+        if (this.trigger) {
+          this.searchKey = this.getSearchKeyWord(newValue);
+          this.followMode = "search";
+          this.getsearchFollows();
+        } else {
+          this.followMode = "select";
+          this.getUserFollows();
+          this.trigger = true;
+        }
       } else {
         this.followMode = "";
         this.lastEditContent = "";
@@ -138,9 +148,6 @@ export default {
 
     input(value) {
       this.editContent = value;
-      if (this.followMode) {
-        this.getSearchKeyWord(value);
-      }
     },
 
     blurFunc() {
@@ -168,20 +175,22 @@ export default {
         this.lastEditContent = newValue;
       }
 
-      console.log(newValue.length - newValue.lastIndexOf("@") - 1);
-
-      // console.log(
-      //   this.getKeyWord(
-      //     newValue,
-      //     this.lastEditContent,
-      //     newValue.length - newValue.lastIndexOf("@")
-      //   )
-      // );
+      let keyWordLength = newValue.length - newValue.lastIndexOf("@") + 1;
 
       let selection = document.getSelection();
       let range = selection.getRangeAt(0);
       let rect = range.getBoundingClientRect();
       console.log(rect);
+
+      return newValue.slice(this.lastEditContent.length - 1, keyWordLength + 1);
+    },
+
+    getsearchFollows() {
+      this.userFollows.forEach((element) => {
+        if (element.nickname.includes(this.searchKey)) {
+          this.searchFollows.push(element);
+        }
+      });
     },
 
     updateEmotionShow() {

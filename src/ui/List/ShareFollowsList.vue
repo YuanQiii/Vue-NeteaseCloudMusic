@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-05 10:22:45
- * @LastEditTime: 2022-01-05 17:06:37
+ * @LastEditTime: 2022-01-06 23:23:31
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\ui\List\ShareFollowsList.vue
@@ -15,6 +15,7 @@
           class="item"
           v-for="(value, index) in userFollows.slice(0, userFollowsLength)"
           :data-nickname="value['nickname']"
+          :key="index"
         >
           {{ value["nickname"] }}
         </div>
@@ -24,6 +25,7 @@
           class="item"
           v-for="(value, index) in searchFollows"
           :data-nickname="value['nickname']"
+          :key="index"
         >
           {{ value["nickname"] }}
         </div>
