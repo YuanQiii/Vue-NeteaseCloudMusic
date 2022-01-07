@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-06 23:31:28
+ * @LastEditTime: 2022-01-07 16:01:32
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -12,6 +12,7 @@
       <div class="nav">
         <selected-tab text="分享给大家" />
         <selected-tab text="私信分享" />
+        <selected-tab :text="followMode" />
       </div>
       <div class="edit">
         <div-editable
@@ -38,14 +39,15 @@
           class="follows-list"
           v-show="followMode"
           :style="followListStyle"
-          :userFollows="userFollows"
-          :followMode="followMode"
-          :searchFollows="searchFollows"
+          :follows="userFollowsFilter"
           @getFollowNickname="getFollowNickname"
         />
 
         <image-upload-icon class="upload" />
-        <div class="count" :style="editWordCountStyle">{{ editWordCount }}</div>
+
+        <div class="count" :style="editWordCountStyle">
+          {{ editWordCount }}
+        </div>
       </div>
     </div>
   </div>
@@ -75,18 +77,19 @@ export default {
     ShareEmotionList,
     DivEditable,
   },
+  created() {
+    this.getUserFollows();
+  },
   data() {
     return {
-      editContent: "嘻嘻",
+      editContent: "",
       emotionShow: false,
       userFollows: [],
-      searchFollows: [],
       followMode: "",
       followLeft: 10,
       followTop: -170,
       searchKey: "",
       lastEditContent: "",
-      trigger: false,
 
       left: 800,
       top: 400,
@@ -96,26 +99,37 @@ export default {
     };
   },
   watch: {
+    // 监听变化
     editContent(newValue, oldValue) {
-      if (this.getKeyWord(newValue, oldValue) == "@" || this.trigger) {
-        if (this.trigger) {
-          this.searchKey = this.getSearchKeyWord(newValue);
-          this.followMode = "search";
-          this.getsearchFollows();
-        } else {
-          this.followMode = "select";
-          this.getUserFollows();
-          this.trigger = true;
-        }
+      if (this.getKeyWord(newValue, oldValue) == "@") {
+        this.followMode = "select";
       } else {
-        this.followMode = "";
-        this.lastEditContent = "";
+        if (this.followMode) {
+          this.getSearchKeyWord(newValue);
+          this.followMode = "search";
+        } else {
+          this.followMode = "";
+          this.lastEditContent = "";
+        }
       }
     },
   },
   computed: {
     ...mapState(["popupDownloadShow"]),
     ...mapGetters("user", ["userId"]),
+
+    // 筛选结果
+    userFollowsFilter() {
+      if (this.followMode == "select") {
+        return this.userFollows.length > 10
+          ? this.userFollows.slice(0, 10)
+          : this.userFollows;
+      }
+
+      if (this.followMode == "search") {
+        return this.getsearchFollows();
+      }
+    },
 
     followListStyle() {
       return {
@@ -156,41 +170,47 @@ export default {
 
     focusFunc() {
       if (this.editContent.endsWith("@")) {
-        this.followMode = "search";
+        this.followMode = "select";
       }
     },
 
-    getKeyWord(newValue, oldValue, count = 0) {
+    // 获得编辑过后变化的词
+    getKeyWord(newValue, oldValue) {
       let length1 = newValue.length;
       let length2 = oldValue.length;
       if (length1 > length2) {
-        return newValue.slice(length2, length1 + count);
+        return newValue.slice(length2, length1);
       } else {
         return oldValue.slice(length1 - 1, length2 - 1);
       }
     },
 
+    // 获得@符号后的关键词
     getSearchKeyWord(newValue) {
       if (!this.lastEditContent) {
         this.lastEditContent = newValue;
       }
-
       let keyWordLength = newValue.length - newValue.lastIndexOf("@") + 1;
+      return newValue.slice(this.lastEditContent.length - 1, keyWordLength + 1);
+    },
 
+    getStyle() {
       let selection = document.getSelection();
       let range = selection.getRangeAt(0);
       let rect = range.getBoundingClientRect();
       console.log(rect);
-
-      return newValue.slice(this.lastEditContent.length - 1, keyWordLength + 1);
     },
 
+    // 获得查找结果
     getsearchFollows() {
+      let search = [];
       this.userFollows.forEach((element) => {
         if (element.nickname.includes(this.searchKey)) {
-          this.searchFollows.push(element);
+          search.push(element);
         }
       });
+
+      return search;
     },
 
     updateEmotionShow() {
@@ -201,15 +221,18 @@ export default {
       this.emotionShow = false;
     },
 
+    // 点击添加@符号，给出列表选择
     updateAtShow() {
       this.editContent += "@";
-      this.getUserFollows();
     },
+
+    // 获取选择的名字
     getFollowNickname(value) {
-      this.editContent += `[${value}] `;
+      this.editContent += `${value} `;
       this.followMode = "";
     },
 
+    // 获得全部follows结果
     getUserFollows() {
       userFollowsApi(this.userId)
         .then((response) => {
@@ -224,7 +247,6 @@ export default {
           }
         })
         .catch((error) => {
-          this.followMore = false;
           console.log(error);
         });
     },
