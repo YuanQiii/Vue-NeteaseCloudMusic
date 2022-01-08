@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-07 16:01:32
+ * @LastEditTime: 2022-01-08 15:16:44
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -85,6 +85,7 @@ export default {
       editContent: "",
       emotionShow: false,
       userFollows: [],
+      userFollowsFilter: [],
       followMode: "",
       followLeft: 10,
       followTop: -170,
@@ -103,10 +104,12 @@ export default {
     editContent(newValue, oldValue) {
       if (this.getKeyWord(newValue, oldValue) == "@") {
         this.followMode = "select";
+        this.filterUserFollows();
       } else {
         if (this.followMode) {
           this.getSearchKeyWord(newValue);
           this.followMode = "search";
+          this.filterUserFollows();
         } else {
           this.followMode = "";
           this.lastEditContent = "";
@@ -117,19 +120,6 @@ export default {
   computed: {
     ...mapState(["popupDownloadShow"]),
     ...mapGetters("user", ["userId"]),
-
-    // 筛选结果
-    userFollowsFilter() {
-      if (this.followMode == "select") {
-        return this.userFollows.length > 10
-          ? this.userFollows.slice(0, 10)
-          : this.userFollows;
-      }
-
-      if (this.followMode == "search") {
-        return this.getsearchFollows();
-      }
-    },
 
     followListStyle() {
       return {
@@ -174,6 +164,20 @@ export default {
       }
     },
 
+    // 筛选结果
+    filterUserFollows() {
+      if (this.followMode == "select") {
+        this.userFollowsFilter =
+          this.userFollows.length > 10
+            ? this.userFollows.slice(0, 10)
+            : this.userFollows;
+      }
+
+      if (this.followMode == "search") {
+        this.userFollowsFilter = this.getsearchFollows();
+      }
+    },
+
     // 获得编辑过后变化的词
     getKeyWord(newValue, oldValue) {
       let length1 = newValue.length;
@@ -191,7 +195,10 @@ export default {
         this.lastEditContent = newValue;
       }
       let keyWordLength = newValue.length - newValue.lastIndexOf("@") + 1;
-      return newValue.slice(this.lastEditContent.length - 1, keyWordLength + 1);
+      this.searchKey = newValue.slice(
+        this.lastEditContent.length - 1,
+        keyWordLength + 1
+      );
     },
 
     getStyle() {
@@ -205,7 +212,9 @@ export default {
     getsearchFollows() {
       let search = [];
       this.userFollows.forEach((element) => {
-        if (element.nickname.includes(this.searchKey)) {
+        let name = element.nickname.toLowerCase();
+        let key = this.searchKey.toLowerCase();
+        if (name.includes(key)) {
           search.push(element);
         }
       });
