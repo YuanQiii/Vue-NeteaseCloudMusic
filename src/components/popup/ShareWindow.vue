@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-08 15:16:44
+ * @LastEditTime: 2022-01-20 17:56:22
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -17,13 +17,17 @@
       <div class="edit">
         <div-editable
           class="area"
+          ref="divEditable"
           :value="editContent"
           @input="input"
           @focusFunc="focusFunc"
           @blurFunc="blurFunc"
         />
         <div class="thide">
-          <div class="text">单曲：雅俗共赏 - 许嵩</div>
+          <div class="text">
+            {{ userOperateType }}：{{ currentPLaySongName }} -
+            {{ currentPlaySongArtist }}
+          </div>
         </div>
       </div>
       <div class="operation">
@@ -49,6 +53,20 @@
           {{ editWordCount }}
         </div>
       </div>
+      <div class="button">
+        <div class="left">
+          <login-button @click.native="share" class="share" :text="shareText" />
+          <register-button
+            @click.native="UPDATE_POPUP_TYPE(null)"
+            class="cancel"
+            text="取消"
+          />
+        </div>
+        <div class="right">
+          <div class="text">同时分享到：</div>
+          <img src="../../assets/recommend/p1.png" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,6 +84,8 @@ import ShareFollowsList from "../../ui/List/ShareFollowsList.vue";
 import ShareEmotionList from "../../ui/List/ShareEmotionList.vue";
 import DivEditable from "../../ui/Input/DivEditable.vue";
 
+import LoginButton from "../../ui/Button/LoginButton.vue";
+import RegisterButton from "../../ui/Button/RegisterButton.vue";
 export default {
   name: "ShareWindow",
   components: {
@@ -76,6 +96,8 @@ export default {
     ShareFollowsList,
     ShareEmotionList,
     DivEditable,
+    LoginButton,
+    RegisterButton,
   },
   created() {
     this.getUserFollows();
@@ -91,6 +113,9 @@ export default {
       followTop: -170,
       searchKey: "",
       lastEditContent: "",
+      isClick: false,
+      rangeEndOffset: 0,
+      shareText: "分享",
 
       left: 800,
       top: 400,
@@ -102,12 +127,14 @@ export default {
   watch: {
     // 监听变化
     editContent(newValue, oldValue) {
-      if (this.getKeyWord(newValue, oldValue) == "@") {
+      let keyWrod = this.getKeyWord(newValue, oldValue);
+
+      if (keyWrod == "@") {
         this.followMode = "select";
         this.filterUserFollows();
       } else {
         if (this.followMode) {
-          this.getSearchKeyWord(newValue);
+          this.getSearchKeyWord(newValue, oldValue);
           this.followMode = "search";
           this.filterUserFollows();
         } else {
@@ -115,11 +142,19 @@ export default {
           this.lastEditContent = "";
         }
       }
+
+      this.getStyle();
     },
   },
   computed: {
     ...mapState(["popupDownloadShow"]),
-    ...mapGetters("user", ["userId"]),
+    ...mapGetters("user", ["userId", "userOperateType"]),
+    ...mapGetters("player", [
+      "currentPlaySongId",
+      "currentPLaySongName",
+      "currentPlaySongArtist",
+    ]),
+    ...mapMutations(["UPDATE_POPUP_TYPE"]),
 
     followListStyle() {
       return {
@@ -155,7 +190,12 @@ export default {
     },
 
     blurFunc() {
-      this.followMode = "";
+      setTimeout(() => {
+        if (!this.isClick) {
+          this.followMode = "";
+        }
+        this.isClick = false;
+      }, 200);
     },
 
     focusFunc() {
@@ -190,14 +230,20 @@ export default {
     },
 
     // 获得@符号后的关键词
-    getSearchKeyWord(newValue) {
+    getSearchKeyWord(newValue, oldValue) {
       if (!this.lastEditContent) {
         this.lastEditContent = newValue;
       }
       let keyWordLength = newValue.length - newValue.lastIndexOf("@") + 1;
-      this.searchKey = newValue.slice(
+
+      let tempStr = newValue;
+      if (newValue.length < oldValue.length) {
+        tempStr = oldValue;
+      }
+
+      this.searchKey = tempStr.slice(
         this.lastEditContent.length - 1,
-        keyWordLength + 1
+        keyWordLength + 2
       );
     },
 
@@ -205,7 +251,10 @@ export default {
       let selection = document.getSelection();
       let range = selection.getRangeAt(0);
       let rect = range.getBoundingClientRect();
-      console.log(rect);
+      // console.log(rect["x"]);
+      // console.log(this.left);
+      // this.followLeft = this.left - rect["x"];
+      // this.followTop = rect["y"];
     },
 
     // 获得查找结果
@@ -230,15 +279,40 @@ export default {
       this.emotionShow = false;
     },
 
+    // handleRange() {
+    //   let el = this.$refs.divEditable.$el;
+    //   let selection = document.getSelection();
+    //   let range = selection.getRangeAt(0);
+    //   this.rangeEndOffset = range.endOffset;
+    //   el.focus();
+    //   // range.setEnd(el, range.endOffset - 1);
+
+    //   console.log(
+    //     "🚀 ~ file: ShareWindow.vue ~ line 268 ~ handleRange ~ range.endOffset",
+    //     range.endOffset
+    //   );
+    // },
+
     // 点击添加@符号，给出列表选择
     updateAtShow() {
+      this.isClick = true;
       this.editContent += "@";
     },
 
     // 获取选择的名字
     getFollowNickname(value) {
-      this.editContent += `${value} `;
-      this.followMode = "";
+      if (this.followMode == "select") {
+        this.editContent += `${value} `;
+        this.followMode = "";
+      } else {
+        let index = this.editContent.lastIndexOf(this.searchKey);
+        let originContent = this.editContent.slice(0, index);
+        this.editContent = `${originContent}${value} `;
+      }
+    },
+
+    share() {
+      this.shareText = "分享中...";
     },
 
     // 获得全部follows结果
@@ -332,6 +406,35 @@ export default {
         line-height: 18px;
         margin-left: 362px;
         text-align: right;
+      }
+    }
+    .button {
+      display: flex;
+      margin-top: 30px;
+      .left {
+        display: flex;
+        .share {
+          width: 80px;
+          height: 31px;
+        }
+        .cancel {
+          width: 80px;
+          height: 31px;
+          margin-left: 10px;
+        }
+      }
+      .right {
+        display: flex;
+        .text {
+          margin-top: 4px;
+          margin-left: 155px;
+          display: block;
+          font-size: 12px;
+          line-height: 22px;
+          width: 80px;
+          height: 22px;
+          color: #666;
+        }
       }
     }
   }

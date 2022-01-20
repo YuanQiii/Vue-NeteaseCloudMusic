@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-06 09:24:01
- * @LastEditTime: 2022-01-05 09:58:18
+ * @LastEditTime: 2022-01-20 10:44:51
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\user.js
@@ -17,8 +17,8 @@ export function userDetailApi(uid) {
     url: "user/detail",
     method: "get",
     params: {
-      uid
-    }
+      uid,
+    },
   });
 }
 
@@ -40,8 +40,8 @@ export function userPlaylistApi(uid) {
     url: "user/playlist",
     method: "get",
     params: {
-      uid
-    }
+      uid,
+    },
   });
 }
 
@@ -54,8 +54,8 @@ export function userMsgPrivateApi(limit = 30, offset = 0) {
     method: "get",
     params: {
       limit,
-      offset
-    }
+      offset,
+    },
   });
 }
 
@@ -68,8 +68,8 @@ export function userEventApi(pagesize = 20, lasttime = -1) {
     method: "get",
     params: {
       pagesize,
-      lasttime
-    }
+      lasttime,
+    },
   });
 }
 
@@ -83,8 +83,25 @@ export function userFollowsApi(uid, limit = 30, offset = 0) {
     params: {
       uid,
       limit,
-      offset
-    }
+      offset,
+    },
   });
 }
 
+/**
+ * @description: 分享文本、歌曲、歌单、mv、电台、电台节目到动态
+ * @param {*} id 资源 id （歌曲，歌单，mv，电台，电台节目对应 id）
+ * @param {*} type 资源类型，默认歌曲 song，可传 song,playlist,mv,djradio,djprogram
+ * @param {*} msg 内容，140 字限制，支持 emoji，@用户名（/user/follows接口获取的用户名，用户名后和内容应该有空格），图片暂不支持
+ */
+export function userShareResoure(id, type = "song", msg = "") {
+  return request({
+    url: "share/resource",
+    method: "get",
+    params: {
+      id,
+      type,
+      msg,
+    },
+  });
+}

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2021-12-29 15:05:35
+ * @LastEditTime: 2022-01-20 11:14:21
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -49,8 +49,11 @@ const UPDATE_USER_SUBCOUNT = "UPDATE_USER_SUBCOUNT";
 // 用户歌单
 const UPDATE_USER_PLAYLIST = "UPDATE_USER_PLAYLIST";
 
-// 用户操作歌单
+// 用户操作歌曲
 const UPDATE_USER_OPERATE_SONG = "UPDATE_USER_OPERATE_SONG";
+
+// 用户操作类型
+const UPDATE_USER_OPERATE_TYPE_INDEX = "UPDATE_USER_OPERATE_TYPE_INDEX";
 
 // 用户私信
 const UPDATE_USER_MSG_PRIVATE = "UPDATE_USER_MSG_PRIVATE";
@@ -103,8 +106,6 @@ const UPDATE_POPUP_TYPE = "UPDATE_POPUP_TYPE";
 // 歌单详情
 const UPDATE_PLAYLIST_DETAIL = "UPDATE_PLAYLIST_DETAIL";
 
-
-
 export {
   UPDATE_AUTO_LOGIN,
   UPDATE_LOGIN_WINDOW_SHOW,
@@ -121,6 +122,7 @@ export {
   UPDATE_USER_SUBCOUNT,
   UPDATE_USER_PLAYLIST,
   UPDATE_USER_OPERATE_SONG,
+  UPDATE_USER_OPERATE_TYPE_INDEX,
   UPDATE_USER_MSG_PRIVATE,
   ADD_PLAYLIST_SONGS_INFO,
   DELETE_PLAYLIST_SONGS_INFO,

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2021-12-29 22:35:21
+ * @LastEditTime: 2022-01-20 11:15:16
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
@@ -9,7 +9,7 @@
 <template>
   <div class="song-operation">
     <playbar-like @click.native="addSong" />
-    <playbar-share />
+    <playbar-share @click.native="shareSong" />
     <playbar-download @click.native="dwonloadClient" />
     <playbar-delete @click.native="deleteSong" />
   </div>
@@ -33,16 +33,17 @@ export default {
   },
   methods: {
     ...mapMutations("login", ["UPDATE_LOGIN_WINDOW_SHOW"]),
-
     ...mapMutations("player", [
+      "UPDATE_PLAYLIST_SHOW",
       "ADD_PLAYLIST_SONGS_INFO",
       "DELETE_PLAYLIST_SONGS_INFO",
     ]),
 
-    ...mapMutations("user", ["UPDATE_USER_OPERATE_SONG"]),
-
+    ...mapMutations("user", [
+      "UPDATE_USER_OPERATE_SONG",
+      "UPDATE_USER_OPERATE_TYPE_INDEX",
+    ]),
     ...mapMutations(["UPDATE_POPUP_TYPE"]),
-
     ...mapActions("user", ["getUserPlaylist"]),
 
     addSong() {
@@ -51,12 +52,27 @@ export default {
         this.UPDATE_POPUP_TYPE("addToPlaylist");
         this.getUserPlaylist();
         this.UPDATE_USER_OPERATE_SONG(this.songDetail["id"]);
+        this.UPDATE_USER_OPERATE_TYPE_INDEX(0);
       } else {
         this.UPDATE_LOGIN_WINDOW_SHOW(true);
       }
+
+      this.UPDATE_PLAYLIST_SHOW(false);
+    },
+    shareSong() {
+      if (this.userLogin) {
+        this.UPDATE_USER_OPERATE_SONG(this.songDetail["id"]);
+        this.UPDATE_USER_OPERATE_TYPE_INDEX(0);
+        this.UPDATE_POPUP_TYPE("share");
+      } else {
+        this.UPDATE_LOGIN_WINDOW_SHOW(true);
+      }
+
+      this.UPDATE_PLAYLIST_SHOW(false);
     },
     dwonloadClient() {
       this.UPDATE_POPUP_TYPE("download");
+      this.UPDATE_PLAYLIST_SHOW(false);
     },
     deleteSong() {
       this.DELETE_PLAYLIST_SONGS_INFO(this.songDetail["id"]);

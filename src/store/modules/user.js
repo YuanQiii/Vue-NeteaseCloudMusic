@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2021-12-22 21:49:17
+ * @LastEditTime: 2022-01-20 11:22:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -17,7 +17,11 @@
 
 import * as types from "../mutationsTypes.js";
 
-import { userDetailApi, userMsgPrivateApi, userPlaylistApi } from "@/api/user.js";
+import {
+  userDetailApi,
+  userMsgPrivateApi,
+  userPlaylistApi,
+} from "@/api/user.js";
 import { loginStatusApi } from "@/api/login.js";
 
 const state = {
@@ -235,86 +239,94 @@ const state = {
     more: false,
     newMsgCount: 202,
   },
-  userPlaylist: [{
-    "subscribers": [],
-    "subscribed": false,
-    "creator": {
-        "defaultAvatar": false,
-        "province": 510000,
-        "authStatus": 0,
-        "followed": false,
-        "avatarUrl": "http://p1.music.126.net/GJ5qTHTRTHFWUX2u3-AfnA==/18633423557581539.jpg",
-        "accountStatus": 0,
-        "gender": 0,
-        "city": 510100,
-        "birthday": 0,
-        "userId": 292515621,
-        "userType": 0,
-        "nickname": "农企要翻身",
-        "signature": "",
-        "description": "",
-        "detailDescription": "",
-        "avatarImgId": 18633423557581540,
-        "backgroundImgId": 2002210674180203,
-        "backgroundUrl": "http://p1.music.126.net/bmA_ablsXpq3Tk9HlEg9sA==/2002210674180203.jpg",
-        "authority": 0,
-        "mutual": false,
-        "expertTags": null,
-        "experts": null,
-        "djStatus": 0,
-        "vipType": 0,
-        "remarkName": null,
-        "authenticationTypes": 0,
-        "avatarDetail": null,
-        "avatarImgIdStr": "18633423557581539",
-        "backgroundImgIdStr": "2002210674180203",
-        "anchor": false,
-        "avatarImgId_str": "18633423557581539"
+  userPlaylist: [
+    {
+      subscribers: [],
+      subscribed: false,
+      creator: {
+        defaultAvatar: false,
+        province: 510000,
+        authStatus: 0,
+        followed: false,
+        avatarUrl:
+          "http://p1.music.126.net/GJ5qTHTRTHFWUX2u3-AfnA==/18633423557581539.jpg",
+        accountStatus: 0,
+        gender: 0,
+        city: 510100,
+        birthday: 0,
+        userId: 292515621,
+        userType: 0,
+        nickname: "农企要翻身",
+        signature: "",
+        description: "",
+        detailDescription: "",
+        avatarImgId: 18633423557581540,
+        backgroundImgId: 2002210674180203,
+        backgroundUrl:
+          "http://p1.music.126.net/bmA_ablsXpq3Tk9HlEg9sA==/2002210674180203.jpg",
+        authority: 0,
+        mutual: false,
+        expertTags: null,
+        experts: null,
+        djStatus: 0,
+        vipType: 0,
+        remarkName: null,
+        authenticationTypes: 0,
+        avatarDetail: null,
+        avatarImgIdStr: "18633423557581539",
+        backgroundImgIdStr: "2002210674180203",
+        anchor: false,
+        avatarImgId_str: "18633423557581539",
+      },
+      artists: null,
+      tracks: null,
+      updateFrequency: null,
+      backgroundCoverId: 0,
+      backgroundCoverUrl: null,
+      titleImage: 0,
+      titleImageUrl: null,
+      englishTitle: null,
+      opRecommend: false,
+      recommendInfo: null,
+      subscribedCount: 0,
+      cloudTrackCount: 0,
+      userId: 292515621,
+      totalDuration: 0,
+      coverImgId: 109951165443758420,
+      privacy: 0,
+      trackUpdateTime: 1639453657156,
+      trackCount: 763,
+      updateTime: 1628754912961,
+      commentThreadId: "A_PL_0_404318182",
+      coverImgUrl:
+        "https://p1.music.126.net/-QSQ1nT-nV6agAdWQIgURA==/109951165443758413.jpg",
+      specialType: 5,
+      anonimous: false,
+      createTime: 1466291781102,
+      highQuality: false,
+      newImported: false,
+      trackNumberUpdateTime: 1628754912961,
+      playCount: 1422,
+      adType: 0,
+      description: null,
+      tags: [],
+      ordered: false,
+      status: 0,
+      name: "农企要翻身喜欢的音乐",
+      id: 404318182,
+      coverImgId_str: "109951165443758413",
+      sharedUsers: null,
+      shareStatus: null,
     },
-    "artists": null,
-    "tracks": null,
-    "updateFrequency": null,
-    "backgroundCoverId": 0,
-    "backgroundCoverUrl": null,
-    "titleImage": 0,
-    "titleImageUrl": null,
-    "englishTitle": null,
-    "opRecommend": false,
-    "recommendInfo": null,
-    "subscribedCount": 0,
-    "cloudTrackCount": 0,
-    "userId": 292515621,
-    "totalDuration": 0,
-    "coverImgId": 109951165443758420,
-    "privacy": 0,
-    "trackUpdateTime": 1639453657156,
-    "trackCount": 763,
-    "updateTime": 1628754912961,
-    "commentThreadId": "A_PL_0_404318182",
-    "coverImgUrl": "https://p1.music.126.net/-QSQ1nT-nV6agAdWQIgURA==/109951165443758413.jpg",
-    "specialType": 5,
-    "anonimous": false,
-    "createTime": 1466291781102,
-    "highQuality": false,
-    "newImported": false,
-    "trackNumberUpdateTime": 1628754912961,
-    "playCount": 1422,
-    "adType": 0,
-    "description": null,
-    "tags": [],
-    "ordered": false,
-    "status": 0,
-    "name": "农企要翻身喜欢的音乐",
-    "id": 404318182,
-    "coverImgId_str": "109951165443758413",
-    "sharedUsers": null,
-    "shareStatus": null
-  }],
+  ],
 
   // userAccount: null,
   // userDetail: null,
   userLogin: true,
-  userOperateSong: 0
+  userOperateSong: 0,
+
+  userOperateTypeIndex: 0,
+  userOperateTypes: ["单曲", "歌单", "mv", "djradio", "djprogram"],
 };
 
 const getters = {
@@ -327,11 +339,14 @@ const getters = {
   userNewMsgCount(state) {
     return state.userMsgPrivate["newMsgCount"];
   },
-  userCreatedPlaylist(state, getters){
-    return state.userPlaylist.filter(value => {
-      return value['creator']['userId'] == getters.userId
-    })
-  }
+  userCreatedPlaylist(state, getters) {
+    return state.userPlaylist.filter((value) => {
+      return value["creator"]["userId"] == getters.userId;
+    });
+  },
+  userOperateType(state) {
+    return state.userOperateTypes[state.userOperateTypeIndex];
+  },
 };
 
 const mutations = {
@@ -350,13 +365,15 @@ const mutations = {
   [types.UPDATE_USER_MSG_PRIVATE](state, payload) {
     state.userMsgPrivate = payload;
   },
-  [types.UPDATE_USER_PLAYLIST](state, payload){
-    state.userPlaylist = payload
+  [types.UPDATE_USER_PLAYLIST](state, payload) {
+    state.userPlaylist = payload;
   },
-  [types.UPDATE_USER_OPERATE_SONG](state, payload){
-    console.log(payload);
-    state.userOperateSong = payload
-  }
+  [types.UPDATE_USER_OPERATE_SONG](state, payload) {
+    state.userOperateSong = payload;
+  },
+  [types.UPDATE_USER_OPERATE_TYPE_INDEX](state, payload) {
+    state.userOperateTypeIndex = payload;
+  },
 };
 
 const actions = {
@@ -365,7 +382,10 @@ const actions = {
       .then((response) => {
         console.log(response);
         if (response["data"]["data"]["code"] == 200) {
-          commit(types.UPDATE_USER_ACCOUNT, response["data"]["data"]["account"]);
+          commit(
+            types.UPDATE_USER_ACCOUNT,
+            response["data"]["data"]["account"]
+          );
           return userDetailApi(getters.userId);
         }
       })
@@ -386,19 +406,21 @@ const actions = {
         console.log(error);
       });
   },
-  getUserPlaylist({commit, getters}){
-    userPlaylistApi(getters.userId).then(response => {
-      if(response['data']['code'] == 200){
-        console.log(response['data']);
-        commit(types.UPDATE_USER_PLAYLIST, response['data']['playlist'])
-      }else{
-        console.log('获取失败');
-      }
-      console.log(response['data']['playlist']);
-    }).catch(error => {
-      console.log(error);
-    })
-  }
+  getUserPlaylist({ commit, getters }) {
+    userPlaylistApi(getters.userId)
+      .then((response) => {
+        if (response["data"]["code"] == 200) {
+          console.log(response["data"]);
+          commit(types.UPDATE_USER_PLAYLIST, response["data"]["playlist"]);
+        } else {
+          console.log("获取失败");
+        }
+        console.log(response["data"]["playlist"]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 };
 
 // 最后统一导出

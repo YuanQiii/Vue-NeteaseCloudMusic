@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-10 23:48:29
+ * @LastEditTime: 2022-01-20 11:58:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
@@ -81,6 +81,14 @@ const getters = {
       return state.playListSongs[getters.currentPlaySongId(state)]["name"];
     } else {
       return "";
+    }
+  },
+
+  currentPlaySongArtist(state, getters) {
+    try {
+      return state.playListSongs[getters.currentPlaySongId]["ar"][0]["name"];
+    } catch {
+      return null;
     }
   },
 
