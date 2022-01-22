@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 14:32:47
- * @LastEditTime: 2022-01-07 15:21:55
+ * @LastEditTime: 2022-01-22 14:27:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\PopupWindow.vue
@@ -42,8 +42,6 @@ export default {
     };
   },
   computed: {
-    ...mapMutations(["UPDATE_POPUP_TYPE"]),
-
     windowStyle() {
       return {
         left: `${this.left}px`,
@@ -52,6 +50,8 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["UPDATE_POPUP_TYPE"]),
+
     beforeMove(e) {
       this.diffX = e["offsetX"];
       this.diffY = e["offsetY"];

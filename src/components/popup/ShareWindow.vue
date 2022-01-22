@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-20 17:56:22
+ * @LastEditTime: 2022-01-22 14:49:53
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -17,7 +17,7 @@
       <div class="edit">
         <div-editable
           class="area"
-          ref="divEditable"
+          id="divEditable"
           :value="editContent"
           @input="input"
           @focusFunc="focusFunc"
@@ -74,7 +74,7 @@
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex";
 
-import { userFollowsApi } from "@/api/user.js";
+import { userFollowsApi, userShareResoure } from "@/api/user.js";
 
 import AtIcon from "../../ui/Icon/AtIcon.vue";
 import EmotionIcon from "../../ui/Icon/EmotionIcon.vue";
@@ -183,7 +183,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_POPUP_DOWNLOAD_SHOW"]),
+    ...mapMutations(["UPDATE_POPUP_DOWNLOAD_SHOW", "UPDATE_MESSAGE_TIP_INFO"]),
 
     input(value) {
       this.editContent = value;
@@ -251,10 +251,8 @@ export default {
       let selection = document.getSelection();
       let range = selection.getRangeAt(0);
       let rect = range.getBoundingClientRect();
-      // console.log(rect["x"]);
-      // console.log(this.left);
-      // this.followLeft = this.left - rect["x"];
-      // this.followTop = rect["y"];
+      this.followLeft = rect["x"] - this.left + 315;
+      this.followTop = rect["y"] - this.top + 55;
     },
 
     // 获得查找结果
@@ -279,20 +277,6 @@ export default {
       this.emotionShow = false;
     },
 
-    // handleRange() {
-    //   let el = this.$refs.divEditable.$el;
-    //   let selection = document.getSelection();
-    //   let range = selection.getRangeAt(0);
-    //   this.rangeEndOffset = range.endOffset;
-    //   el.focus();
-    //   // range.setEnd(el, range.endOffset - 1);
-
-    //   console.log(
-    //     "🚀 ~ file: ShareWindow.vue ~ line 268 ~ handleRange ~ range.endOffset",
-    //     range.endOffset
-    //   );
-    // },
-
     // 点击添加@符号，给出列表选择
     updateAtShow() {
       this.isClick = true;
@@ -313,6 +297,23 @@ export default {
 
     share() {
       this.shareText = "分享中...";
+
+      userShareResoure(
+        this.currentPlaySongId,
+        this.userOperateType,
+        this.editContent
+      )
+        .then((response) => {
+          console.log(response);
+          this.UPDATE_MESSAGE_TIP_INFO({
+            text: "分享成功",
+            type: "correct",
+            show: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     // 获得全部follows结果
