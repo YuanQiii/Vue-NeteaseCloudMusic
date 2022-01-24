@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2022-01-20 11:22:25
+ * @LastEditTime: 2022-01-24 16:20:45
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -323,10 +323,12 @@ const state = {
   // userAccount: null,
   // userDetail: null,
   userLogin: true,
-  userOperateSong: 0,
+
+  userOperateSong: {},
 
   userOperateTypeIndex: 0,
   userOperateTypes: ["单曲", "歌单", "mv", "djradio", "djprogram"],
+  userOperateENTypes: ["song", "playlist", "mv", "djradio", "djprogram"],
 };
 
 const getters = {
@@ -346,6 +348,27 @@ const getters = {
   },
   userOperateType(state) {
     return state.userOperateTypes[state.userOperateTypeIndex];
+  },
+  userOperateENType(state) {
+    return state.userOperateENTypes[state.userOperateTypeIndex];
+  },
+  userOperateSongId(state) {
+    if (Object.keys(state.userOperateSong).length) {
+      return state.userOperateSong["id"];
+    }
+    return 0;
+  },
+  userOperateSongName(state) {
+    if (Object.keys(state.userOperateSong).length) {
+      return state.userOperateSong["name"];
+    }
+    return "";
+  },
+  userOperateSongArtist(state) {
+    if (Object.keys(state.userOperateSong).length) {
+      return state.userOperateSong["ar"][0]["name"];
+    }
+    return "";
   },
 };
 

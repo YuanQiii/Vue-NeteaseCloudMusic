@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2022-01-20 11:15:16
+ * @LastEditTime: 2022-01-24 16:15:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
@@ -61,7 +61,7 @@ export default {
     },
     shareSong() {
       if (this.userLogin) {
-        this.UPDATE_USER_OPERATE_SONG(this.songDetail["id"]);
+        this.UPDATE_USER_OPERATE_SONG(this.songDetail);
         this.UPDATE_USER_OPERATE_TYPE_INDEX(0);
         this.UPDATE_POPUP_TYPE("share");
       } else {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-06 09:24:01
- * @LastEditTime: 2022-01-20 10:44:51
+ * @LastEditTime: 2022-01-24 17:56:35
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\user.js
@@ -94,13 +94,32 @@ export function userFollowsApi(uid, limit = 30, offset = 0) {
  * @param {*} type 资源类型，默认歌曲 song，可传 song,playlist,mv,djradio,djprogram
  * @param {*} msg 内容，140 字限制，支持 emoji，@用户名（/user/follows接口获取的用户名，用户名后和内容应该有空格），图片暂不支持
  */
-export function userShareResoure(id, type = "song", msg = "") {
+export function userShareResoureApi(id, type = "song", msg = "") {
   return request({
     url: "share/resource",
     method: "get",
     params: {
       id,
       type,
+      msg,
+    },
+  });
+}
+
+/**
+ * @description: 发送私信(带歌曲)
+ * @param {*} user_ids
+ * @param {*} id
+ * @param {*} msg
+ * @return {*}
+ */
+export function userSendSongApi(user_ids, id, msg) {
+  return request({
+    url: "share/resource",
+    method: "get",
+    params: {
+      user_ids,
+      id,
       msg,
     },
   });

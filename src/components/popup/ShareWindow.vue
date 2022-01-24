@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-22 14:49:53
+ * @LastEditTime: 2022-01-24 17:55:58
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -9,27 +9,48 @@
 <template>
   <div class="share-window">
     <div class="content">
-      <div class="nav">
+      <div class="nav" @click="changeShareMode">
         <selected-tab text="分享给大家" />
         <selected-tab text="私信分享" />
         <selected-tab :text="followMode" />
       </div>
-      <div class="edit">
+
+      <div class="edit" v-if="shareMode">
         <div-editable
           class="area"
           id="divEditable"
           :value="editContent"
+          placeholder="说点什么吧"
           @input="input"
           @focusFunc="focusFunc"
           @blurFunc="blurFunc"
         />
         <div class="thide">
           <div class="text">
-            {{ userOperateType }}：{{ currentPLaySongName }} -
-            {{ currentPlaySongArtist }}
+            {{ userOperateType }}：{{ userOperateSongName }} -
+            {{ userOperateSongArtist }}
           </div>
         </div>
       </div>
+      <div class="edit" v-else>
+        <div-editable
+          class="friend"
+          :value="friendName"
+          placeholder="选择或输入好友昵称"
+          @click.native="showFriendList"
+        />
+        <div class="friend-list" v-show="friendListShow">
+          <div
+            class="friend-item"
+            v-for="follow in userFollows"
+            @click="chooseFriend(follow)"
+          >
+            <img class="image" :src="follow['avatarUrl']" />
+            <div class="name">{{ follow["nickname"] }}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="operation">
         <emotion-icon class="emotion" @click.native="updateEmotionShow" />
         <share-emotion-list
@@ -38,16 +59,16 @@
           v-show="emotionShow"
         />
 
-        <at-icon class="at" @click.native="updateAtShow" />
+        <at-icon class="at" @click.native="updateAtShow" v-show="shareMode" />
         <share-follows-list
           class="follows-list"
-          v-show="followMode"
+          v-show="followMode && shareMode"
           :style="followListStyle"
           :follows="userFollowsFilter"
           @getFollowNickname="getFollowNickname"
         />
 
-        <image-upload-icon class="upload" />
+        <image-upload-icon class="upload" v-show="shareMode" />
 
         <div class="count" :style="editWordCountStyle">
           {{ editWordCount }}
@@ -62,7 +83,7 @@
             text="取消"
           />
         </div>
-        <div class="right">
+        <div class="right" v-show="shareMode">
           <div class="text">同时分享到：</div>
           <img src="../../assets/recommend/p1.png" />
         </div>
@@ -74,7 +95,11 @@
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex";
 
-import { userFollowsApi, userShareResoure } from "@/api/user.js";
+import {
+  userFollowsApi,
+  userShareResoureApi,
+  userSendSongApi,
+} from "@/api/user.js";
 
 import AtIcon from "../../ui/Icon/AtIcon.vue";
 import EmotionIcon from "../../ui/Icon/EmotionIcon.vue";
@@ -105,6 +130,7 @@ export default {
   data() {
     return {
       editContent: "",
+      friendName: "",
       emotionShow: false,
       userFollows: [],
       userFollowsFilter: [],
@@ -116,6 +142,9 @@ export default {
       isClick: false,
       rangeEndOffset: 0,
       shareText: "分享",
+      shareMode: 1,
+      shareFriendId: 0,
+      friendListShow: false,
 
       left: 800,
       top: 400,
@@ -142,19 +171,23 @@ export default {
           this.lastEditContent = "";
         }
       }
-
       this.getStyle();
+    },
+
+    shareMode() {
+      this.editContent = "";
     },
   },
   computed: {
     ...mapState(["popupDownloadShow"]),
-    ...mapGetters("user", ["userId", "userOperateType"]),
-    ...mapGetters("player", [
-      "currentPlaySongId",
-      "currentPLaySongName",
-      "currentPlaySongArtist",
+    ...mapGetters("user", [
+      "userId",
+      "userOperateType",
+      "userOperateENType",
+      "userOperateSongId",
+      "userOperateSongName",
+      "userOperateSongArtist",
     ]),
-    ...mapMutations(["UPDATE_POPUP_TYPE"]),
 
     followListStyle() {
       return {
@@ -176,14 +209,36 @@ export default {
           bracketsCount++;
         }
       }
-      return 150 - this.editContent.length + Math.floor(bracketsCount / 2);
+      return 140 - this.editContent.length + Math.floor(bracketsCount / 2);
     },
     editWordCountStyle() {
       return this.editWordCount < 0 ? { color: "#c20c2c" } : {};
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_POPUP_DOWNLOAD_SHOW", "UPDATE_MESSAGE_TIP_INFO"]),
+    ...mapMutations([
+      "UPDATE_POPUP_DOWNLOAD_SHOW",
+      "UPDATE_MESSAGE_TIP_INFO",
+      "UPDATE_POPUP_TYPE",
+    ]),
+
+    changeShareMode(e) {
+      if (e.target.innerHTML == "分享给大家") {
+        this.shareMode = 1;
+      } else {
+        this.shareMode = 0;
+      }
+    },
+
+    showFriendList() {
+      this.friendListShow = true;
+    },
+
+    chooseFriend(follow) {
+      this.shareFriendId = follow["userId"];
+      this.friendListShow = false;
+      this.friendName = follow["nickname"];
+    },
 
     input(value) {
       this.editContent = value;
@@ -212,7 +267,7 @@ export default {
             ? this.userFollows.slice(0, 10)
             : this.userFollows;
       }
-
+      console.log(this.userFollows);
       if (this.followMode == "search") {
         this.userFollowsFilter = this.getsearchFollows();
       }
@@ -251,8 +306,8 @@ export default {
       let selection = document.getSelection();
       let range = selection.getRangeAt(0);
       let rect = range.getBoundingClientRect();
-      this.followLeft = rect["x"] - this.left + 315;
-      this.followTop = rect["y"] - this.top + 55;
+      this.followLeft = rect["x"] - this.left - 40;
+      this.followTop = rect["y"] - this.top - 270;
     },
 
     // 获得查找结果
@@ -298,22 +353,39 @@ export default {
     share() {
       this.shareText = "分享中...";
 
-      userShareResoure(
-        this.currentPlaySongId,
-        this.userOperateType,
-        this.editContent
-      )
-        .then((response) => {
-          console.log(response);
-          this.UPDATE_MESSAGE_TIP_INFO({
-            text: "分享成功",
-            type: "correct",
-            show: true,
+      if (this.shareMode) {
+        userShareResoureApi(
+          this.userOperateSongId,
+          this.userOperateENType,
+          this.editContent
+        )
+          .then((response) => {
+            if (response["data"]["code"] == 200) {
+              this.shareSuccess();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      } else {
+        userSendSongApi(userIds, this.userOperateSongId, this.editContent)
+          .then((response) => {
+            console.log(response);
+            this.shareSuccess();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+
+    shareSuccess() {
+      this.UPDATE_POPUP_TYPE(null);
+      this.UPDATE_MESSAGE_TIP_INFO({
+        text: "分享成功",
+        type: "correct",
+        show: true,
+      });
     },
 
     // 获得全部follows结果
@@ -357,6 +429,7 @@ export default {
       width: 446px;
       padding: 5px;
       border: 1px solid #e5e5e5;
+
       .area {
         width: 432px;
         height: 117px;
@@ -380,6 +453,40 @@ export default {
           color: #333;
           font-size: 14px;
           padding-left: 10px;
+        }
+      }
+
+      .friend {
+        font-size: 12px;
+        width: 444px;
+        height: 18px;
+        line-height: 18px;
+      }
+      .friend-list {
+        width: 448px;
+        height: 222px;
+        overflow: scroll;
+        margin-top: 10px;
+        border: 1px solid #a8a8a8;
+        padding-left: 5px;
+        margin-left: -5px;
+        .friend-item {
+          display: flex;
+          cursor: pointer;
+          &:hover {
+            background-color: #eee;
+          }
+
+          .image {
+            width: 30px;
+            height: 30px;
+          }
+          .name {
+            color: #333;
+            font-size: 12px;
+            line-height: 42px;
+            margin-left: 10px;
+          }
         }
       }
     }

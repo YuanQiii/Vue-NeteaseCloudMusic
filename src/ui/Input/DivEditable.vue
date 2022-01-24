@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-06 17:16:31
- * @LastEditTime: 2022-01-06 17:32:36
+ * @LastEditTime: 2022-01-24 16:55:09
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\ui\Input\DivEditable.vue
@@ -10,6 +10,7 @@
   <div
     class="div-editable"
     contenteditable="true"
+    :placeholder="placeholder"
     v-html="innerText"
     @input="changeText"
     @focus="focusFunc"
@@ -22,6 +23,10 @@ export default {
   name: "DivEditable",
   props: {
     value: {
+      type: String,
+      default: "",
+    },
+    placeholder: {
       type: String,
       default: "",
     },
