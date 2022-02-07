@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2022-01-24 16:20:45
+ * @LastEditTime: 2022-01-25 10:32:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -326,9 +326,18 @@ const state = {
 
   userOperateSong: {},
 
+  userOperateDetail: {},
+
   userOperateTypeIndex: 0,
-  userOperateTypes: ["单曲", "歌单", "mv", "djradio", "djprogram"],
-  userOperateENTypes: ["song", "playlist", "mv", "djradio", "djprogram"],
+  userOperateTypes: ["单曲", "歌单", "专辑", "mv", "djradio", "djprogram"],
+  userOperateENTypes: [
+    "song",
+    "playlist",
+    "album",
+    "mv",
+    "djradio",
+    "djprogram",
+  ],
 };
 
 const getters = {
@@ -352,21 +361,27 @@ const getters = {
   userOperateENType(state) {
     return state.userOperateENTypes[state.userOperateTypeIndex];
   },
-  userOperateSongId(state) {
+  userOperateId(state, getters) {
     if (Object.keys(state.userOperateSong).length) {
-      return state.userOperateSong["id"];
+      if (getters.userOperateENType == "song") {
+        return state.userOperateSong["id"];
+      }
     }
     return 0;
   },
-  userOperateSongName(state) {
+  userOperateName(state, getters) {
     if (Object.keys(state.userOperateSong).length) {
-      return state.userOperateSong["name"];
+      if (getters.userOperateENType == "song") {
+        return state.userOperateSong["name"];
+      }
     }
     return "";
   },
-  userOperateSongArtist(state) {
+  userOperateCreator(state, getters) {
     if (Object.keys(state.userOperateSong).length) {
-      return state.userOperateSong["ar"][0]["name"];
+      if (getters.userOperateENType == "song") {
+        return state.userOperateSong["ar"][0]["name"];
+      }
     }
     return "";
   },

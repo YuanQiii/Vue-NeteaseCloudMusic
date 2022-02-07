@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-06 09:24:01
- * @LastEditTime: 2022-01-24 17:56:35
+ * @LastEditTime: 2022-01-25 10:40:06
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\user.js
@@ -115,7 +115,45 @@ export function userShareResoureApi(id, type = "song", msg = "") {
  */
 export function userSendSongApi(user_ids, id, msg) {
   return request({
-    url: "share/resource",
+    url: "send/song",
+    method: "get",
+    params: {
+      user_ids,
+      id,
+      msg,
+    },
+  });
+}
+
+/**
+ * @description: 发送私信(带专辑)
+ * @param {*} user_ids
+ * @param {*} id
+ * @param {*} msg
+ * @return {*}
+ */
+export function userSendAlbumApi(user_ids, id, msg) {
+  return request({
+    url: "send/album",
+    method: "get",
+    params: {
+      user_ids,
+      id,
+      msg,
+    },
+  });
+}
+
+/**
+ * @description: 发送私信(带歌单)
+ * @param {*} user_ids
+ * @param {*} id
+ * @param {*} msg
+ * @return {*}
+ */
+export function userSendPlaylistApi(user_ids, id, msg) {
+  return request({
+    url: "send/playlist",
     method: "get",
     params: {
       user_ids,

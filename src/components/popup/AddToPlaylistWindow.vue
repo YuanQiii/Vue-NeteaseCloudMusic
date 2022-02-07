@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-15 15:58:06
- * @LastEditTime: 2021-12-29 22:33:57
+ * @LastEditTime: 2022-01-25 11:12:29
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\AddToPlaylist.vue
@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     ...mapMutations(["UPDATE_POPUP_TYPE", "UPDATE_MESSAGE_TIP_INFO"]),
-    ...mapGetters("playlist", ["playlistTrackIds"]),
     ...mapActions("playlist", ["getPlaylistDetail"]),
 
     CreatePlaylist() {

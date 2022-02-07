@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-23 22:08:25
- * @LastEditTime: 2022-01-24 17:55:58
+ * @LastEditTime: 2022-01-25 11:10:10
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\popup\ShareWindow.vue
@@ -10,9 +10,8 @@
   <div class="share-window">
     <div class="content">
       <div class="nav" @click="changeShareMode">
-        <selected-tab text="分享给大家" />
-        <selected-tab text="私信分享" />
-        <selected-tab :text="followMode" />
+        <selected-tab text="分享给大家" :active="shareMode == 1" />
+        <selected-tab text="私信分享" :active="shareMode == 0" />
       </div>
 
       <div class="edit" v-if="shareMode">
@@ -27,8 +26,8 @@
         />
         <div class="thide">
           <div class="text">
-            {{ userOperateType }}：{{ userOperateSongName }} -
-            {{ userOperateSongArtist }}
+            {{ userOperateType }}：{{ userOperateName }} -
+            {{ userOperateCreator }}
           </div>
         </div>
       </div>
@@ -39,6 +38,20 @@
           placeholder="选择或输入好友昵称"
           @click.native="showFriendList"
         />
+
+        <div-editable
+          class="private-area"
+          :value="editContent"
+          placeholder="说点什么吧"
+          @input="input"
+        />
+
+        <div class="thide">
+          <div class="text">
+            {{ userOperateType }}：{{ userOperateName }} -
+            {{ userOperateCreator }}
+          </div>
+        </div>
         <div class="friend-list" v-show="friendListShow">
           <div
             class="friend-item"
@@ -88,6 +101,11 @@
           <img src="../../assets/recommend/p1.png" />
         </div>
       </div>
+
+      <div class="tip" v-show="editWordCount < 0">
+        <error-icon class="icon" />
+        <div class="text">字数超过140个字符</div>
+      </div>
     </div>
   </div>
 </template>
@@ -99,6 +117,8 @@ import {
   userFollowsApi,
   userShareResoureApi,
   userSendSongApi,
+  userSendAlbumApi,
+  userSendPlaylistApi,
 } from "@/api/user.js";
 
 import AtIcon from "../../ui/Icon/AtIcon.vue";
@@ -111,6 +131,7 @@ import DivEditable from "../../ui/Input/DivEditable.vue";
 
 import LoginButton from "../../ui/Button/LoginButton.vue";
 import RegisterButton from "../../ui/Button/RegisterButton.vue";
+import ErrorIcon from "../../ui/Icon/ErrorIcon.vue";
 export default {
   name: "ShareWindow",
   components: {
@@ -123,6 +144,7 @@ export default {
     DivEditable,
     LoginButton,
     RegisterButton,
+    ErrorIcon,
   },
   created() {
     this.getUserFollows();
@@ -140,7 +162,6 @@ export default {
       searchKey: "",
       lastEditContent: "",
       isClick: false,
-      rangeEndOffset: 0,
       shareText: "分享",
       shareMode: 1,
       shareFriendId: 0,
@@ -184,9 +205,9 @@ export default {
       "userId",
       "userOperateType",
       "userOperateENType",
-      "userOperateSongId",
-      "userOperateSongName",
-      "userOperateSongArtist",
+      "userOperateId",
+      "userOperateName",
+      "userOperateCreator",
     ]),
 
     followListStyle() {
@@ -212,7 +233,17 @@ export default {
       return 140 - this.editContent.length + Math.floor(bracketsCount / 2);
     },
     editWordCountStyle() {
-      return this.editWordCount < 0 ? { color: "#c20c2c" } : {};
+      let style = {};
+
+      if (this.editWordCount < 0) {
+        style["color"] = "#c20c2c";
+      }
+
+      if (!this.shareMode) {
+        style["marginLeft"] = "407px";
+      }
+
+      return style;
     },
   },
   methods: {
@@ -354,28 +385,51 @@ export default {
       this.shareText = "分享中...";
 
       if (this.shareMode) {
-        userShareResoureApi(
-          this.userOperateSongId,
-          this.userOperateENType,
-          this.editContent
-        )
-          .then((response) => {
-            if (response["data"]["code"] == 200) {
-              this.shareSuccess();
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        this.shareOpen();
       } else {
-        userSendSongApi(userIds, this.userOperateSongId, this.editContent)
-          .then((response) => {
-            console.log(response);
+        this.sharePrivate();
+      }
+    },
+
+    shareOpen() {
+      userShareResoureApi(
+        this.userOperateId,
+        this.userOperateENType,
+        this.editContent
+      )
+        .then((response) => {
+          if (response["data"]["code"] == 200) {
             this.shareSuccess();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    sharePrivate() {
+      let apiMethods = {
+        song: userSendSongApi,
+        album: userSendAlbumApi,
+        playlist: userSendPlaylistApi,
+      };
+
+      for (const key in apiMethods) {
+        if (Object.hasOwnProperty.call(apiMethods, key)) {
+          const element = apiMethods[key];
+
+          if (key == this.userOperateENType) {
+            element(this.shareFriendId, this.userOperateId, this.editContent)
+              .then((response) => {
+                if (response["data"]["code"] == 200) {
+                  this.shareSuccess();
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        }
       }
     },
 
@@ -489,6 +543,16 @@ export default {
           }
         }
       }
+
+      .private-area {
+        margin-top: 10px;
+        font-size: 12px;
+        border-top: 1px solid #e5e5e5;
+        width: 444px;
+        height: 75px;
+        overflow: auto;
+        padding-top: 5px;
+      }
     }
     .operation {
       margin-top: 10px;
@@ -543,6 +607,20 @@ export default {
           height: 22px;
           color: #666;
         }
+      }
+    }
+    .tip {
+      display: flex;
+      margin-top: 10px;
+      .icon {
+        transform: scale(0.78);
+      }
+      .text {
+        font-size: 12px;
+        line-height: 17px;
+        color: #e33232;
+        margin-top: 2px;
+        margin-left: 8px;
       }
     }
   }
