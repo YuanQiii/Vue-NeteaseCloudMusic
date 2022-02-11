@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-29 21:46:47
- * @LastEditTime: 2022-01-22 14:32:56
+ * @LastEditTime: 2022-02-11 11:30:23
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\App.vue
@@ -36,7 +36,7 @@
       </popup-window>
     </div>
 
-    <music-player />
+    <!-- <music-player /> -->
   </div>
 </template>
 

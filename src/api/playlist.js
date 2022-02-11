@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-16 21:42:31
- * @LastEditTime: 2021-12-22 21:45:45
+ * @LastEditTime: 2022-02-11 17:35:04
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\playlist.js
@@ -46,6 +46,7 @@ export function playlistTracksApi(op, pid, tracks) {
 /**
  * @description: 获取歌单详情
  * @param {*} id
+ * @param {*} s 歌单最近的 s 个收藏者,默认为 8
  */
 export function playlistDetailApi(id, s = 8) {
   return request({
@@ -53,7 +54,7 @@ export function playlistDetailApi(id, s = 8) {
     method: "get",
     params: {
       id,
-      s
+      s,
     },
   });
 }
@@ -67,7 +68,7 @@ export function playlistTrackAllApi(id) {
     url: "playlist/track/all",
     method: "get",
     params: {
-      id
+      id,
     },
   });
 }

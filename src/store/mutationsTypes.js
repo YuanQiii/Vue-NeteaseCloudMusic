@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-16 17:56:55
- * @LastEditTime: 2022-01-20 11:14:21
+ * @LastEditTime: 2022-02-11 16:51:44
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\mutationsTypes.js
@@ -106,6 +106,9 @@ const UPDATE_POPUP_TYPE = "UPDATE_POPUP_TYPE";
 // 歌单详情
 const UPDATE_PLAYLIST_DETAIL = "UPDATE_PLAYLIST_DETAIL";
 
+// 所有榜单
+const UPDATE_TOPLIST = "UPDATE_TOPLIST";
+
 export {
   UPDATE_AUTO_LOGIN,
   UPDATE_LOGIN_WINDOW_SHOW,
@@ -140,4 +143,5 @@ export {
   UPDATE_MESSAGE_TIP_INFO,
   UPDATE_POPUP_TYPE,
   UPDATE_PLAYLIST_DETAIL,
+  UPDATE_TOPLIST,
 };
