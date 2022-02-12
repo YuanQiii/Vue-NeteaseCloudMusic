@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-11 14:47:30
- * @LastEditTime: 2022-02-11 17:49:39
+ * @LastEditTime: 2022-02-12 15:57:18
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\TopListItem.vue
@@ -14,14 +14,27 @@
         <div class="cover"></div>
       </div>
       <div class="op">
-        <div class="title">{{ title }}</div>
+        <div class="title">{{ toplistDetail["name"] }}</div>
         <div class="icon">
           <div class="play"></div>
           <div class="collect"></div>
         </div>
       </div>
     </div>
-    <div class="content"></div>
+    <div class="content">
+      <div
+        class="item"
+        v-for="(value, index) in toplistDetail['songs']"
+        :key="index"
+        :style="getNameStyle(index)"
+      >
+        <div class="num" :style="getNumStyle(index)">{{ index + 1 }}</div>
+        <div class="name">{{ value["name"] }}</div>
+      </div>
+      <div class="more">
+        <div class="text">查看全部></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,17 +44,30 @@ export default {
   props: {
     toplistDetail: Object,
   },
+  methods: {
+    getNumStyle(index) {
+      return index < 3 ? { color: "#c10d0c" } : { color: "#000" };
+    },
+    getNameStyle(index) {
+      return index % 2
+        ? { backgroundColor: "#f4f4f4" }
+        : { backgroundColor: "#e8e8e8" };
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .top-list-item {
   border-right: solid 1px #ccc;
-  width: 189px;
-  padding: 20px;
+  width: 229px;
+  height: 487px;
   .head {
     position: relative;
     display: flex;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
     .image {
       margin-right: 10px;
       .pic {
@@ -93,6 +119,42 @@ export default {
           }
         }
       }
+    }
+  }
+  .item {
+    display: flex;
+    .num {
+      width: 35px;
+      height: 32px;
+      line-height: 32px;
+      font-size: 16px;
+      margin-left: 20px;
+    }
+    .name {
+      width: 170px;
+      height: 32px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+      font-size: 12px;
+      line-height: 32px;
+      margin-left: -10px;
+      border-bottom: solid 1px transparent;
+      cursor: pointer;
+      &:hover {
+        border-bottom: solid 1px #000;
+      }
+    }
+  }
+  .more {
+    background-color: #e8e8e8;
+    .text {
+      font-size: 12px;
+      line-height: 32px;
+      margin-left: 140px;
+      display: block;
+      cursor: pointer;
     }
   }
 }

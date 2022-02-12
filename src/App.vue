@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-29 21:46:47
- * @LastEditTime: 2022-02-11 11:30:23
+ * @LastEditTime: 2022-02-12 17:46:37
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\App.vue
@@ -36,11 +36,15 @@
       </popup-window>
     </div>
 
+    <foot />
+
     <!-- <music-player /> -->
   </div>
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
+
 import DownloadWindow from "./components/popup/DownloadWindow.vue";
 import AddToPlaylistWindow from "./components/popup/AddToPlaylistWindow.vue";
 import LoginWindow from "./components/login/LoginWindow.vue";
@@ -49,8 +53,8 @@ import MusicPlayer from "./components/player/MusicPlayer.vue";
 import CreatePlaylistWindow from "./components/popup/CreatePlaylistWindow.vue";
 import MessageTip from "./components/tip/MessageTip.vue";
 import PopupWindow from "./components/popup/PopupWindow.vue";
-import { mapGetters, mapState } from "vuex";
 import ShareWindow from "./components/popup/ShareWindow.vue";
+import Foot from "./views/foot/Foot.vue";
 
 export default {
   components: {
@@ -63,6 +67,7 @@ export default {
     ShareWindow,
     MessageTip,
     PopupWindow,
+    Foot,
   },
   computed: {
     ...mapState(["popupType"]),

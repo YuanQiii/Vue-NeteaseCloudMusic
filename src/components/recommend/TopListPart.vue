@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-11 11:45:36
- * @LastEditTime: 2022-02-11 17:55:22
+ * @LastEditTime: 2022-02-12 15:56:40
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\TopList.vue
@@ -41,7 +41,7 @@ export default {
       picUrlList: [
         "http://p4.music.126.net/pcYHpMkdC69VVvWiynNklA==/109951166952713766.jpg?param=100y100",
       ],
-      toplistModes: ["飙升榜", "飙升榜", "飙升榜"],
+      toplistModes: ["飙升榜", "新歌榜", "原创榜"],
       toplistDetail: [],
     };
   },
@@ -80,9 +80,10 @@ export default {
         .then((response) => {
           if (response["status"] == 200) {
             let playlist = response["data"]["playlist"];
+            console.log(playlist["tracks"].slice(0, 10));
             this.toplistDetail.push({
               name: playlist["name"],
-              songs: playlist["tracks"],
+              songs: playlist["tracks"].slice(0, 10),
               image: playlist["coverImgUrl"],
             });
           }
@@ -103,7 +104,7 @@ export default {
     display: flex;
     flex-direction: row;
     width: 690px;
-    height: 310px;
+    height: 488px;
     border: 1px solid #ccc;
     border-right: none;
     margin-top: 20px;
