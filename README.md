@@ -1,4 +1,4 @@
-# demo
+# Vue-NeteaseCloudMusic
 
 ## Project setup
 ```
