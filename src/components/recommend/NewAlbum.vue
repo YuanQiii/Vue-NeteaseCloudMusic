@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-07 16:42:11
- * @LastEditTime: 2022-02-11 11:42:29
+ * @LastEditTime: 2022-02-13 22:31:24
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\NewAlbum.vue
@@ -15,6 +15,8 @@
           <div
             class="item"
             v-for="(value, index) in albumList"
+            :key="index"
+            @click="toPage(value['id'])"
             @mouseenter="updatePlayIconShow(true, index)"
             @mouseleave="updatePlayIconShow(false, index)"
           >
@@ -45,7 +47,7 @@ export default {
   data() {
     return {
       title: "新碟上架",
-      moreUrl: "null",
+      moreUrl: "Album",
       albumList: [],
       marginLeft: -1300,
       transition: 1,
@@ -98,6 +100,12 @@ export default {
         this.playIconShow = index;
       } else {
         this.playIconShow = -1;
+      }
+    },
+    toPage(id) {
+      let name = "albumDetail";
+      if (this.$route.name != name) {
+        this.$router.push({ name, params: { id } });
       }
     },
     last() {

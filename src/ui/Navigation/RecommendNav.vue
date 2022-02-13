@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-25 11:15:39
- * @LastEditTime: 2022-01-26 10:37:32
+ * @LastEditTime: 2022-02-13 22:53:43
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\ui\Navigation\RecommendNav.vue
@@ -11,12 +11,12 @@
     <div class="left">
       <div class="image"></div>
       <div class="title">{{ title }}</div>
-      <div class="tab" @click="toPage" v-if="tabList.length">
+      <div class="tab" v-if="tabList.length">
         <div
           class="item"
           v-for="(item, index) in tabList"
           :key="index"
-          :data-url="item['url']"
+          @click="toPage(item['name'])"
         >
           <span class="name">
             {{ item["name"] }}
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="right" v-if="moreUrl">
-      <div class="text" @click="toPageMore">更多</div>
+      <div class="text" @click="toPageMore(moreUrl)">更多</div>
       <div class="image"></div>
     </div>
   </div>
@@ -40,11 +40,37 @@ export default {
     moreUrl: String,
   },
   methods: {
-    toPage(e) {
-      console.log(e);
+    toPage(category) {
+      if (this.$route.name != "PlayList") {
+        this.$router.push({
+          name: "PlayList",
+          params: {
+            category,
+          },
+        });
+      }
     },
-    toPageMore() {
-      console.log(this.moreUrl);
+    toPageMore(url) {
+      if (url.includes("/")) {
+        if (url.split("/")[1] == "all") {
+          let name = url.split("/")[0];
+          let category = url.split("/")[1];
+          if (this.$route.name != name) {
+            this.$router.push({ name, params: { category } });
+          }
+        } else {
+          let name = url.split("/")[0];
+          let id = url.split("/")[1];
+
+          if (this.$route.name != name) {
+            this.$router.push({ name, params: { id } });
+          }
+        }
+      } else {
+        if (this.$route.name != url) {
+          this.$router.push({ name: url });
+        }
+      }
     },
   },
 };

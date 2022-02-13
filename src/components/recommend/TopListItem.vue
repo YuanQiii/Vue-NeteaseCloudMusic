@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-11 14:47:30
- * @LastEditTime: 2022-02-12 15:57:18
+ * @LastEditTime: 2022-02-13 23:43:45
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\TopListItem.vue
@@ -14,7 +14,9 @@
         <div class="cover"></div>
       </div>
       <div class="op">
-        <div class="title">{{ toplistDetail["name"] }}</div>
+        <div class="title" @click="toPage('TopList', toplistId)">
+          {{ toplistDetail["name"] }}
+        </div>
         <div class="icon">
           <div class="play"></div>
           <div class="collect"></div>
@@ -29,10 +31,12 @@
         :style="getNameStyle(index)"
       >
         <div class="num" :style="getNumStyle(index)">{{ index + 1 }}</div>
-        <div class="name">{{ value["name"] }}</div>
+        <div class="name" @click="toPage('songDetail', value['id'])">
+          {{ value["name"] }}
+        </div>
       </div>
       <div class="more">
-        <div class="text">查看全部></div>
+        <div class="text" @click="toPage('TopList', toplistId)">查看全部></div>
       </div>
     </div>
   </div>
@@ -43,6 +47,7 @@ export default {
   name: "TopListItem",
   props: {
     toplistDetail: Object,
+    toplistId: String,
   },
   methods: {
     getNumStyle(index) {
@@ -52,6 +57,11 @@ export default {
       return index % 2
         ? { backgroundColor: "#f4f4f4" }
         : { backgroundColor: "#e8e8e8" };
+    },
+    toPage(name, id) {
+      if (this.$route.name != name) {
+        this.$router.push({ name: name, params: { id } });
+      }
     },
   },
 };
@@ -70,6 +80,7 @@ export default {
     margin-top: 20px;
     .image {
       margin-right: 10px;
+      cursor: pointer;
       .pic {
         width: 80px;
         height: 80px;
@@ -90,6 +101,7 @@ export default {
         font-size: 14px;
         color: #333;
         font-weight: 700;
+        cursor: pointer;
       }
       .icon {
         display: flex;

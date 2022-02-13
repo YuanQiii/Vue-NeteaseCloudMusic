@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2021-12-08 16:19:52
+ * @LastEditTime: 2022-02-13 23:38:26
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\router\index.js
@@ -24,6 +24,11 @@ const Music = () => import("../views/my/Music.vue");
 const Message = () => import("../views/my/Message.vue");
 
 
+const PlaylistDetail = () => import("../views/page/PlaylistDetail.vue");
+const AlbumDetail = () => import("../views/page/AlbumDetail.vue");
+const SongDetail = () => import("../views/page/SongDetail.vue");
+
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -39,12 +44,12 @@ const routes = [
         component: Recommend,
       },
       {
-        path: "toplist",
+        path: "toplist/:id",
         name: "TopList",
         component: TopList,
       },
       {
-        path: "playlist",
+        path: "playlist/:category",
         name: "PlayList",
         component: PlayList,
       },
@@ -90,6 +95,21 @@ const routes = [
         component: Message
       },
     ]
+  },
+  {
+    path: '/playlist/:id',
+    name: 'playlistDetail',
+    component: PlaylistDetail
+  },
+  {
+    path: '/album/:id',
+    name: 'albumDetail',
+    component: AlbumDetail
+  },
+  {
+    path: '/song/:id',
+    name: 'songDetail',
+    component: SongDetail
   },
   {
     path: '*',

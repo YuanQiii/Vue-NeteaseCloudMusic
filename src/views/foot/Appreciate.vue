@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-12 16:04:50
- * @LastEditTime: 2022-02-12 17:56:12
+ * @LastEditTime: 2022-02-13 21:17:02
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\views\foot\Appreciate.vue
 -->
 <template>
   <div class="footmain">
-    <div class="item" v-for="(item, index) in iconList">
+    <div class="item" v-for="(item, index) in iconList" :key="index">
       <a class="footitem" :key="index" :href="item['href']" />
       <div class="image" :style="item['position']"></div>
       <span>{{ item["name"] }}</span>
@@ -23,7 +23,7 @@ export default {
       iconList: [
         {
           name: "amped studio",
-          position: { backgroundPosition: "-120px -902px" },
+          position: { backgroundPosition: "-63px -456.5px" },
           href: "https://web-amped.music.163.com/",
         },
         {
@@ -70,6 +70,7 @@ export default {
         cursor: pointer;
         display: block;
         background: url(https://s2.music.126.net/style/web2/img/foot_enter_new.png);
+        background-size: 110px 552px;
       }
     }
   }

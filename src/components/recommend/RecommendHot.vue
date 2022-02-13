@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-26 09:52:08
- * @LastEditTime: 2022-02-07 15:37:17
+ * @LastEditTime: 2022-02-13 22:11:56
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\RecommendHot.vue
@@ -16,6 +16,7 @@
         :name="value['name']"
         :picUrl="value['picUrl']"
         :playCount="value['playCount']"
+        @click.native="toPage(value['id'])"
       />
     </div>
   </div>
@@ -41,7 +42,7 @@ export default {
         { name: "民谣", url: "" },
         { name: "电子", url: "" },
       ],
-      moreUrl: "null",
+      moreUrl: "PlayList/all",
       recommendList: [],
     };
   },
@@ -57,6 +58,16 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    toPage(id) {
+      if (this.$route.name != "playlistDetail") {
+        this.$router.push({
+          name: "playlistDetail",
+          params: {
+            id,
+          },
+        });
+      }
     },
   },
 };

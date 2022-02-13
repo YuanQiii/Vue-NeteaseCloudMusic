@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-06 21:58:51
+ * @LastEditTime: 2022-02-13 22:36:41
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \Vue-NeteaseCloudMusic\src\components\navigation\sub\SubBarItem.vue
+-->
 <template>
   <div class="sub-bar-item">
     <div
@@ -22,8 +30,8 @@ export default {
     return {
       pageNames: {
         推荐: "Recommend",
-        排行榜: "TopList",
-        歌单: "PlayList",
+        排行榜: "TopList/19723756",
+        歌单: "PlayList/all",
         主播电台: "DJ",
         歌手: "Artist",
         新碟上架: "Album",
@@ -37,7 +45,29 @@ export default {
     toDiscoverItemPage(name) {
       let pageName = this.pageNames[name];
       if (pageName != this.$route.name) {
-        this.$router.push({ name: pageName });
+        if (pageName.includes("/")) {
+          if (pageName.split("/")[1] == "all") {
+            let name = pageName.split("/")[0];
+            let category = pageName.split("/")[1];
+            this.$router.push({
+              name,
+              params: {
+                category,
+              },
+            });
+          } else {
+            let name = pageName.split("/")[0];
+            let id = pageName.split("/")[1];
+            this.$router.push({
+              name,
+              params: {
+                id,
+              },
+            });
+          }
+        } else {
+          this.$router.push({ name: pageName });
+        }
       }
     },
   },

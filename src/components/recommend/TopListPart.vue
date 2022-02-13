@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-11 11:45:36
- * @LastEditTime: 2022-02-12 15:56:40
+ * @LastEditTime: 2022-02-13 23:11:39
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\TopList.vue
@@ -15,6 +15,7 @@
           v-for="(item, index) in toplistDetail"
           :key="index"
           :toplistDetail="item"
+          :toplistId="toplistIds[index]"
         />
       </div>
     </div>
@@ -37,12 +38,10 @@ export default {
   data() {
     return {
       title: "榜单",
-      moreUrl: "null",
-      picUrlList: [
-        "http://p4.music.126.net/pcYHpMkdC69VVvWiynNklA==/109951166952713766.jpg?param=100y100",
-      ],
+      moreUrl: "TopList/19723756",
       toplistModes: ["飙升榜", "新歌榜", "原创榜"],
       toplistDetail: [],
+      toplistIds: ["19723756", "3779629", "2884035"],
     };
   },
   computed: {
@@ -80,7 +79,6 @@ export default {
         .then((response) => {
           if (response["status"] == 200) {
             let playlist = response["data"]["playlist"];
-            console.log(playlist["tracks"].slice(0, 10));
             this.toplistDetail.push({
               name: playlist["name"],
               songs: playlist["tracks"].slice(0, 10),
