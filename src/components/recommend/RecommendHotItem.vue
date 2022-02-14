@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-07 13:55:11
- * @LastEditTime: 2022-02-07 16:35:01
+ * @LastEditTime: 2022-02-14 11:41:59
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\RecommendHotItem.vue
@@ -9,37 +9,45 @@
 <template>
   <div class="recommend-hot-item">
     <div class="main">
-      <div class="pic"><img class="image" :src="picUrl" alt="" /></div>
+      <div class="pic">
+        <img class="image" :src="playlist['picUrl']" alt="" />
+      </div>
       <div class="mask"></div>
       <div class="bottom">
         <div class="icon"></div>
         <div class="icon1"></div>
         <div class="count">{{ count }}</div>
-        <div class="icon2"></div>
+        <div class="icon2" @click="play"></div>
       </div>
     </div>
     <div class="title">
-      <span class="name">{{ name }}</span>
+      <span class="name">{{ playlist["name"] }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import { playPlaylist } from "@/utils/operate.js";
+
 export default {
   name: "RecommendHotItem",
   props: {
-    name: String,
-    picUrl: String,
-    playCount: Number,
+    playlist: Object,
   },
   computed: {
     count() {
-      if (this.playCount < 10000) {
-        return `${this.playCount}`;
+      if (this.playlist["playCount"] < 10000) {
+        return `${this.playlist["playCount"]}`;
       } else {
-        let num = parseInt(this.playCount / 10000);
+        let num = parseInt(this.playlist["playCount"] / 10000);
         return `${num}万`;
       }
+    },
+  },
+  methods: {
+    play() {
+      this.$emit("jumpPage", false);
+      playPlaylist(this.playlist["id"]);
     },
   },
 };

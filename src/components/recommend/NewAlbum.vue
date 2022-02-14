@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-07 16:42:11
- * @LastEditTime: 2022-02-13 22:31:24
+ * @LastEditTime: 2022-02-14 15:18:59
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\NewAlbum.vue
@@ -22,7 +22,11 @@
           >
             <img class="pic" :src="value['picUrl']" />
             <div class="bg"></div>
-            <div class="play" v-show="playIconShow == index"></div>
+            <div
+              class="play"
+              v-show="playIconShow == index"
+              @click="play(value['id'])"
+            ></div>
             <div class="name">{{ value["name"] }}</div>
             <div class="artist">{{ getArtistName(value["artists"]) }}</div>
           </div>
@@ -36,6 +40,7 @@
 
 <script>
 import { albumNewestApi } from "@/api/recommend.js";
+import { playPlaylist } from "@/utils/operate.js";
 
 import RecommendNav from "../../ui/Navigation/RecommendNav.vue";
 export default {
@@ -55,6 +60,7 @@ export default {
       currentIndex: 0,
       clickEnable: true,
       playIconShow: false,
+      isJump: true,
     };
   },
   computed: {
@@ -104,9 +110,14 @@ export default {
     },
     toPage(id) {
       let name = "albumDetail";
-      if (this.$route.name != name) {
+      if (this.$route.name != name && this.isJump) {
         this.$router.push({ name, params: { id } });
       }
+      this.isJump = true;
+    },
+    play(id) {
+      this.isJump = false;
+      playPlaylist(id, "album");
     },
     last() {
       if (this.clickEnable) {

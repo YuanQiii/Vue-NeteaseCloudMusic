@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2022-01-20 11:58:01
+ * @LastEditTime: 2022-02-14 14:40:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
@@ -125,7 +125,7 @@ const mutations = {
   },
 
   /**
-   * @description: 更新歌单列表，
+   * @description: 更新歌单列表
    * payload 为对象时，增加一首歌曲
    * @param {*} state
    * @param {*} payload 类型为array
@@ -138,11 +138,14 @@ const mutations = {
     } else {
       addSongs.push(payload);
     }
-
     addSongs.forEach((element) => {
       if (!state.playListSongs.hasOwnProperty(element.id)) {
         Vue.set(state.playListSongs, element.id, element);
-        state.playListSongsId.push(element.id);
+        Vue.set(
+          state.playListSongsId,
+          state.playListSongsId.length,
+          element.id
+        );
       } else {
         console.log("已添加到播放列表");
       }

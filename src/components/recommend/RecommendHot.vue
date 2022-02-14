@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-26 09:52:08
- * @LastEditTime: 2022-02-13 22:11:56
+ * @LastEditTime: 2022-02-14 11:41:58
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\RecommendHot.vue
@@ -13,10 +13,9 @@
       <recommend-hot-item
         v-for="(value, index) in recommendList"
         :key="index"
-        :name="value['name']"
-        :picUrl="value['picUrl']"
-        :playCount="value['playCount']"
+        :playlist="value"
         @click.native="toPage(value['id'])"
+        @jumpPage="jumpPage"
       />
     </div>
   </div>
@@ -44,6 +43,7 @@ export default {
       ],
       moreUrl: "PlayList/all",
       recommendList: [],
+      isJump: true,
     };
   },
   methods: {
@@ -60,14 +60,19 @@ export default {
         });
     },
     toPage(id) {
-      if (this.$route.name != "playlistDetail") {
+      if (this.$route.name != "playlistDetail" && this.isJump) {
         this.$router.push({
           name: "playlistDetail",
           params: {
             id,
           },
         });
+      } else {
+        this.isJump = true;
       }
+    },
+    jumpPage(value) {
+      this.isJump = value;
     },
   },
 };

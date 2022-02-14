@@ -1,14 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2022-01-24 16:15:15
+ * @LastEditTime: 2022-02-14 11:03:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
 -->
 <template>
   <div class="song-operation">
-    <playbar-like @click.native="addSong" />
+    <playbar-like @click.native="like" />
     <playbar-share @click.native="shareSong" />
     <playbar-download @click.native="dwonloadClient" />
     <playbar-delete @click.native="deleteSong" />
@@ -17,6 +17,8 @@
 
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
+
+import { collectSong } from "@/utils/operate.js";
 
 import PlaybarDelete from "../../../ui/playbar/PlaybarDelete.vue";
 import PlaybarDownload from "../../../ui/playbar/PlaybarDownload.vue";
@@ -46,13 +48,10 @@ export default {
     ...mapMutations(["UPDATE_POPUP_TYPE"]),
     ...mapActions("user", ["getUserPlaylist"]),
 
-    addSong() {
+    like() {
       if (this.userLogin) {
-        this.ADD_PLAYLIST_SONGS_INFO(this.songDetail);
-        this.UPDATE_POPUP_TYPE("addToPlaylist");
-        this.getUserPlaylist();
-        this.UPDATE_USER_OPERATE_SONG(this.songDetail["id"]);
-        this.UPDATE_USER_OPERATE_TYPE_INDEX(0);
+        collectSong(this.songDetail);
+        playSong(this.songDetail);
       } else {
         this.UPDATE_LOGIN_WINDOW_SHOW(true);
       }

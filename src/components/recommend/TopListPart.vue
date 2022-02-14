@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-11 11:45:36
- * @LastEditTime: 2022-02-13 23:11:39
+ * @LastEditTime: 2022-02-14 15:27:07
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\TopList.vue
@@ -83,6 +83,7 @@ export default {
               name: playlist["name"],
               songs: playlist["tracks"].slice(0, 10),
               image: playlist["coverImgUrl"],
+              id: playlist["id"],
             });
           }
         })

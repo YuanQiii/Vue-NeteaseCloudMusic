@@ -72,3 +72,19 @@ export function playlistTrackAllApi(id) {
     },
   });
 }
+
+/**
+ * @description: 收藏/取消收藏歌单
+ * @param {*} id
+ * @param {*} t 类型,1:收藏,2:取消收藏
+ */
+export function playlistSubscribeApi(id, t) {
+  return request({
+    url: "playlist/subscribe",
+    method: "get",
+    params: {
+      id,
+      t
+    },
+  });
+}
