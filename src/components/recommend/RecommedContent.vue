@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-25 11:28:22
- * @LastEditTime: 2022-02-11 13:58:05
+ * @LastEditTime: 2022-02-16 16:00:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\RecommedContent.vue
@@ -13,7 +13,9 @@
       <new-album class="new-album" />
       <top-list-part />
     </div>
-    <div class="side"></div>
+    <div class="side">
+      <recommend-side />
+    </div>
   </div>
 </template>
 
@@ -21,8 +23,9 @@
 import RecommendHot from "./RecommendHot.vue";
 import NewAlbum from "./NewAlbum.vue";
 import TopListPart from "./TopListPart.vue";
+import RecommendSide from "../side/RecommendSide.vue";
 export default {
-  components: { RecommendHot, NewAlbum, TopListPart },
+  components: { RecommendHot, NewAlbum, TopListPart, RecommendSide },
 };
 </script>
 <style lang="scss" scoped>
@@ -39,10 +42,6 @@ export default {
     .new-album {
       margin-top: 50px;
     }
-  }
-  .side {
-    width: 250px;
-    background-color: #fff;
   }
 }
 </style>

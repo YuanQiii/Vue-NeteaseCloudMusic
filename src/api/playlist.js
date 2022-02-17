@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-16 21:42:31
- * @LastEditTime: 2022-02-11 17:35:04
+ * @LastEditTime: 2022-02-16 14:02:20
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\playlist.js
@@ -78,13 +78,13 @@ export function playlistTrackAllApi(id) {
  * @param {*} id
  * @param {*} t 类型,1:收藏,2:取消收藏
  */
-export function playlistSubscribeApi(id, t) {
+export function playlistSubscribeApi(t, id) {
   return request({
     url: "playlist/subscribe",
     method: "get",
     params: {
+      t,
       id,
-      t
     },
   });
 }

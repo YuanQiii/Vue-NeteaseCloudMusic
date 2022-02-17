@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2022-01-25 10:32:38
+ * @LastEditTime: 2022-02-16 16:43:25
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
@@ -346,6 +346,15 @@ const getters = {
   },
   userAvatarUrl(state) {
     return state.userDetail["profile"]["avatarUrl"];
+  },
+  userNickname(state) {
+    return state.userDetail["profile"]["nickname"];
+  },
+  userVipLevel(state) {
+    return state.userDetail["userPoint"]["balance"];
+  },
+  userVipType(state) {
+    return state.userDetail["profile"]["vipType"];
   },
   userNewMsgCount(state) {
     return state.userMsgPrivate["newMsgCount"];

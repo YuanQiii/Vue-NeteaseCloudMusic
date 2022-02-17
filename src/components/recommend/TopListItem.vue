@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-11 14:47:30
- * @LastEditTime: 2022-02-14 15:30:57
+ * @LastEditTime: 2022-02-16 13:51:58
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\TopListItem.vue
@@ -19,7 +19,7 @@
         </div>
         <div class="icon">
           <div class="play" @click="play(toplistDetail['id'])"></div>
-          <div class="collect"></div>
+          <div class="collect" @click="collect(toplistDetail['id'])"></div>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { playPlaylist } from "@/utils/operate.js";
+import { playPlaylist, collectPlaylist } from "@/utils/operate.js";
 
 export default {
   name: "TopListItem",
@@ -67,6 +67,9 @@ export default {
     },
     play(id) {
       playPlaylist(id, "playlist", 100);
+    },
+    collect(id) {
+      collectPlaylist(1, id);
     },
   },
 };
