@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-16 14:06:47
- * @LastEditTime: 2022-02-16 16:50:50
+ * @LastEditTime: 2022-02-17 20:35:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\side\UserInfo.vue
@@ -22,15 +22,32 @@
         <div class="user-level">
           <div class="text">9</div>
         </div>
+        <login-button text="签到" class="sign" />
       </div>
     </div>
-    <div class="bottom"></div>
+    <div class="bottom">
+      <div class="item">
+        <div class="count">{{ userEventCount }}</div>
+        <div class="text">动态</div>
+      </div>
+      <div class="item">
+        <div class="count">{{ userFollows }}</div>
+        <div class="text">关注</div>
+      </div>
+      <div class="item last">
+        <div class="count">{{ userFolloweds }}</div>
+        <div class="text">粉丝</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import LoginButton from "../../ui/Button/LoginButton.vue";
+
 export default {
+  components: { LoginButton },
   name: "RecommendUserInfo",
   data() {
     return {
@@ -63,6 +80,9 @@ export default {
       "userNickname",
       "userVipType",
       "userVipLevel",
+      "userEventCount",
+      "userFollows",
+      "userFolloweds",
     ]),
   },
 };
@@ -83,6 +103,7 @@ export default {
         height: 80px;
         padding: 2px;
         border: 1px solid #dadada;
+        cursor: pointer;
       }
     }
     .info {
@@ -97,6 +118,11 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        cursor: pointer;
+        border-bottom: solid 1px #f7f7f7;
+        &:hover {
+          border-bottom: solid 1px #000;
+        }
       }
       .level {
         width: 43px;
@@ -106,15 +132,49 @@ export default {
         background: url(https://s2.music.126.net/style/web2/img/icon2.png);
         background-position: -130px -64px;
         display: block;
-        width: 40px;
+        width: 30px;
         height: 18px;
+        position: relative;
+        top: 25px;
+        left: -102px;
         .text {
           font-size: 12px;
           font-style: italic;
           font-weight: 700;
           line-height: 18px;
+          color: #999;
+          margin-left: 25px;
         }
       }
+      .sign {
+        width: 100px;
+        height: 30px;
+        position: relative;
+        top: 60px;
+        left: -135px;
+      }
+    }
+  }
+  .bottom {
+    display: flex;
+    margin-left: 5px;
+    margin-top: 20px;
+    .item {
+      color: #666;
+      margin-left: 20px;
+      width: 45px;
+      height: 50px;
+      border-right: solid 1px #ccc;
+      cursor: pointer;
+      &:hover {
+        color: #0c73c2;
+      }
+      .count {
+        font-size: 20px;
+      }
+    }
+    .last {
+      border-right: none;
     }
   }
 }
