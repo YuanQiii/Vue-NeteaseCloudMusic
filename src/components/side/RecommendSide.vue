@@ -10,15 +10,17 @@
   <div class="recommend-side">
     <recommend-user-info />
     <recommend-singer />
+    <recommend-radio />
   </div>
 </template>
 
 <script>
 import RecommendUserInfo from "./RecommendUserInfo.vue";
 import RecommendSinger from "./RecommendSinger.vue";
+import RecommendRadio from "./RecommendRadio.vue";
 
 export default {
-  components: { RecommendUserInfo, RecommendSinger },
+  components: { RecommendUserInfo, RecommendSinger, RecommendRadio },
   name: "RecommendSide",
 };
 </script>
