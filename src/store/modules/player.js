@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-19 09:48:46
- * @LastEditTime: 2022-02-14 14:40:15
+ * @LastEditTime: 2022-02-24 22:41:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\player.js
@@ -46,7 +46,7 @@ const state = {
 
 const getters = {
   /**
-   * @description: 歌曲时长
+   * @description: 歌曲时长 
    * @param {*} state
    * @return {*}
    */
@@ -124,7 +124,7 @@ const mutations = {
     }
   },
 
-  /**
+  /**  
    * @description: 更新歌单列表
    * payload 为对象时，增加一首歌曲
    * @param {*} state

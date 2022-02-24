@@ -1,21 +1,14 @@
 /*
  * @Author: your name
- * @Date: 2021-11-22 09:30:54
- * @LastEditTime: 2022-02-17 20:24:24
- * @LastEditors: Please set LastEditors
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: \Vue-NeteaseCloudMusic\src\store\modules\user.js
- */
-/*
- * @Author: your name
  * @Date: 2021-11-11 09:10:23
- * @LastEditTime: 2021-11-21 17:21:35
+ * @LastEditTime: 2022-02-24 23:40:43
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\login.js
  */
 
 import * as types from "../mutationsTypes.js";
+import { getValue } from "../../utils/hasOwn.js";
 
 import {
   userDetailApi,
@@ -342,31 +335,31 @@ const state = {
 
 const getters = {
   userId(state) {
-    return state.userAccount["id"];
+    return getValue(state.userAccount, 'id')
   },
   userAvatarUrl(state) {
-    return state.userDetail["profile"]["avatarUrl"];
+    return getValue(state.userDetail, "profile", "avatarUrl")
   },
   userNickname(state) {
-    return state.userDetail["profile"]["nickname"];
+    return getValue(state.userDetail, 'profile', 'nickname')
   },
   userVipLevel(state) {
-    return state.userDetail["userPoint"]["balance"];
+    return getValue(state.userDetail, 'userPoint', 'balance')
   },
   userVipType(state) {
-    return state.userDetail["profile"]["vipType"];
+    return getValue(state.userDetail, 'profile', 'vipType')
   },
   userEventCount(state){
-    return state.userDetail["profile"]['eventCount']
+    return getValue(state.userDetail, 'profile', 'eventCount')
   },
   userFollows(state){
-    return state.userDetail["profile"]['follows']
+    return getValue(state.userDetail, 'profile', 'follows')
   },  
   userFolloweds(state){
-    return state.userDetail["profile"]['followeds']
+    return getValue(state.userDetail, 'profile', 'followeds')
   },  
   userNewMsgCount(state) {
-    return state.userMsgPrivate["newMsgCount"];
+    return getValue(state.userMsgPrivate, 'newMsgCount')
   },
   userCreatedPlaylist(state, getters) {
     return state.userPlaylist.filter((value) => {

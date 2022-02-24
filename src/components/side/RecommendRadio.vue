@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-23 22:45:00
- * @LastEditTime: 2022-02-23 23:24:30
+ * @LastEditTime: 2022-02-24 21:10:10
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\side\RecommendRadio.vue
@@ -16,6 +16,7 @@
         v-for="(value, index) in artistsId"
         :key="index"
         :artistDetail="artistsDetail[value]"
+        @click.native="toPage(value)"
       />
     </div>
   </div>
@@ -62,6 +63,18 @@ export default {
         });
       });
     },
+    toPage(id) {
+      if (this.$route.name != "userDetail") {
+        this.$router.push({
+          name: "userDetail",
+          params: {
+            id,
+          },
+        });
+      } else {
+        this.isJump = true;
+      }
+    },
   },
 };
 </script>
@@ -72,6 +85,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 210px;
+  height: 700px;
   margin-left: 20px;
   margin-top: 20px;
   .head {

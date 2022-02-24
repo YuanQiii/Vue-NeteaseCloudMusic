@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-06 09:24:01
- * @LastEditTime: 2022-01-25 10:40:06
+ * @LastEditTime: 2022-02-24 21:21:35
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\user.js
@@ -160,5 +160,15 @@ export function userSendPlaylistApi(user_ids, id, msg) {
       id,
       msg,
     },
+  });
+}
+
+/**
+ * @description: 发送私信(带歌单)
+ */
+export function userDailySigninApi() {
+  return request({
+    url: "daily_signin",
+    method: "get",
   });
 }

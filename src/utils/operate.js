@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-02-14 09:50:45
- * @LastEditTime: 2022-02-16 13:48:09
+ * @LastEditTime: 2022-02-24 23:18:40
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\utils\operate.js
@@ -63,7 +63,7 @@ export function playPlaylist(playlistId, type = "playlist", limit = 10) {
     .catch((error) => {
       console.log(error);
     });
-}
+} 
 
 export function collectPlaylist(playlistId, type) {
   playlistSubscribeApi(playlistId, type)

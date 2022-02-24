@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-22 20:53:44
- * @LastEditTime: 2022-02-22 22:38:19
+ * @LastEditTime: 2022-02-24 21:09:05
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\side\RcommendSinger.vue
@@ -17,9 +17,14 @@
         v-for="(value, index) in artistsId"
         :key="index"
         :artistDetail="artistsDetail[value]"
+        @click.native="toPage(value)"
       />
 
-      <register-button class="btn" text="申请成为网易音乐人" />
+      <register-button
+        class="btn"
+        text="申请成为网易音乐人"
+        @click.native="jumpPage"
+      />
     </div>
   </div>
 </template>
@@ -66,6 +71,21 @@ export default {
           }
         });
       });
+    },
+    toPage(id) {
+      if (this.$route.name != "userDetail") {
+        this.$router.push({
+          name: "userDetail",
+          params: {
+            id,
+          },
+        });
+      } else {
+        this.isJump = true;
+      }
+    },
+    jumpPage() {
+      window.location.href = "https://music.163.com/st/musician";
     },
   },
 };

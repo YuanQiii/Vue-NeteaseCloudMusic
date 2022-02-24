@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-10-28 15:17:26
- * @LastEditTime: 2022-02-14 11:03:06
+ * @LastEditTime: 2022-02-24 23:47:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\operation\Operate.vue
@@ -51,7 +51,7 @@ export default {
     like() {
       if (this.userLogin) {
         collectSong(this.songDetail);
-        playSong(this.songDetail);
+        // playSong(this.songDetail);
       } else {
         this.UPDATE_LOGIN_WINDOW_SHOW(true);
       }

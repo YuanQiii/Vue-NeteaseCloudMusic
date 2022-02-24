@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-16 14:06:47
- * @LastEditTime: 2022-02-17 20:35:03
+ * @LastEditTime: 2022-02-24 21:20:33
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\side\UserInfo.vue
@@ -22,7 +22,7 @@
         <div class="user-level">
           <div class="text">9</div>
         </div>
-        <login-button text="签到" class="sign" />
+        <login-button text="签到" class="sign" @click.native="dailySignin" />
       </div>
     </div>
     <div class="bottom">
@@ -46,9 +46,14 @@
 import { mapGetters, mapState } from "vuex";
 import LoginButton from "../../ui/Button/LoginButton.vue";
 
+import { userDailySigninApi } from "@/api/user.js";
+
 export default {
   components: { LoginButton },
   name: "RecommendUserInfo",
+  created() {
+    this.dailySignin();
+  },
   data() {
     return {
       vipUrl: [
@@ -85,12 +90,22 @@ export default {
       "userFolloweds",
     ]),
   },
+  methods: {
+    dailySignin() {
+      userDailySigninApi().then((response) => {
+        console.log(
+          "🚀 ~ file: RecommendUserInfo.vue ~ line 98 ~ userDailySigninApi ~ response",
+          response
+        );
+      });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .recommend-user-info {
-  width: 250px;
+  width: 248px;
   height: 185px;
   background-color: #f7f7f7;
   .top {
