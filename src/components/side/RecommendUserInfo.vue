@@ -1,58 +1,68 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-16 14:06:47
- * @LastEditTime: 2022-02-24 21:20:33
+ * @LastEditTime: 2022-03-09 11:32:50
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\side\UserInfo.vue
 -->
 <template>
   <div class="recommend-user-info">
-    <div class="top">
-      <div class="avatar">
-        <img class="image" :src="userAvatarUrl" alt="" />
-      </div>
-      <div class="info">
-        <div class="name">{{ userNickname }}</div>
-        <img
-          class="level"
-          :src="vipUrl[userVipType][userVipLevel - 1]"
-          alt=""
-        />
-        <div class="user-level">
-          <div class="text">9</div>
+    <div class="logged" v-if="userLogin">
+      <div class="top">
+        <div class="avatar">
+          <img class="image" :src="userAvatarUrl" alt="" />
         </div>
-        <login-button text="签到" class="sign" @click.native="dailySignin" />
+        <div class="info">
+          <div class="name">{{ userNickname }}</div>
+          <img class="level" :src="vipUrl[1]" alt="" />
+          <div class="user-level">
+            <div class="text">9</div>
+          </div>
+          <login-button text="签到" class="sign" @click.native="dailySignin" />
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="item">
+          <div class="count">{{ userEventCount }}</div>
+          <div class="text">动态</div>
+        </div>
+        <div class="item">
+          <div class="count">{{ userFollows }}</div>
+          <div class="text">关注</div>
+        </div>
+        <div class="item last">
+          <div class="count">{{ userFolloweds }}</div>
+          <div class="text">粉丝</div>
+        </div>
       </div>
     </div>
-    <div class="bottom">
-      <div class="item">
-        <div class="count">{{ userEventCount }}</div>
-        <div class="text">动态</div>
+    <div class="not" v-else>
+      <div class="image"></div>
+      <div class="text">
+        登录网易云音乐，可以享受无限收藏的乐趣，并且无限同步到手机
       </div>
-      <div class="item">
-        <div class="count">{{ userFollows }}</div>
-        <div class="text">关注</div>
-      </div>
-      <div class="item last">
-        <div class="count">{{ userFolloweds }}</div>
-        <div class="text">粉丝</div>
-      </div>
+      <red-button
+        text="用户登录"
+        @click.native="UPDATE_LOGIN_WINDOW_SHOW(true)"
+        class="login-button"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 import LoginButton from "../../ui/Button/LoginButton.vue";
 
 import { userDailySigninApi } from "@/api/user.js";
+import RedButton from "../../ui/Button/RedButton.vue";
 
 export default {
-  components: { LoginButton },
+  components: { LoginButton, RedButton },
   name: "RecommendUserInfo",
   created() {
-    this.dailySignin();
+    // this.dailySignin();
   },
   data() {
     return {
@@ -79,7 +89,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("user", ["userDetail"]),
+    ...mapState("user", ["userLogin", "userDetail"]),
     ...mapGetters("user", [
       "userAvatarUrl",
       "userNickname",
@@ -91,6 +101,8 @@ export default {
     ]),
   },
   methods: {
+    ...mapMutations("login", ["UPDATE_LOGIN_WINDOW_SHOW"]),
+
     dailySignin() {
       userDailySigninApi().then((response) => {
         console.log(
@@ -105,91 +117,118 @@ export default {
 
 <style lang="scss" scoped>
 .recommend-user-info {
-  width: 248px;
-  height: 185px;
-  background-color: #f7f7f7;
-  .top {
-    margin-left: 20px;
-    margin-top: 20px;
-    display: flex;
-    .avatar {
-      .image {
-        width: 80px;
-        height: 80px;
-        padding: 2px;
-        border: 1px solid #dadada;
-        cursor: pointer;
+  .logged {
+    width: 248px;
+    height: 185px;
+    background-color: #f7f7f7;
+    .top {
+      margin-left: 20px;
+      margin-top: 20px;
+      display: flex;
+      .avatar {
+        .image {
+          width: 80px;
+          height: 80px;
+          padding: 2px;
+          border: 1px solid #dadada;
+          cursor: pointer;
+        }
+      }
+      .info {
+        margin-left: 20px;
+        display: flex;
+        .name {
+          font-size: 14px;
+          font-weight: 600;
+          width: 60px;
+          height: 20px;
+          line-height: 20px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          cursor: pointer;
+          border-bottom: solid 1px #f7f7f7;
+          &:hover {
+            border-bottom: solid 1px #000;
+          }
+        }
+        .level {
+          width: 43px;
+          height: 16px;
+        }
+        .user-level {
+          background: url(https://s2.music.126.net/style/web2/img/icon2.png);
+          background-position: -130px -64px;
+          display: block;
+          width: 30px;
+          height: 18px;
+          position: relative;
+          top: 25px;
+          left: -102px;
+          .text {
+            font-size: 12px;
+            font-style: italic;
+            font-weight: 700;
+            line-height: 18px;
+            color: #999;
+            margin-left: 25px;
+          }
+        }
+        .sign {
+          width: 100px;
+          height: 30px;
+          position: relative;
+          top: 60px;
+          left: -135px;
+        }
       }
     }
-    .info {
-      margin-left: 20px;
+    .bottom {
       display: flex;
-      .name {
-        font-size: 14px;
-        font-weight: 600;
-        width: 60px;
-        height: 20px;
-        line-height: 20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      margin-left: 5px;
+      margin-top: 20px;
+      .item {
+        color: #666;
+        margin-left: 20px;
+        width: 45px;
+        height: 50px;
+        border-right: solid 1px #ccc;
         cursor: pointer;
-        border-bottom: solid 1px #f7f7f7;
         &:hover {
-          border-bottom: solid 1px #000;
+          color: #0c73c2;
+        }
+        .count {
+          font-size: 20px;
         }
       }
-      .level {
-        width: 43px;
-        height: 16px;
-      }
-      .user-level {
-        background: url(https://s2.music.126.net/style/web2/img/icon2.png);
-        background-position: -130px -64px;
-        display: block;
-        width: 30px;
-        height: 18px;
-        position: relative;
-        top: 25px;
-        left: -102px;
-        .text {
-          font-size: 12px;
-          font-style: italic;
-          font-weight: 700;
-          line-height: 18px;
-          color: #999;
-          margin-left: 25px;
-        }
-      }
-      .sign {
-        width: 100px;
-        height: 30px;
-        position: relative;
-        top: 60px;
-        left: -135px;
+      .last {
+        border-right: none;
       }
     }
   }
-  .bottom {
-    display: flex;
-    margin-left: 5px;
-    margin-top: 20px;
-    .item {
-      color: #666;
-      margin-left: 20px;
-      width: 45px;
-      height: 50px;
-      border-right: solid 1px #ccc;
-      cursor: pointer;
-      &:hover {
-        color: #0c73c2;
-      }
-      .count {
-        font-size: 20px;
-      }
+  .not {
+    width: 250px;
+    height: 125px;
+    position: relative;
+    .image {
+      width: 250px;
+      height: 125px;
+      display: block;
+      background: url(https://s2.music.126.net/style/web2/img/index/index.png);
+      background-position: 0 0;
     }
-    .last {
-      border-right: none;
+    .text {
+      width: 205px;
+      font-size: 12px;
+      line-height: 22px;
+      position: relative;
+      top: -105px;
+      left: 23px;
+    }
+    .login-button {
+      position: relative;
+      left: 75px;
+      top: -95px;
     }
   }
 }

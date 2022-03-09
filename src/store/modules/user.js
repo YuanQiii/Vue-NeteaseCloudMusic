@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 09:10:23
- * @LastEditTime: 2022-02-24 23:40:43
+ * @LastEditTime: 2022-03-09 12:00:40
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\login.js
@@ -315,7 +315,7 @@ const state = {
 
   // userAccount: null,
   // userDetail: null,
-  userLogin: true,
+  userLogin: false,
 
   userOperateSong: {},
 
@@ -335,31 +335,31 @@ const state = {
 
 const getters = {
   userId(state) {
-    return getValue(state.userAccount, 'id')
+    return getValue(state.userAccount, "id");
   },
   userAvatarUrl(state) {
-    return getValue(state.userDetail, "profile", "avatarUrl")
+    return getValue(state.userDetail, "profile", "avatarUrl");
   },
   userNickname(state) {
-    return getValue(state.userDetail, 'profile', 'nickname')
+    return getValue(state.userDetail, "profile", "nickname");
   },
   userVipLevel(state) {
-    return getValue(state.userDetail, 'userPoint', 'balance')
+    return getValue(state.userDetail, "userPoint", "balance");
   },
   userVipType(state) {
-    return getValue(state.userDetail, 'profile', 'vipType')
+    return getValue(state.userDetail, "profile", "vipType");
   },
-  userEventCount(state){
-    return getValue(state.userDetail, 'profile', 'eventCount')
+  userEventCount(state) {
+    return getValue(state.userDetail, "profile", "eventCount");
   },
-  userFollows(state){
-    return getValue(state.userDetail, 'profile', 'follows')
-  },  
-  userFolloweds(state){
-    return getValue(state.userDetail, 'profile', 'followeds')
-  },  
+  userFollows(state) {
+    return getValue(state.userDetail, "profile", "follows");
+  },
+  userFolloweds(state) {
+    return getValue(state.userDetail, "profile", "followeds");
+  },
   userNewMsgCount(state) {
-    return getValue(state.userMsgPrivate, 'newMsgCount')
+    return getValue(state.userMsgPrivate, "newMsgCount");
   },
   userCreatedPlaylist(state, getters) {
     return state.userPlaylist.filter((value) => {
@@ -449,6 +449,7 @@ const actions = {
         console.log(response);
         if (response["data"]["code"] == 200) {
           commit(types.UPDATE_USER_MSG_PRIVATE, response["data"]);
+          commit(types.UPDATE_USER_LOGIN, true);
         }
       })
       .catch((error) => {

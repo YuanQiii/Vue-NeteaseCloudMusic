@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-11-10 09:37:19
- * @LastEditTime: 2021-12-11 21:17:16
+ * @LastEditTime: 2022-03-09 12:00:39
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\components\login\QRCodeLogin.vue
@@ -101,7 +101,6 @@ export default {
       } else if (code == 803) {
         this.code = code;
         this.getUserInfo();
-        this.UPDATE_USER_LOGIN(true);
         this.UPDATE_LOGIN_WINDOW_SHOW(false);
       } else {
         this.code = code;
