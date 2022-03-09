@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-06 09:24:01
- * @LastEditTime: 2022-03-09 10:43:28
+ * @LastEditTime: 2022-03-09 21:16:38
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\user.js
@@ -28,6 +28,16 @@ export function userDetailApi(uid) {
 export function userSubcountApi() {
   return request({
     url: "user/subcount",
+    method: "get",
+  });
+}
+
+/**
+ * @description: 用户账号信息
+ */
+export function userAccountApi() {
+  return request({
+    url: "user/account",
     method: "get",
   });
 }

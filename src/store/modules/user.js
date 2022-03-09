@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-11-11 09:10:23
- * @LastEditTime: 2022-03-09 12:00:40
+ * @LastEditTime: 2022-03-09 21:16:57
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Projects\NeteaseCloudMusic\Vue-NeteaseCloudMusic\src\store\modules\login.js
@@ -11,6 +11,8 @@ import * as types from "../mutationsTypes.js";
 import { getValue } from "../../utils/hasOwn.js";
 
 import {
+  userSubcountApi,
+  userAccountApi,
   userDetailApi,
   userMsgPrivateApi,
   userPlaylistApi,
@@ -429,17 +431,21 @@ const actions = {
   getUserInfo({ commit, getters }) {
     loginStatusApi()
       .then((response) => {
-        console.log(response);
         if (response["data"]["data"]["code"] == 200) {
-          commit(
-            types.UPDATE_USER_ACCOUNT,
-            response["data"]["data"]["account"]
-          );
-          return userDetailApi(getters.userId);
+          return userAccountApi()
         }
       })
+      .then(response => {
+        console.log('userAccount', response);
+        commit(
+          types.UPDATE_USER_ACCOUNT,
+          response["data"]["data"]["account"]
+        );
+        console.log('getters.userId', getters.userId);
+        return userDetailApi(getters.userId);
+      })
       .then((response) => {
-        console.log(response);
+        console.log('userDetail', response);
         if (response["data"]["code"] == 200) {
           commit(types.UPDATE_USER_DETAIL, response["data"]);
           return userMsgPrivateApi();
