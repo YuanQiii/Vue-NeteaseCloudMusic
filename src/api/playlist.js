@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-16 21:42:31
- * @LastEditTime: 2022-03-09 22:07:55
+ * @LastEditTime: 2022-03-10 17:51:50
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\api\playlist.js
@@ -95,6 +95,21 @@ export function playlistSubscribeApi(t, id) {
 export function playlistCatlistApi() {
   return request({
     url: "playlist/catlist",
-    method: "get"
+    method: "get",
+  });
+}
+
+/**
+ * @description: 歌单( 网友精选碟 )
+ */
+export function playlistTopApi(cat, offset = 0, limit = 35) {
+  return request({
+    url: "top/playlist",
+    method: "get",
+    params: {
+      cat,
+      offset,
+      limit,
+    },
   });
 }

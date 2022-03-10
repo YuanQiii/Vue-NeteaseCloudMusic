@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-07 13:55:11
- * @LastEditTime: 2022-02-14 11:41:59
+ * @LastEditTime: 2022-03-10 17:12:08
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \Vue-NeteaseCloudMusic\src\components\recommend\RecommendHotItem.vue
@@ -10,7 +10,11 @@
   <div class="recommend-hot-item">
     <div class="main">
       <div class="pic">
-        <img class="image" :src="playlist['picUrl']" alt="" />
+        <img
+          class="image"
+          :src="playlist['picUrl'] || playlist['coverImgUrl']"
+          alt=""
+        />
       </div>
       <div class="mask"></div>
       <div class="bottom">
